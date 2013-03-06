@@ -6,7 +6,7 @@
         {
           'action_name': 'Build oniguruma',
           'inputs': ['vendor/onig'],
-          'outputs': ['src/libonig.a'],
+          'outputs': ['src/libonig.a', 'src/oniguruma.h'],
           'action': [
             'sh',
             'build-onig.sh'
