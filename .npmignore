@@ -7,3 +7,4 @@
 .libs
 *.coffee
 Makefile
+*.log
