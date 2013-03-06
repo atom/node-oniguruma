@@ -4,9 +4,9 @@
   "description": "oniguruma regular expression library",
   "version": "0.1.0",
   "repository": {
-     "type": "git",
-     "url": "https://github.com/Atom/node-oniguruma.git"
-   },
+    "type": "git",
+    "url": "https://github.com/Atom/node-oniguruma.git"
+  },
   "keywords": [
     "regex",
     "regular expression"
@@ -16,7 +16,8 @@
     "grunt-contrib-coffee": "~0.4.0",
     "grunt-shell": "~0.2.1",
     "jasmine-node": "~1.3.0",
-    "coffee-script": "~1.6.1"
+    "coffee-script": "~1.6.1",
+    "grunt-cli": "~0.1.6"
   },
   "dependencies": {
     "bindings": "~1.0.0"
