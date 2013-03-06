@@ -15,12 +15,6 @@ module.exports = (grunt) ->
         ext: '.js'
 
     shell:
-      buildOnig:
-        command: 'coffee build-onig.coffee'
-        options:
-          stdout: true
-          stderr: true
-
       rebuild:
         command: 'node-gyp rebuild'
         options:
