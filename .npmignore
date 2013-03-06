@@ -1,0 +1,9 @@
+/build
+.pairs
+*.a
+*.o
+*.lo
+.deps
+.libs
+*.coffee
+Makefile

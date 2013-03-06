@@ -1,0 +1,11 @@
+/node_modules
+/build
+/lib/*.js
+*.o
+*.lo
+*.a
+.deps
+.libs
+src/oniguruma.h
+/preinstall.js
+Makefile

@@ -1,10 +1,7 @@
 pairs:
   ns: Nathan Sobo; nathan
   cj: Corey Johnson; cj
-  dg: David Graham; dgraham
   ks: Kevin Sawicki; kevin
-  jc: Jerry Cheung; jerry
 email:
   domain: github.com
 #global: true
-
