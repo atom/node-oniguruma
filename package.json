@@ -22,7 +22,6 @@
     "bindings": "~1.0.0"
   },
   "scripts": {
-    "preinstall": "node preinstall.js",
     "test": "jasmine-node --coffee spec/"
   }
 }

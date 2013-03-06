@@ -3,10 +3,6 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
 
     coffee:
-      compile:
-        files:
-          'preinstall.js': 'preinstall.coffee'
-
       glob_to_multiple:
         expand: true
         cwd: 'src'
