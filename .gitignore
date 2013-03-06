@@ -11,3 +11,11 @@ src/oniguruma.h
 Makefile
 *.log
 *.status
+vendor/onig/sample/crnl
+vendor/onig/sample/encode
+vendor/onig/sample/listcap
+vendor/onig/sample/names
+vendor/onig/sample/posix
+vendor/onig/sample/simple
+vendor/onig/sample/sql
+vendor/onig/sample/syntax
