@@ -10,3 +10,4 @@ src/oniguruma.h
 /preinstall.js
 Makefile
 *.log
+*.status
