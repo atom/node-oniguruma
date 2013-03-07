@@ -38,6 +38,11 @@
             'OTHER_CPLUSPLUSFLAGS': ['-std=c++11', '-stdlib=libc++'],
             'MACOSX_DEPLOYMENT_TARGET': '10.7.0',
           }
+        }],
+        ['OS=="linux"', {
+          'cflags': [
+            '-std=c++11',
+          ],
         }]
       ]
     }
