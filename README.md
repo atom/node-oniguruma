@@ -1,5 +1,7 @@
 # Oniguruma Node module [![Build Status](https://travis-ci.org/Atom/node-oniguruma.png)](https://travis-ci.org/Atom/node-oniguruma)
 
+Read all about oniguruma regular expressions [here](http://www.geocities.jp/kosako3/oniguruma/doc/RE.txt).
+
 ## Building
 
   * Clone the repository
