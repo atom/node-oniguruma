@@ -1,4 +1,4 @@
-# Node Oniguruma
+# Oniguruma Node module [![Build Status](https://travis-ci.org/Atom/node-oniguruma.png)](https://travis-ci.org/Atom/node-oniguruma)
 
 ## Building
 
