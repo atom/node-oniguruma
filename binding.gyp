@@ -3,17 +3,18 @@
     {
       "target_name": "oniguruma",
       'variables': {
-        'build-onig-flags': ''
+        'onig-arch-flag': '',
+        'onig-link-flag': ''
       },
       'conditions': [
         ['target_arch=="ia32"', {
           'variables': {
-            'build-onig-flags': '<(build-onig-flags) -m32'
+            'onig-arch-flag': '-m32'
           }
         }],
         ['OS=="linux"', {
           'variables': {
-            'build-onig-flags': '<(build-onig-flags) -fPIC'
+            'onig-link-flag': '-fPIC'
           }
         }]
       ],
@@ -25,7 +26,7 @@
           'action': [
             'sh',
             'build-onig.sh',
-            '<(build-onig-flags)'
+            '<(onig-arch-flag) <(onig-link-flag)'
           ]
         }
       ]
