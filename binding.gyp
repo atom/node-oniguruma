@@ -8,7 +8,12 @@
       'conditions': [
         ['target_arch=="ia32"', {
           'variables': {
-            'build-onig-flags': '-m32'
+            'build-onig-flags': '<(build-onig-flags) -m32'
+          }
+        }],
+        ['OS=="linux"', {
+          'variables': {
+            'build-onig-flags': '<(build-onig-flags) -fPIC'
           }
         }]
       ],
