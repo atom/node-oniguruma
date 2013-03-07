@@ -5,7 +5,7 @@
   "version": "0.3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Atom/node-oniguruma.git"
+    "url": "https://github.com/atom/node-oniguruma.git"
   },
   "keywords": [
     "regex",
