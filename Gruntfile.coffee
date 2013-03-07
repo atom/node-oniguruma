@@ -17,6 +17,13 @@ module.exports = (grunt) ->
           stdout: true
           stderr: true
 
+      test:
+              command: 'jasmine-node --coffee spec/'
+              options:
+                stdout: true
+                stderr: true
+
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-shell')
-  grunt.registerTask('default', ['coffee', 'shell'])
+  grunt.registerTask('default', ['coffee', 'shell:rebuild'])
+  grunt.registerTask('test', ['coffee', 'shell'])
