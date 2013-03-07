@@ -3,6 +3,7 @@
 /lib/*.js
 *.o
 *.lo
+*.la
 *.a
 .deps
 .libs
