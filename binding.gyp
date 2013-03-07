@@ -41,7 +41,7 @@
         }],
         ['OS=="linux"', {
           'cflags': [
-            '-std=c++0x',
+            '-std=c++0x', '-fPIC'
           ],
         }]
       ]
