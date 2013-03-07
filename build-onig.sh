@@ -1,8 +1,6 @@
 cd vendor/onig
-if [ "$npm_config_arch" == "x86_32" ]; then
-  CPPFLAGS=-m32
-  CFLAGS=-m32
-fi
+CPPFLAGS="$1"
+CFLAGS="$1"
 ./configure
 make clean
 make

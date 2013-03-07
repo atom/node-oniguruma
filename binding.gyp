@@ -2,6 +2,16 @@
   "targets": [
     {
       "target_name": "oniguruma",
+      'variables': {
+        'build-onig-flags': ''
+      },
+      'conditions': [
+        ['target_arch=="ia32"', {
+          'variables': {
+            'build-onig-flags': '-m32'
+          }
+        }]
+      ],
       'actions': [
         {
           'action_name': 'Build oniguruma',
@@ -9,7 +19,8 @@
           'outputs': ['src/libonig.a', 'src/oniguruma.h'],
           'action': [
             'sh',
-            'build-onig.sh'
+            'build-onig.sh',
+            '<(build-onig-flags)'
           ]
         }
       ]
