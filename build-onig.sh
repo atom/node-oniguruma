@@ -1,7 +1,7 @@
 cd vendor/onig
 CPPFLAGS="$1"
 CFLAGS="$1"
-./configure --enable-shared
+./configure --disable-shared
 make clean
 make
 cp .libs/libonig.a ../../src/libonig.a
