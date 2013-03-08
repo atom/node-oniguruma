@@ -7,7 +7,6 @@
 *.a
 .deps
 .libs
-src/oniguruma.h
 Makefile
 *.log
 *.status

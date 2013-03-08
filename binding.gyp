@@ -36,8 +36,11 @@
       "dependencies": [
         "oniguruma"
       ],
-      "sources": ["src/libonig.a", "src/onig-result.cc", "src/onig-reg-exp.cc", "src/onig-scanner.cc"],
-      "libraries": ["../src/libonig.a"], # path is relative to the 'build' directory
+      "sources": ["src/onig-result.cc", "src/onig-reg-exp.cc", "src/onig-scanner.cc"],
+      "libraries": ["../deps/onig/.libs/libonig.a"], # path is relative to the 'build' directory
+      'include_dirs': [
+        './deps/onig'
+      ],
       'conditions': [
         ['OS=="mac"', {
           'xcode_settings': {
