@@ -21,7 +21,7 @@
       'actions': [
         {
           'action_name': 'Build oniguruma',
-          'inputs': ['vendor/onig'],
+          'inputs': ['deps/onig'],
           'outputs': ['src/libonig.a', 'src/oniguruma.h'],
           'action': [
             'sh',
