@@ -1,5 +1,4 @@
 #include "oniguruma.h"
-#include "onig-reg-exp.h"
 #include "onig-result.h"
 
 OnigResult::OnigResult(OnigRegion* region, const std::string& searchString) : searchString_(searchString) {
