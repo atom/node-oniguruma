@@ -2,7 +2,6 @@
 #define ONIG_RESULT_H_
 
 #include <string>
-#include "oniguruma.h"
 
 class OnigRegExp;
 

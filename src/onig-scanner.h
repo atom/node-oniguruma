@@ -2,7 +2,6 @@
 #include <v8.h>
 #include <string>
 #include <vector>
-#include <memory>
 
 using namespace v8;
 

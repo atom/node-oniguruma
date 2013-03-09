@@ -1,9 +1,3 @@
-#include <node.h>
-#include <v8.h>
-#include <string>
-#include <iostream>
-#include <vector>
-
 #include "oniguruma.h"
 #include "onig-scanner.h"
 #include "onig-reg-exp.h"

@@ -1,6 +1,3 @@
-#include <string>
-#include <iostream>
-
 #include "oniguruma.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
