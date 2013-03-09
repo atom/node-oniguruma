@@ -1,5 +1,4 @@
 #include <v8.h>
-
 #include "onig-reg-exp.h"
 #include "onig-result.h"
 
