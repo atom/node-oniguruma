@@ -10,6 +10,7 @@
 Makefile
 *.log
 *.status
+deps/onig/libtool
 vendor/onig/sample/crnl
 vendor/onig/sample/encode
 vendor/onig/sample/listcap
