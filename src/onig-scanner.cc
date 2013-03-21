@@ -2,6 +2,7 @@
 #include "onig-scanner.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
+#include "unicode-utils.h"
 
 using namespace v8;
 using namespace std;
@@ -47,7 +48,7 @@ OnigScanner::~OnigScanner() {};
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
-  int startLocation = v8StartLocation->Value();
+  int startLocation = UnicodeUtils::bytes_in_characters(string.data(), v8StartLocation->Value());
   int bestIndex = -1;
   int bestLocation = NULL;
   OnigResult* bestResult = NULL;

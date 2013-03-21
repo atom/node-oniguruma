@@ -36,7 +36,7 @@
       "dependencies": [
         "oniguruma"
       ],
-      "sources": ["src/onig-result.cc", "src/onig-reg-exp.cc", "src/onig-scanner.cc"],
+      "sources": ["src/onig-result.cc", "src/onig-reg-exp.cc", "src/onig-scanner.cc", "src/unicode-utils.cc"],
       "libraries": ["../deps/onig/.libs/libonig.a"], # path is relative to the 'build' directory
       'include_dirs': [
         './deps/onig'

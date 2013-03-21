@@ -1,5 +1,6 @@
 #include "oniguruma.h"
 #include "onig-result.h"
+#include "unicode-utils.h"
 
 OnigResult::OnigResult(OnigRegion* region, const std::string& searchString) : searchString_(searchString) {
   region_ = region;
@@ -14,9 +15,12 @@ int OnigResult::Count() {
 }
 
 int OnigResult::LocationAt(int index) {
-  return *(region_->beg + index);
+  int bytes = *(region_->beg + index);
+  return UnicodeUtils::characters_in_bytes(searchString_.data(), bytes);
 }
 
 int OnigResult::LengthAt(int index) {
-  return *(region_->end + index) - *(region_->beg + index);
+  int bytes = *(region_->end + index) - *(region_->beg + index);
+  const char *search = searchString_.data() + *(region_->end + index);
+  return UnicodeUtils::characters_in_bytes(search, bytes);
 }
