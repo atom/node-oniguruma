@@ -8,7 +8,9 @@ using namespace std;
 OnigRegExp::OnigRegExp(const string& source) : source_(source) {
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
-  int status = onig_new(&regex_, sourceData, sourceData + source.length(), ONIG_OPTION_NONE, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT, &error);
+  int status = onig_new(&regex_, sourceData, sourceData + source.length(),
+                        ONIG_OPTION_NONE, ONIG_ENCODING_UTF8,
+                        ONIG_SYNTAX_DEFAULT, &error);
 
   if (status == ONIG_NORMAL) {
     return;
@@ -32,7 +34,10 @@ OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
   int end = searchString.size();
   OnigRegion* region = onig_region_new();
   const UChar* searchData = (const UChar*)searchString.data();
-  int status = onig_search(regex_, searchData, searchData + searchString.length(), searchData + position, searchData + end, region, ONIG_OPTION_NONE);
+  int status = onig_search(regex_, searchData,
+                           searchData + searchString.length(),
+                           searchData + position, searchData + end, region,
+                           ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
     return new OnigResult(region, searchString);
