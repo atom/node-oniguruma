@@ -9,12 +9,12 @@ using namespace std;
 
 void OnigScanner::Init(Handle<Object> target) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
-  tpl->SetClassName(v8::String::NewSymbol("OnigScanner"));
+  tpl->SetClassName(String::NewSymbol("OnigScanner"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->PrototypeTemplate()->Set(v8::String::NewSymbol("findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
 
   Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(v8::String::NewSymbol("OnigScanner"), constructor);
+  target->Set(String::NewSymbol("OnigScanner"), constructor);
 }
 
 NODE_MODULE(onig_scanner, OnigScanner::Init)
