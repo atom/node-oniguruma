@@ -3,8 +3,9 @@
 #include "onig-result.h"
 
 using namespace v8;
+using namespace std;
 
-OnigRegExp::OnigRegExp(const std::string& source) : source_(source) {
+OnigRegExp::OnigRegExp(const string& source) : source_(source) {
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
   int status = onig_new(&regex_, sourceData, sourceData + source.length(), NULL, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT, &error);
@@ -23,11 +24,11 @@ OnigRegExp::~OnigRegExp() {
   if (regex_) onig_free(regex_);
 }
 
-bool OnigRegExp::Contains(const std::string& value) {
-  return source_.find(value) != std::string::npos;
+bool OnigRegExp::Contains(const string& value) {
+  return source_.find(value) != string::npos;
 }
 
-OnigResult* OnigRegExp::Search(const std::string& searchString, size_t position) {
+OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
   int end = searchString.size();
   OnigRegion* region = onig_region_new();
   const UChar* searchData = (const UChar*)searchString.data();
