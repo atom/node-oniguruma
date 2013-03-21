@@ -4,6 +4,7 @@
 #include "onig-result.h"
 
 using namespace v8;
+using namespace std;
 
 void OnigScanner::Init(Handle<Object> target) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
@@ -37,7 +38,7 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 
   for (int i = 0; i < length; i++) {
     String::Utf8Value utf8Value(sources->Get(i));
-    regExps[i] = std::unique_ptr<OnigRegExp>(new OnigRegExp(std::string(*utf8Value)));
+    regExps[i] = unique_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
   }
 };
 
@@ -45,7 +46,7 @@ OnigScanner::~OnigScanner() {};
 
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation) {
   String::Utf8Value utf8Value(v8String);
-  std::string string(*utf8Value);
+  string string(*utf8Value);
   int startLocation = v8StartLocation->Value();
   int bestIndex = -1;
   int bestLocation = NULL;
@@ -59,7 +60,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     lastMatchedString = string;
   }
 
-  std::vector<std::unique_ptr<OnigRegExp>>::iterator iter = regExps.begin();
+  vector<unique_ptr<OnigRegExp>>::iterator iter = regExps.begin();
   int index = 0;
   while (iter < regExps.end()) {
     OnigRegExp *regExp = (*iter).get();
@@ -77,7 +78,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
 
     if (!useCachedResult) {
       result = regExp->Search(string, startLocation);
-      cachedResults[index] = std::unique_ptr<OnigResult>(result);
+      cachedResults[index] = unique_ptr<OnigResult>(result);
       maxCachedIndex = index;
     }
 
