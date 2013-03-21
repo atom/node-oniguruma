@@ -2,7 +2,7 @@
   "main": "./lib/oniguruma",
   "name": "oniguruma",
   "description": "oniguruma regular expression library",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/atom/node-oniguruma.git"
