@@ -8,7 +8,7 @@ using namespace std;
 OnigRegExp::OnigRegExp(const string& source) : source_(source) {
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
-  int status = onig_new(&regex_, sourceData, sourceData + source.length(), NULL, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT, &error);
+  int status = onig_new(&regex_, sourceData, sourceData + source.length(), ONIG_OPTION_NONE, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT, &error);
 
   if (status == ONIG_NORMAL) {
     return;
