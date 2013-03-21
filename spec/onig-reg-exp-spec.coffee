@@ -5,7 +5,7 @@ describe 'OnigRegExp', ->
     it "returns correct indices and lengths", ->
       regex = new OnigRegExp('a')
 
-      firstMatch = regex.search('ç√Ωabcd≈ßåabcd', 0)
+      firstMatch = regex.search('ç√Ωa', 0)
       expect(firstMatch.index).toBe 3
       expect(firstMatch[0]).toBe 'a'
 

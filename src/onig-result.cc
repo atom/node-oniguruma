@@ -21,6 +21,6 @@ int OnigResult::LocationAt(int index) {
 
 int OnigResult::LengthAt(int index) {
   int bytes = *(region_->end + index) - *(region_->beg + index);
-  const char *search = searchString_.data() + *(region_->end + index);
+  const char *search = searchString_.data() + *(region_->beg + index);
   return UnicodeUtils::characters_in_bytes(search, bytes);
 }
