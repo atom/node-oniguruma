@@ -34,8 +34,7 @@ OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
   int end = searchString.size();
   OnigRegion* region = onig_region_new();
   const UChar* searchData = (const UChar*)searchString.data();
-  int status = onig_search(regex_, searchData,
-                           searchData + searchString.length(),
+  int status = onig_search(regex_, searchData, searchData + end,
                            searchData + position, searchData + end, region,
                            ONIG_OPTION_NONE);
 
