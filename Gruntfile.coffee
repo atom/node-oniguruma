@@ -23,7 +23,14 @@ module.exports = (grunt) ->
           stdout: true
           stderr: true
 
+      clean:
+        command: 'rm -fr build'
+        options:
+          stdout: true
+          stderr: true
+
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-shell')
   grunt.registerTask('default', ['coffee', 'shell:rebuild'])
   grunt.registerTask('test', ['coffee', 'shell'])
+  grunt.registerTask('clean', ['shell:clean'])
