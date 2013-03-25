@@ -4,9 +4,6 @@
 #include "onig-result.h"
 #include "unicode-utils.h"
 
-using namespace v8;
-using namespace std;
-
 void OnigScanner::Init(Handle<Object> target) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
   tpl->SetClassName(String::NewSymbol("OnigScanner"));
