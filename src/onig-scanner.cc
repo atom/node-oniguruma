@@ -66,10 +66,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     bool useCachedResult = false;
     OnigResult *result = nullptr;
 
-    // In Oniguruma, \G is based on the start position of the match, so the result
-    // changes based on the start position. So it can't be cached.
-    bool containsBackslashG = regExp->Contains("\\G");
-    if (useCachedResults && index <= maxCachedIndex && ! containsBackslashG) {
+    if (useCachedResults && index <= maxCachedIndex) {
       result = cachedResults[index].get();
       useCachedResult = (result == NULL || result->LocationAt(0) >= startLocation);
     }
