@@ -35,5 +35,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-shell')
   grunt.registerTask('default', ['coffee', 'shell:rebuild'])
-  grunt.registerTask('test', ['coffee', 'shell'])
+  grunt.registerTask('test', ['default', 'shell:test'])
   grunt.registerTask('clean', ['shell:clean'])
