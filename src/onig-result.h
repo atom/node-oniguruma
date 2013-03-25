@@ -3,11 +3,13 @@
 
 #include <string>
 
+using namespace std;
+
 class OnigRegExp;
 
 class OnigResult {
   public:
-    OnigResult(OnigRegion* region, const std::string& searchString);
+    OnigResult(OnigRegion* region, const string& searchString);
     ~OnigResult();
 
     int Count();
