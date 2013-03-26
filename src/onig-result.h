@@ -20,7 +20,7 @@ class OnigResult {
     OnigResult(const OnigResult&); // Disallow copying
     OnigResult &operator=(const OnigResult&);  // Disallow copying
 
-    std::string searchString_;
+    string searchString_;
     OnigRegion *region_;
 };
 
