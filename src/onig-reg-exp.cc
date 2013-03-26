@@ -3,7 +3,6 @@
 #include "onig-result.h"
 
 using namespace v8;
-using namespace std;
 
 OnigRegExp::OnigRegExp(const string& source) : source_(source) {
   OnigErrorInfo error;

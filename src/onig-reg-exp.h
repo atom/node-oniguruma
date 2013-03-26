@@ -4,22 +4,24 @@
 #include <string>
 #include "oniguruma.h"
 
+using namespace std;
+
 class OnigResult;
 
 class OnigRegExp {
   public:
-    OnigRegExp(const std::string& source);
+    OnigRegExp(const string& source);
     ~OnigRegExp();
 
-    bool Contains(const std::string& value);
+    bool Contains(const string& value);
     int LocationAt(int index);
-    OnigResult *Search(const std::string &searchString, size_t position);
+    OnigResult *Search(const string &searchString, size_t position);
 
   private:
     OnigRegExp(const OnigRegExp&); // Disallow copying
     OnigRegExp &operator=(const OnigRegExp&);  // Disallow copying
 
-    std::string source_;
+    string source_;
     regex_t* regex_;
 };
 
