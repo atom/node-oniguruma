@@ -19,3 +19,4 @@ deps/onig/sample/sql
 deps/onig/sample/syntax
 .travis.yml
 *~
+.npmignore
