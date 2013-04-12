@@ -20,3 +20,4 @@ deps/onig/sample/syntax
 .travis.yml
 *~
 .npmignore
+.node-version

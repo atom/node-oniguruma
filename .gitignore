@@ -21,3 +21,4 @@ deps/onig/sample/sql
 deps/onig/sample/syntax
 deps/onig/libtool
 *~
+.node-version
