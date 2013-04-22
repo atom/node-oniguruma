@@ -20,7 +20,7 @@ class OnigScanner : public node::ObjectWrap {
     OnigScanner(Handle<Array> sources);
     ~OnigScanner();
 
-    Handle<Value> FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation);
+    Handle<Value> FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
     Handle<Value> CaptureIndicesForMatch(OnigResult* result);
     void ClearCachedResults();
 

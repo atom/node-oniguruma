@@ -26,7 +26,7 @@ Handle<Value> OnigScanner::New(const Arguments& args) {
 Handle<Value> OnigScanner::FindNextMatch(const Arguments& args) {
   HandleScope scope;
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(args.This());
-  return scope.Close(scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1])));
+  return scope.Close(scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), args.This()));
 }
 
 OnigScanner::OnigScanner(Handle<Array> sources) {
@@ -42,7 +42,7 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 
 OnigScanner::~OnigScanner() {};
 
-Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation) {
+Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
   int startLocation = UnicodeUtils::bytes_in_characters(string.data(), v8StartLocation->Value());
@@ -98,6 +98,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     Local<Object> result = Object::New();
     result->Set(String::NewSymbol("index"), Number::New(bestIndex));
     result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult));
+    result->Set(String::NewSymbol("scanner"), v8Scanner);
     return result;
   }
   else {

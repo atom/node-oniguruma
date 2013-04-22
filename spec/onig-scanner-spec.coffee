@@ -6,3 +6,7 @@ describe "OnigScanner", ->
     expect(scanner.findNextMatch("xxaxxbxxc", 0).index).toBe 0
     expect(scanner.findNextMatch("xxaxxbxxc", 4).index).toBe 1
     expect(scanner.findNextMatch("xxaxxbxxc", 7).index).toBe 2
+
+  it "includes the scanner with the results", ->
+    scanner = new OnigScanner(["a"])
+    expect(scanner.findNextMatch("a", 0).scanner).toBe scanner
