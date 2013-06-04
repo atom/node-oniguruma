@@ -15,7 +15,10 @@ int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
     int characterLength = mblen(string, bytes);
     if (characterLength < 1)
       break;
-    characters++;
+    if (characterLength == 4)
+      characters += 2; /* High/low surrogate pair of two characters */
+    else
+      characters++;
     bytes -= characterLength;
     string += characterLength;
   }
