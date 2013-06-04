@@ -6,12 +6,10 @@ class OnigRegExp
     @scanner = new OnigScanner([@source])
 
   isHighSurrogate: (string, index) ->
-    code = string.charCodeAt(index)
-    0xD800 <= code <= 0xDBFF
+    0xD800 <= string.charCodeAt(index) <= 0xDBFF
 
   isLowSurrogate: (string, index) ->
-    code = string.charCodeAt(index)
-    0xDC00 <= code <= 0xDFFF
+    0xDC00 <= string.charCodeAt(index) <= 0xDFFF
 
   isSurrogatePair: (string, index) ->
     @isHighSurrogate(string, index) and @isLowSurrogate(string, index + 1)
@@ -45,5 +43,4 @@ class OnigRegExp
       captures.indices.push(start)
     captures
 
-  test: (string) ->
-    @search(string)?
+  test: (string) -> @search(string)?
