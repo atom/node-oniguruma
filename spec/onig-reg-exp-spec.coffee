@@ -6,12 +6,14 @@ describe 'OnigRegExp', ->
       regex = new OnigRegExp('\\w(\\d+)')
       result = regex.search('----a123----')
       expect(result.length).toBe 2
-      expect(result[0]).toBe 'a123'
-      expect(result[1]).toBe '123'
-      expect(result.index).toBe 4
-      expect(result.indices.length).toBe 2
-      expect(result.indices[0]).toBe 4
-      expect(result.indices[1]).toBe 5
+      expect(result[0].match).toBe 'a123'
+      expect(result[0].start).toBe 4
+      expect(result[0].end).toBe 8
+      expect(result[0].index).toBe 0
+      expect(result[1].match).toBe '123'
+      expect(result[1].start).toBe 5
+      expect(result[1].end).toBe 8
+      expect(result[1].index).toBe 1
 
     it 'returns null if it does not match', ->
       regex = new OnigRegExp('\\w(\\d+)')
@@ -23,25 +25,25 @@ describe 'OnigRegExp', ->
         regex = new OnigRegExp('a')
 
         firstMatch = regex.search('ç√Ωa', 0)
-        expect(firstMatch.index).toBe 3
-        expect(firstMatch[0]).toBe 'a'
+        expect(firstMatch[0].start).toBe 3
+        expect(firstMatch[0].match).toBe 'a'
 
         secondMatch = regex.search('ç√Ωabcd≈ßåabcd', 5)
-        expect(secondMatch.index).toBe 10
-        expect(secondMatch[0]).toBe 'a'
+        expect(secondMatch[0].start).toBe 10
+        expect(secondMatch[0].match).toBe 'a'
 
     describe 'when the string being searched contains non-Basic Multilingual Plane characters', ->
       it 'returns correct indices and matches', ->
         regex = new OnigRegExp("'")
 
         match = regex.search("'\uD835\uDF97'", 0)
-        expect(match.index).toBe 0
-        expect(match[0]).toBe "'"
+        expect(match[0].start).toBe 0
+        expect(match[0].match).toBe "'"
 
         match = regex.search("'\uD835\uDF97'", 1)
-        expect(match.index).toBe 3
-        expect(match[0]).toBe "'"
+        expect(match[0].start).toBe 3
+        expect(match[0].match).toBe "'"
 
         match = regex.search("'\uD835\uDF97'", 2)
-        expect(match.index).toBe 3
-        expect(match[0]).toBe "'"
+        expect(match[0].start).toBe 3
+        expect(match[0].match).toBe "'"

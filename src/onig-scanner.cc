@@ -113,16 +113,17 @@ void OnigScanner::ClearCachedResults() {
 
 Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result) {
   int resultCount = result->Count();
-  Local<Array> array = Array::New(resultCount * 3);
-  int i = 0;
+  Local<Array> captures = Array::New(resultCount);
   for (int index = 0; index < resultCount; index++) {
     int captureLength = result->LengthAt(index);
     int captureStart = result->LocationAt(index);
 
-    array->Set(i++, Number::New(index));
-    array->Set(i++, Number::New(captureStart));
-    array->Set(i++, Number::New(captureStart + captureLength));
+    Local<Object> capture = Object::New();
+    capture->Set(String::NewSymbol("index"), Number::New(index));
+    capture->Set(String::NewSymbol("start"), Number::New(captureStart));
+    capture->Set(String::NewSymbol("end"), Number::New(captureStart + captureLength));
+    captures->Set(index, capture);
   }
 
-  return array;
+  return captures;
 }
