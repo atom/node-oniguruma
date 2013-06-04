@@ -29,3 +29,19 @@ describe 'OnigRegExp', ->
         secondMatch = regex.search('ç√Ωabcd≈ßåabcd', 5)
         expect(secondMatch.index).toBe 10
         expect(secondMatch[0]).toBe 'a'
+
+    describe 'when the string being searched contains non-Basic Multilingual Plane characters', ->
+      it 'returns correct indices and matches', ->
+        regex = new OnigRegExp("'")
+
+        match = regex.search("'\uD835\uDF97'", 0)
+        expect(match.index).toBe 0
+        expect(match[0]).toBe "'"
+
+        match = regex.search("'\uD835\uDF97'", 1)
+        expect(match.index).toBe 3
+        expect(match[0]).toBe "'"
+
+        match = regex.search("'\uD835\uDF97'", 2)
+        expect(match.index).toBe 3
+        expect(match[0]).toBe "'"
