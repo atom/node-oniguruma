@@ -19,7 +19,7 @@ module.exports = (grunt) ->
           failOnError: true
 
       test:
-        command: 'jasmine-node --coffee spec/'
+        command: 'npm test'
         options:
           stdout: true
           stderr: true
