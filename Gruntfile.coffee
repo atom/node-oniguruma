@@ -25,15 +25,24 @@ module.exports = (grunt) ->
           stderr: true
           failOnError: true
 
-      clean:
+      cleanBuild:
         command: 'rm -fr build'
         options:
           stdout: true
           stderr: true
           failOnError: true
 
+      cleanMake:
+        command: 'make clean'
+        options:
+          stdout: true
+          stderr: true
+          failOnError: true
+          execOptions:
+            cwd: 'deps/onig'
+
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-shell')
   grunt.registerTask('default', ['coffee', 'shell:rebuild'])
   grunt.registerTask('test', ['default', 'shell:test'])
-  grunt.registerTask('clean', ['shell:clean'])
+  grunt.registerTask('clean', ['shell:cleanBuild', 'shell:cleanMake'])
