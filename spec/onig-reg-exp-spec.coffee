@@ -1,7 +1,7 @@
 {OnigRegExp} = require '../lib/oniguruma'
 
 describe 'OnigRegExp', ->
-  describe 'search(string, index)', ->
+  describe '.search(string, index)', ->
     it 'returns an array of the match and all capture groups', ->
       regex = new OnigRegExp('\\w(\\d+)')
       result = regex.search('----a123----')
@@ -47,3 +47,8 @@ describe 'OnigRegExp', ->
         match = regex.search("'\uD835\uDF97'", 2)
         expect(match[0].start).toBe 3
         expect(match[0].match).toBe "'"
+
+  describe '.test(string)', ->
+    it 'returns true if the string matches the pattern', ->
+      expect(new OnigRegExp("a[b-d]c").test('aec')).toBe false
+      expect(new OnigRegExp("a[b-d]c").test('abc')).toBe true
