@@ -10,10 +10,12 @@ describe 'OnigRegExp', ->
       expect(result[0].start).toBe 4
       expect(result[0].end).toBe 8
       expect(result[0].index).toBe 0
+      expect(result[0].length).toBe 4
       expect(result[1].match).toBe '123'
       expect(result[1].start).toBe 5
       expect(result[1].end).toBe 8
       expect(result[1].index).toBe 1
+      expect(result[1].length).toBe 3
 
     it 'returns null if it does not match', ->
       regex = new OnigRegExp('\\w(\\d+)')

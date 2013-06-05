@@ -122,6 +122,7 @@ Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result) {
     capture->Set(String::NewSymbol("index"), Number::New(index));
     capture->Set(String::NewSymbol("start"), Number::New(captureStart));
     capture->Set(String::NewSymbol("end"), Number::New(captureStart + captureLength));
+    capture->Set(String::NewSymbol("length"), Number::New(captureLength));
     captures->Set(index, capture);
   }
 
