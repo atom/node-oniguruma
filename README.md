@@ -45,8 +45,8 @@ console.log match
 {
   index: 1,  # Index of the best pattern match
   captureIndices: [
-    { index: 0, start: 0, end: 2 },  # Entire match
-    { index: 1, start: 1, end: 2 }   # Match of first capture group
+    {index: 0, start: 0, end: 2, length: 2},  # Entire match
+    {index: 1, start: 1, end: 2, length: 1}   # Match of first capture group
   ]
 }
 ```
@@ -73,8 +73,8 @@ regex = new OnigRegExp('a([b-d])c')
 match = regex.search('!abcdef')
 console.log match
 [
-  { index: 0, start: 1, end: 4, match: 'abc' }, # Entire match
-  { index: 1, start: 2, end: 3, match: 'b' }    # Match of first capture group
+  {index: 0, start: 1, end: 4, match: 'abc', length: 3}, # Entire match
+  {index: 1, start: 2, end: 3, match: 'b', length: 1}    # Match of first capture group
 ]
 ```
 
