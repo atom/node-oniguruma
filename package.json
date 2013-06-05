@@ -27,7 +27,8 @@
     "coffee-script": "~1.6.1",
     "grunt-cli": "~0.1.6",
     "node-gyp": "~0.8.5",
-    "jasmine-focused": "~0.1.0"
+    "jasmine-focused": "~0.1.0",
+    "grunt-coffeelint": "0.0.6"
   },
   "dependencies": {
     "bindings": "~1.0.0"
