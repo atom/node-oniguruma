@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>node-oniguruma by atom</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>node-oniguruma</h1>
+        <p>Native Oniguruma Node Module</p>
+
+        <p class="view"><a href="https://github.com/atom/node-oniguruma">View the Project on GitHub <small>atom/node-oniguruma</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/atom/node-oniguruma/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/atom/node-oniguruma/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/atom/node-oniguruma">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="oniguruma-node-module-" class="anchor" href="#oniguruma-node-module-"><span class="octicon octicon-link"></span></a>Oniguruma Node module <a href="https://travis-ci.org/atom/node-oniguruma"><img src="https://travis-ci.org/atom/node-oniguruma.png" alt="Build Status"></a>
+</h1>
+
+<p>Native Node bindings to the Oniguruma regular expressions library.</p>
+
+<p>Read all about Oniguruma regular expressions <a href="http://www.geocities.jp/kosako3/oniguruma/doc/RE.txt">here</a>.</p>
+
+<h2>
+<a name="installing" class="anchor" href="#installing"><span class="octicon octicon-link"></span></a>Installing</h2>
+
+<div class="highlight"><pre>npm install oniguruma
+</pre></div>
+
+<h2>
+<a name="building" class="anchor" href="#building"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<ul>
+<li>Clone the repository</li>
+<li>Run <code>npm install</code>
+</li>
+<li>Run <code>grunt</code> to compile the CoffeeScript and native code</li>
+</ul><h2>
+<a name="using" class="anchor" href="#using"><span class="octicon octicon-link"></span></a>Using</h2>
+
+<div class="highlight"><pre><span class="p">{</span><span class="nx">OnigRegExp</span><span class="p">,</span> <span class="nx">OnigScanner</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">'oniguruma'</span>
+</pre></div>
+
+<h3>
+<a name="onigscannerpatterns" class="anchor" href="#onigscannerpatterns"><span class="octicon octicon-link"></span></a>OnigScanner(patterns)</h3>
+
+<p>Create a new scanner with the given patterns.</p>
+
+<p><code>patterns</code> - An array of string patterns.</p>
+
+<h3>
+<a name="onigscannerfindnextmatchstring-startposition" class="anchor" href="#onigscannerfindnextmatchstring-startposition"><span class="octicon octicon-link"></span></a>OnigScanner.findNextMatch(string, startPosition)</h3>
+
+<p>Find the next match from a given position.</p>
+
+<p><code>string</code> - The string to search.
+<code>startPosition</code> - The position to start at, defaults to <code>0</code>.</p>
+
+<p>Returns an object containing details about the match or <code>null</code> if no match.</p>
+
+<h4>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h4>
+
+<div class="highlight"><pre><span class="nv">scanner = </span><span class="k">new</span> <span class="nx">OnigScanner</span><span class="p">([</span><span class="s">'c'</span><span class="p">,</span> <span class="s">'a(b)?'</span><span class="p">])</span>
+<span class="nv">match = </span><span class="nx">scanner</span><span class="p">.</span><span class="nx">findNextMatch</span><span class="p">(</span><span class="s">'abc'</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">match</span>
+<span class="p">{</span>
+  <span class="nv">index: </span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Index of the best pattern match</span>
+  <span class="nv">captureIndices: </span><span class="p">[</span>
+    <span class="p">{</span><span class="nv">index: </span><span class="mi">0</span><span class="p">,</span> <span class="nv">start: </span><span class="mi">0</span><span class="p">,</span> <span class="nv">end: </span><span class="mi">2</span><span class="p">,</span> <span class="nv">length: </span><span class="mi">2</span><span class="p">},</span>  <span class="c1"># Entire match</span>
+    <span class="p">{</span><span class="nv">index: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">start: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">end: </span><span class="mi">2</span><span class="p">,</span> <span class="nv">length: </span><span class="mi">1</span><span class="p">}</span>   <span class="c1"># Match of first capture group</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>
+<a name="onigregexppattern" class="anchor" href="#onigregexppattern"><span class="octicon octicon-link"></span></a>OnigRegExp(pattern)</h3>
+
+<p>Create a new regex with the given pattern.</p>
+
+<p><code>pattern</code> - A string pattern.</p>
+
+<h3>
+<a name="onigregexpsearchstring-startposition" class="anchor" href="#onigregexpsearchstring-startposition"><span class="octicon octicon-link"></span></a>OnigRegExp.search(string, startPosition)</h3>
+
+<p>Search the string for a match starting at the given position.</p>
+
+<p><code>string</code> - The string to search.
+<code>startPosition</code> - The position to start the search at, defaults to <code>0</code>.</p>
+
+<p>Returns an array of objects for each matched group or <code>null</code> if no match was
+found.</p>
+
+<h3>
+<a name="example-1" class="anchor" href="#example-1"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<div class="highlight"><pre><span class="nv">regex = </span><span class="k">new</span> <span class="nx">OnigRegExp</span><span class="p">(</span><span class="s">'a([b-d])c'</span><span class="p">)</span>
+<span class="nv">match = </span><span class="nx">regex</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s">'!abcdef'</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">match</span>
+<span class="p">[</span>
+  <span class="p">{</span><span class="nv">index: </span><span class="mi">0</span><span class="p">,</span> <span class="nv">start: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">end: </span><span class="mi">4</span><span class="p">,</span> <span class="nv">match: </span><span class="s">'abc'</span><span class="p">,</span> <span class="nv">length: </span><span class="mi">3</span><span class="p">},</span> <span class="c1"># Entire match</span>
+  <span class="p">{</span><span class="nv">index: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">start: </span><span class="mi">2</span><span class="p">,</span> <span class="nv">end: </span><span class="mi">3</span><span class="p">,</span> <span class="nv">match: </span><span class="s">'b'</span><span class="p">,</span> <span class="nv">length: </span><span class="mi">1</span><span class="p">}</span>    <span class="c1"># Match of first capture group</span>
+<span class="p">]</span>
+</pre></div>
+
+<h2>
+<a name="onigregexpteststring" class="anchor" href="#onigregexpteststring"><span class="octicon octicon-link"></span></a>OnigRegExp.test(string)</h2>
+
+<p>Test if this regular expression matches the given string.</p>
+
+<p><code>string</code> - The string to test against.</p>
+
+<p>Returns <code>true</code> if at least one match, <code>false</code> otherwise.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/atom">atom</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
