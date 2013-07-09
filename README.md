@@ -32,6 +32,7 @@ Create a new scanner with the given patterns.
 Find the next match from a given position.
 
 `string` - The string to search.
+
 `startPosition` - The position to start at, defaults to `0`.
 
 Returns an object containing details about the match or `null` if no match.
@@ -62,6 +63,7 @@ Create a new regex with the given pattern.
 Search the string for a match starting at the given position.
 
 `string` - The string to search.
+
 `startPosition` - The position to start the search at, defaults to `0`.
 
 Returns an array of objects for each matched group or `null` if no match was
