@@ -1,9 +1,9 @@
-#ifndef ONIG_RESULT_H_
-#define ONIG_RESULT_H_
+#ifndef SRC_ONIG_RESULT_H_
+#define SRC_ONIG_RESULT_H_
 
 #include <string>
 
-using namespace std;
+using ::std::string;
 
 class OnigRegExp;
 
@@ -17,11 +17,11 @@ class OnigResult {
     int LengthAt(int index);
 
   private:
-    OnigResult(const OnigResult&); // Disallow copying
+    OnigResult(const OnigResult&);  // Disallow copying
     OnigResult &operator=(const OnigResult&);  // Disallow copying
 
     string searchString_;
     OnigRegion *region_;
 };
 
-#endif // ONIG_RESULT_H_
+#endif  // SRC_ONIG_RESULT_H_

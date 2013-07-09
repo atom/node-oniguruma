@@ -1,11 +1,23 @@
+#ifndef SRC_ONIG_SCANNER_H_
+#define SRC_ONIG_SCANNER_H_
+
 #include <node.h>
 #include <v8.h>
 #include <string>
 #include <vector>
 #include <memory>
 
-using namespace v8;
-using namespace std;
+using ::v8::Arguments;
+using ::v8::Array;
+using ::v8::Handle;
+using ::v8::Number;
+using ::v8::Object;
+using ::v8::String;
+using ::v8::Value;
+
+using ::std::string;
+using ::std::unique_ptr;
+using ::std::vector;
 
 class OnigRegExp;
 class OnigResult;
@@ -17,7 +29,7 @@ class OnigScanner : public node::ObjectWrap {
   private:
     static Handle<Value> New(const Arguments& args);
     static Handle<Value> FindNextMatch(const Arguments& args);
-    OnigScanner(Handle<Array> sources);
+    explicit OnigScanner(Handle<Array> sources);
     ~OnigScanner();
 
     Handle<Value> FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
@@ -30,3 +42,5 @@ class OnigScanner : public node::ObjectWrap {
     int maxCachedIndex;
     int lastStartLocation;
 };
+
+#endif  // SRC_ONIG_SCANNER_H_

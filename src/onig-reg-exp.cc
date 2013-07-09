@@ -2,7 +2,8 @@
 #include "onig-reg-exp.h"
 #include "onig-result.h"
 
-using namespace v8;
+using ::v8::Exception;
+using ::v8::String;
 
 OnigRegExp::OnigRegExp(const string& source) : source_(source) {
   OnigErrorInfo error;
@@ -13,11 +14,10 @@ OnigRegExp::OnigRegExp(const string& source) : source_(source) {
 
   if (status == ONIG_NORMAL) {
     return;
-  }
-  else {
+  } else {
     UChar errorString[ONIG_MAX_ERROR_MESSAGE_LEN];
     onig_error_code_to_str(errorString, status, &error);
-    ThrowException(Exception::Error(String::New((char*)errorString)));
+    ThrowException(Exception::Error(String::New(reinterpret_cast<char*>(errorString))));
   }
 }
 
@@ -39,8 +39,7 @@ OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
 
   if (status != ONIG_MISMATCH) {
     return new OnigResult(region, searchString);
-  }
-  else {
+  } else {
     onig_region_free(region, 1);
     return nullptr;
   }

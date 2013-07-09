@@ -29,7 +29,8 @@
     "grunt-cli": "~0.1.6",
     "node-gyp": "~0.8.5",
     "jasmine-focused": "~0.10.0",
-    "grunt-coffeelint": "0.0.6"
+    "grunt-coffeelint": "0.0.6",
+    "node-cpplint": "~0.1.4"
   },
   "dependencies": {
     "bindings": "~1.0.0"

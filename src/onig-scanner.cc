@@ -4,6 +4,13 @@
 #include "onig-result.h"
 #include "unicode-utils.h"
 
+using ::v8::Function;
+using ::v8::FunctionTemplate;
+using ::v8::HandleScope;
+using ::v8::Local;
+using ::v8::Null;
+using ::v8::Persistent;
+
 void OnigScanner::Init(Handle<Object> target) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
   tpl->SetClassName(String::NewSymbol("OnigScanner"));
@@ -58,7 +65,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     lastMatchedString = string;
   }
 
-  vector<unique_ptr<OnigRegExp>>::iterator iter = regExps.begin();
+  vector< unique_ptr<OnigRegExp> >::iterator iter = regExps.begin();
   int index = 0;
   while (iter < regExps.end()) {
     OnigRegExp *regExp = (*iter).get();
@@ -100,8 +107,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult));
     result->Set(String::NewSymbol("scanner"), v8Scanner);
     return result;
-  }
-  else {
+  } else {
     return Null();
   }
 }
