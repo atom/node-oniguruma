@@ -35,7 +35,7 @@
     "bindings": "~1.0.0"
   },
   "scripts": {
-    "prepublish": "grunt coffee",
+    "prepublish": "grunt clean lint coffee",
     "test": "jasmine-focused --coffee spec/"
   }
 }
