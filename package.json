@@ -36,6 +36,6 @@
   },
   "scripts": {
     "prepublish": "grunt clean lint coffee",
-    "test": "jasmine-focused --coffee spec/"
+    "test": "grunt test"
   }
 }
