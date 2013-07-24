@@ -38,7 +38,7 @@ module.exports = (grunt) ->
 
     shell:
       rebuild:
-        command: 'node-gyp rebuild'
+        command: 'npm build .'
         options:
           stdout: true
           stderr: true
