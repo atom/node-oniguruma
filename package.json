@@ -36,7 +36,7 @@
     "bindings": "~1.0.0"
   },
   "scripts": {
-    "prepublish": "grunt clean lint coffee",
+    "prepublish": "grunt publish",
     "test": "grunt test"
   }
 }
