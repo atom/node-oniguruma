@@ -97,7 +97,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
       }
     }
 
-    iter++;
+    ++iter;
     index++;
   }
 
