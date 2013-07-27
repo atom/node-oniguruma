@@ -1,5 +1,6 @@
 #include "unicode-utils.h"
 #include <stdlib.h>
+#include <string.h>
 #include <clocale>
 
 int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
