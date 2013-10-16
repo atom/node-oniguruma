@@ -45,16 +45,16 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
     String::Utf8Value utf8Value(sources->Get(i));
     regExps[i] = unique_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
   }
-};
+}
 
-OnigScanner::~OnigScanner() {};
+OnigScanner::~OnigScanner() {}
 
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
   int startLocation = UnicodeUtils::bytes_in_characters(string.data(), v8StartLocation->Value());
   int bestIndex = -1;
-  int bestLocation = NULL;
+  int bestLocation = 0;
   OnigResult* bestResult = NULL;
 
   bool useCachedResults = (string == lastMatchedString && startLocation >= lastStartLocation);
