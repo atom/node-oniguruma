@@ -7,10 +7,7 @@
         ['OS=="win"', {
           'msvs_disabled_warnings': [
             4244,  # conversion from '__int64' to 'int', possible loss of data
-            4267,  # conversion from 'size_t' to 'int', possible loss of data
             4273,  # inconsistent dll linkage
-            4530,  # C++ exception handler used, but unwind semantics are not enabled
-            4506,  # no definition for inline function
           ],
         }],
       ],
@@ -99,6 +96,14 @@
         ['OS=="linux"', {
           'cflags': [
             '-std=c++0x'
+          ],
+        }],
+        ['OS=="win"', {
+          'msvs_disabled_warnings': [
+            4244,  # conversion from 'double' to 'int', possible loss of data
+            4267,  # conversion from 'size_t' to 'int', possible loss of data
+            4506,  # no definition for inline function
+            4530,  # C++ exception handler used, but unwind semantics are not enabled
           ],
         }],
       ]
