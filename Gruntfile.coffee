@@ -58,21 +58,12 @@ module.exports = (grunt) ->
           stderr: true
           failOnError: true
 
-      cleanMake:
-        command: 'make clean'
-        options:
-          stdout: true
-          stderr: true
-          failOnError: true
-          execOptions:
-            cwd: 'deps/onig'
-
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-coffeelint')
   grunt.loadNpmTasks('grunt-shell')
   grunt.loadNpmTasks('node-cpplint')
   grunt.registerTask('default', ['lint', 'coffee', 'shell:rebuild'])
   grunt.registerTask('test', ['default', 'shell:test'])
-  grunt.registerTask('clean', ['shell:cleanBuild', 'shell:cleanMake'])
+  grunt.registerTask('clean', ['shell:cleanBuild'])
   grunt.registerTask('lint', ['coffeelint', 'cpplint'])
   grunt.registerTask('publish', ['clean', 'lint', 'coffee'])
