@@ -9,6 +9,9 @@
             4244,  # conversion from '__int64' to 'int', possible loss of data
             4273,  # inconsistent dll linkage
           ],
+          'defines': [
+            'ONIG_EXTERN=extern',
+          ],
         }],
       ],
       'direct_dependent_settings': {
@@ -104,6 +107,9 @@
             4267,  # conversion from 'size_t' to 'int', possible loss of data
             4506,  # no definition for inline function
             4530,  # C++ exception handler used, but unwind semantics are not enabled
+          ],
+          'defines': [
+            'ONIG_EXTERN=extern',
           ],
         }],
       ]
