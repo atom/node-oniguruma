@@ -2,7 +2,7 @@
 #define SRC_ONIG_SCANNER_H_
 
 #include <node.h>
-#include <v8.h>
+
 #include <string>
 #include <vector>
 #include <memory>

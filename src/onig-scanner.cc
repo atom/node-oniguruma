@@ -1,4 +1,3 @@
-#include "oniguruma.h"
 #include "onig-scanner.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
