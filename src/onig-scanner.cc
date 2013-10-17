@@ -51,7 +51,15 @@ OnigScanner::~OnigScanner() {}
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
-  int startLocation = UnicodeUtils::bytes_in_characters(string.data(), v8StartLocation->Value());
+
+#ifdef _WIN32
+  String::Value utf16Value(v8String);
+  int startLocation = UnicodeUtils::bytes_in_characters(
+      reinterpret_cast<const wchar_t*>(*utf16Value), v8StartLocation->Value());
+#else
+  int startLocation = UnicodeUtils::bytes_in_characters(
+      *utf8Value, v8StartLocation->Value());
+#endif
   int bestIndex = -1;
   int bestLocation = 0;
   OnigResult* bestResult = NULL;

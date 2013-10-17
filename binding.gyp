@@ -87,7 +87,6 @@
         'src/onig-result.cc',
         'src/onig-reg-exp.cc',
         'src/onig-scanner.cc',
-        'src/unicode-utils.cc'
       ],
       'conditions': [
         ['OS=="mac"', {
@@ -110,6 +109,13 @@
           ],
           'defines': [
             'ONIG_EXTERN=extern',
+          ],
+          'sources': [
+            'src/unicode-utils-win.cc'
+          ],
+        }, {
+          'sources': [
+            'src/unicode-utils-posix.cc'
           ],
         }],
       ]
