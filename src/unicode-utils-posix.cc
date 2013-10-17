@@ -26,7 +26,7 @@ int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
   return characters;
 }
 
-int UnicodeUtils::bytes_in_characters(const wchar_t* string, int bytes) {
+int UnicodeUtils::bytes_in_characters(const char* string, int characters) {
   if (characters == 0)
     return 0;
 
