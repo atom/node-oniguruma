@@ -12,3 +12,9 @@ describe "OnigScanner", ->
   it "includes the scanner with the results", ->
     scanner = new OnigScanner(["a"])
     expect(scanner.findNextMatch("a", 0).scanner).toBe scanner
+
+  describe "when the string searched contains unicode characters", ->
+    it "returns the correct matching pattern", ->
+      scanner = new OnigScanner(["1", "2"])
+      match = scanner.findNextMatch('ab…cde21', 5)
+      expect(match.index).toBe 1

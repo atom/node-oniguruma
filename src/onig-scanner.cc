@@ -52,13 +52,14 @@ OnigScanner::~OnigScanner() {};
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
-  int startLocation = UnicodeUtils::bytes_in_characters(string.data(), v8StartLocation->Value());
+  int charOffset = v8StartLocation->Value();
+  int byteOffset = UnicodeUtils::bytes_in_characters(string.data(), charOffset);
   int bestIndex = -1;
   int bestLocation = NULL;
   OnigResult* bestResult = NULL;
 
-  bool useCachedResults = (string == lastMatchedString && startLocation >= lastStartLocation);
-  lastStartLocation = startLocation;
+  bool useCachedResults = (string == lastMatchedString && byteOffset >= lastStartLocation);
+  lastStartLocation = byteOffset;
 
   if (!useCachedResults) {
     ClearCachedResults();
@@ -75,11 +76,11 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
 
     if (useCachedResults && index <= maxCachedIndex) {
       result = cachedResults[index].get();
-      useCachedResult = (result == NULL || result->LocationAt(0) >= startLocation);
+      useCachedResult = (result == NULL || result->LocationAt(0) >= charOffset);
     }
 
     if (!useCachedResult) {
-      result = regExp->Search(string, startLocation);
+      result = regExp->Search(string, byteOffset);
       cachedResults[index] = unique_ptr<OnigResult>(result);
       maxCachedIndex = index;
     }
@@ -92,7 +93,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
         bestIndex = index;
       }
 
-      if (location == startLocation) {
+      if (location == charOffset) {
         break;
       }
     }
