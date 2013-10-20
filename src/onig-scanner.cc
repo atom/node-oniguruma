@@ -51,21 +51,21 @@ OnigScanner::~OnigScanner() {}
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
+  int charOffset = v8StartLocation->Value();
 
 #ifdef _WIN32
   String::Value utf16Value(v8String);
-  int startLocation = UnicodeUtils::bytes_in_characters(
-      reinterpret_cast<const wchar_t*>(*utf16Value), v8StartLocation->Value());
+  int byteOffset = UnicodeUtils::bytes_in_characters(
+      reinterpret_cast<const wchar_t*>(*utf16Value), charOffset);
 #else
-  int startLocation = UnicodeUtils::bytes_in_characters(
-      *utf8Value, v8StartLocation->Value());
+  int byteOffset = UnicodeUtils::bytes_in_characters(*utf8Value, charOffset);
 #endif
   int bestIndex = -1;
   int bestLocation = 0;
   OnigResult* bestResult = NULL;
 
-  bool useCachedResults = (string == lastMatchedString && startLocation >= lastStartLocation);
-  lastStartLocation = startLocation;
+  bool useCachedResults = (string == lastMatchedString && byteOffset >= lastStartLocation);
+  lastStartLocation = byteOffset;
 
   if (!useCachedResults) {
     ClearCachedResults();
@@ -82,11 +82,11 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
 
     if (useCachedResults && index <= maxCachedIndex) {
       result = cachedResults[index].get();
-      useCachedResult = (result == NULL || result->LocationAt(0) >= startLocation);
+      useCachedResult = (result == NULL || result->LocationAt(0) >= charOffset);
     }
 
     if (!useCachedResult) {
-      result = regExp->Search(string, startLocation);
+      result = regExp->Search(string, byteOffset);
       cachedResults[index] = unique_ptr<OnigResult>(result);
       maxCachedIndex = index;
     }
@@ -99,7 +99,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
         bestIndex = index;
       }
 
-      if (location == startLocation) {
+      if (location == charOffset) {
         break;
       }
     }
