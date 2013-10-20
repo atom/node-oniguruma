@@ -1,7 +1,8 @@
 #include "unicode-utils.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include <clocale>
+#include <locale.h>
 
 int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
   if (bytes == 0)

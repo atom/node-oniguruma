@@ -1,6 +1,10 @@
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
+#ifdef _WIN32
+#include "win32/config.h"
+#else
+
 /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
    systems. This function is required for `alloca.c' support on those systems.
    */
@@ -117,3 +121,5 @@
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
+
+#endif

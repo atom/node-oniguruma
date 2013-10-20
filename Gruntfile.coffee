@@ -45,27 +45,11 @@ module.exports = (grunt) ->
           failOnError: true
 
       test:
-        command: 'jasmine-focused --captureExceptions --coffee spec/'
+        command: 'node node_modules/jasmine-focused/bin/jasmine-focused --captureExceptions --coffee spec/'
         options:
           stdout: true
           stderr: true
           failOnError: true
-
-      cleanBuild:
-        command: 'rm -fr build'
-        options:
-          stdout: true
-          stderr: true
-          failOnError: true
-
-      cleanMake:
-        command: 'make clean'
-        options:
-          stdout: true
-          stderr: true
-          failOnError: true
-          execOptions:
-            cwd: 'deps/onig'
 
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-coffeelint')
@@ -73,6 +57,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('node-cpplint')
   grunt.registerTask('default', ['lint', 'coffee', 'shell:rebuild'])
   grunt.registerTask('test', ['default', 'shell:test'])
-  grunt.registerTask('clean', ['shell:cleanBuild', 'shell:cleanMake'])
   grunt.registerTask('lint', ['coffeelint', 'cpplint'])
-  grunt.registerTask('publish', ['clean', 'lint', 'coffee'])
+  grunt.registerTask('publish', ['lint', 'coffee'])

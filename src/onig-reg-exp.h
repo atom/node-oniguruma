@@ -2,6 +2,7 @@
 #define SRC_ONIG_REG_EXP_H_
 
 #include <string>
+
 #include "oniguruma.h"
 
 using ::std::string;
