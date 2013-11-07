@@ -16,11 +16,17 @@ int OnigResult::Count() {
 
 int OnigResult::LocationAt(int index) {
   int bytes = *(region_->beg + index);
-  return UnicodeUtils::characters_in_bytes(searchString_.data(), bytes);
+  if (bytes > 0)
+    return UnicodeUtils::characters_in_bytes(searchString_.data(), bytes);
+  else
+    return 0;
 }
 
 int OnigResult::LengthAt(int index) {
   int bytes = *(region_->end + index) - *(region_->beg + index);
-  const char *search = searchString_.data() + *(region_->beg + index);
-  return UnicodeUtils::characters_in_bytes(search, bytes);
+  if (bytes > 0) {
+    const char *search = searchString_.data() + *(region_->beg + index);
+    return UnicodeUtils::characters_in_bytes(search, bytes);
+  } else
+    return 0;
 }
