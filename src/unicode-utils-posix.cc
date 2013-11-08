@@ -5,7 +5,7 @@
 #include <locale.h>
 
 int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
-  if (bytes == 0)
+  if (bytes <= 0)
     return 0;
 
   mblen(NULL, 0);
@@ -27,7 +27,7 @@ int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
 }
 
 int UnicodeUtils::bytes_in_characters(const char* string, int characters) {
-  if (characters == 0)
+  if (characters <= 0)
     return 0;
 
   mblen(NULL, 0);
