@@ -106,6 +106,7 @@
             4267,  # conversion from 'size_t' to 'int', possible loss of data
             4506,  # no definition for inline function
             4530,  # C++ exception handler used, but unwind semantics are not enabled
+            4996,  # 'v8::Persistent<T>::New': was declared deprecated
           ],
           'defines': [
             'ONIG_EXTERN=extern',
