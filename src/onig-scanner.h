@@ -1,13 +1,12 @@
 #ifndef SRC_ONIG_SCANNER_H_
 #define SRC_ONIG_SCANNER_H_
 
-#include <node.h>
-
 #include <string>
 #include <vector>
 #include <memory>
 
-using ::v8::Arguments;
+#include "nan.h"
+
 using ::v8::Array;
 using ::v8::Handle;
 using ::v8::Number;
@@ -27,8 +26,8 @@ class OnigScanner : public node::ObjectWrap {
     static void Init(Handle<Object> target);
 
   private:
-    static Handle<Value> New(const Arguments& args);
-    static Handle<Value> FindNextMatch(const Arguments& args);
+    static NAN_METHOD(New);
+    static NAN_METHOD(FindNextMatch);
     explicit OnigScanner(Handle<Array> sources);
     ~OnigScanner();
 
