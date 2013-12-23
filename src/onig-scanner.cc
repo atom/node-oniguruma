@@ -8,7 +8,6 @@ using ::v8::FunctionTemplate;
 using ::v8::HandleScope;
 using ::v8::Local;
 using ::v8::Null;
-using ::v8::Persistent;
 
 void OnigScanner::Init(Handle<Object> target) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
@@ -16,23 +15,22 @@ void OnigScanner::Init(Handle<Object> target) {
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   tpl->PrototypeTemplate()->Set(String::NewSymbol("findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
 
-  Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("OnigScanner"), constructor);
+  target->Set(String::NewSymbol("OnigScanner"), tpl->GetFunction());
 }
 
 NODE_MODULE(onig_scanner, OnigScanner::Init)
 
-Handle<Value> OnigScanner::New(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(OnigScanner::New) {
+  NanScope();
   OnigScanner* scanner = new OnigScanner(Local<Array>::Cast(args[0]));
   scanner->Wrap(args.This());
-  return args.This();
+  NanReturnUndefined();
 }
 
-Handle<Value> OnigScanner::FindNextMatch(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(OnigScanner::FindNextMatch) {
+  NanScope();
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(args.This());
-  return scope.Close(scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), args.This()));
+  NanReturnValue(scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), args.This()));
 }
 
 OnigScanner::OnigScanner(Handle<Array> sources) {
