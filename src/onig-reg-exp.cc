@@ -13,9 +13,7 @@ OnigRegExp::OnigRegExp(const string& source) : source_(source) {
                         ONIG_OPTION_CAPTURE_GROUP, ONIG_ENCODING_UTF8,
                         ONIG_SYNTAX_DEFAULT, &error);
 
-  if (status == ONIG_NORMAL) {
-    return;
-  } else {
+  if (status != ONIG_NORMAL) {
     UChar errorString[ONIG_MAX_ERROR_MESSAGE_LEN];
     onig_error_code_to_str(errorString, status, &error);
     ThrowException(Exception::Error(String::New(reinterpret_cast<char*>(errorString))));
