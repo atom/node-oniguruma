@@ -1,4 +1,4 @@
-#include <node.h>
+#include "nan.h"
 
 #include "onig-reg-exp.h"
 #include "onig-result.h"
