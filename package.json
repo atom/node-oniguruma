@@ -26,7 +26,7 @@
     "grunt-contrib-coffee": "~0.4.0",
     "grunt-shell": "~0.2.1",
     "grunt-cli": "~0.1.6",
-    "jasmine-focused": "~0.15.0",
+    "jasmine-focused": "~0.19.0",
     "grunt-coffeelint": "0.0.6",
     "node-cpplint": "~0.1.5"
   },
