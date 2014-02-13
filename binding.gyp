@@ -100,6 +100,9 @@
           'cflags': [
             '-std=c++0x'
           ],
+          'cflags_cc!': [
+            '-fno-rtti'
+          ]
         }],
         ['OS=="win"', {
           'msvs_disabled_warnings': [
