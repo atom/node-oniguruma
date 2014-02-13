@@ -40,6 +40,6 @@ OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
     return new OnigResult(region, searchString);
   } else {
     onig_region_free(region, 1);
-    return nullptr;
+    return NULL;
   }
 }

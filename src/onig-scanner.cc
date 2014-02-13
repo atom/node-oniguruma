@@ -76,7 +76,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     OnigRegExp *regExp = (*iter).get();
 
     bool useCachedResult = false;
-    OnigResult *result = nullptr;
+    OnigResult *result = NULL;
 
     if (useCachedResults && index <= maxCachedIndex) {
       result = cachedResults[index].get();
