@@ -40,7 +40,7 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 
   for (int i = 0; i < length; i++) {
     String::Utf8Value utf8Value(sources->Get(i));
-    regExps[i] = unique_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
+    regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
   }
 }
 
@@ -70,7 +70,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     lastMatchedString = string;
   }
 
-  vector< unique_ptr<OnigRegExp> >::iterator iter = regExps.begin();
+  vector< shared_ptr<OnigRegExp> >::iterator iter = regExps.begin();
   int index = 0;
   while (iter < regExps.end()) {
     OnigRegExp *regExp = (*iter).get();
@@ -85,7 +85,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
 
     if (!useCachedResult) {
       result = regExp->Search(string, byteOffset);
-      cachedResults[index] = unique_ptr<OnigResult>(result);
+      cachedResults[index] = shared_ptr<OnigResult>(result);
       maxCachedIndex = index;
     }
 

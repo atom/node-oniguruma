@@ -15,7 +15,7 @@ using ::v8::String;
 using ::v8::Value;
 
 using ::std::string;
-using ::std::unique_ptr;
+using ::std::shared_ptr;
 using ::std::vector;
 
 class OnigRegExp;
@@ -35,8 +35,8 @@ class OnigScanner : public node::ObjectWrap {
     Handle<Value> CaptureIndicesForMatch(OnigResult* result);
     void ClearCachedResults();
 
-    vector<unique_ptr<OnigRegExp>> regExps;
-    vector<unique_ptr<OnigResult>> cachedResults;
+    vector<shared_ptr<OnigRegExp>> regExps;
+    vector<shared_ptr<OnigResult>> cachedResults;
     string lastMatchedString;
     int maxCachedIndex;
     int lastStartLocation;
