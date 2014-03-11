@@ -30,9 +30,12 @@ bool OnigRegExp::Contains(const string& value) {
   return source_.find(value) != string::npos;
 }
 
-OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
-  if (!regex_)
+shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
+                                          size_t position) {
+  if (!regex_) {
     ThrowException(Exception::Error(String::New("RegExp is not valid")));
+    return NULL;
+  }
 
   int end = searchString.size();
   OnigRegion* region = onig_region_new();
@@ -42,7 +45,7 @@ OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
                            ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
-    return new OnigResult(region, searchString);
+    return shared_ptr<OnigResult>(new OnigResult(region, searchString));
   } else {
     onig_region_free(region, 1);
     return NULL;

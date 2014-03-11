@@ -76,16 +76,16 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     OnigRegExp *regExp = (*iter).get();
 
     bool useCachedResult = false;
-    OnigResult *result = NULL;
+    shared_ptr<OnigResult> result;
 
     if (useCachedResults && index <= maxCachedIndex) {
-      result = cachedResults[index].get();
-      useCachedResult = (result == NULL || result->LocationAt(0) >= charOffset);
+      result = cachedResults[index];
+      useCachedResult = (!result || result->LocationAt(0) >= charOffset);
     }
 
     if (!useCachedResult) {
       result = regExp->Search(string, byteOffset);
-      cachedResults[index] = shared_ptr<OnigResult>(result);
+      cachedResults[index] = result;
       maxCachedIndex = index;
     }
 
@@ -93,7 +93,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
       int location = result->LocationAt(0);
       if (bestIndex == -1 || location < bestLocation) {
         bestLocation = location;
-        bestResult = result;
+        bestResult = result.get();
         bestIndex = index;
       }
 
