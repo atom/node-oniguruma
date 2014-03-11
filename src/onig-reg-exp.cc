@@ -6,7 +6,9 @@
 using ::v8::Exception;
 using ::v8::String;
 
-OnigRegExp::OnigRegExp(const string& source) : source_(source) {
+OnigRegExp::OnigRegExp(const string& source)
+    : source_(source),
+      regex_(NULL) {
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
   int status = onig_new(&regex_, sourceData, sourceData + source.length(),
