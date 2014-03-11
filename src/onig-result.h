@@ -9,7 +9,7 @@ class OnigRegExp;
 
 class OnigResult {
   public:
-    OnigResult(OnigRegion* region, const string& searchString);
+    explicit OnigResult(OnigRegion* region);
     ~OnigResult();
 
     int Count();
@@ -20,7 +20,6 @@ class OnigResult {
     OnigResult(const OnigResult&);  // Disallow copying
     OnigResult &operator=(const OnigResult&);  // Disallow copying
 
-    string searchString_;
     OnigRegion *region_;
 };
 

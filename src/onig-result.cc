@@ -2,7 +2,7 @@
 #include "onig-result.h"
 #include "unicode-utils.h"
 
-OnigResult::OnigResult(OnigRegion* region, const string& searchString) : searchString_(searchString) {
+OnigResult::OnigResult(OnigRegion* region) {
   region_ = region;
 }
 
@@ -17,16 +17,15 @@ int OnigResult::Count() {
 int OnigResult::LocationAt(int index) {
   int bytes = *(region_->beg + index);
   if (bytes > 0)
-    return UnicodeUtils::characters_in_bytes(searchString_.data(), bytes);
+    return bytes;
   else
     return 0;
 }
 
 int OnigResult::LengthAt(int index) {
   int bytes = *(region_->end + index) - *(region_->beg + index);
-  if (bytes > 0) {
-    const char *search = searchString_.data() + *(region_->beg + index);
-    return UnicodeUtils::characters_in_bytes(search, bytes);
-  } else
+  if (bytes > 0)
+    return bytes;
+  else
     return 0;
 }

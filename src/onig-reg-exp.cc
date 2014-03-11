@@ -37,7 +37,7 @@ OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
                            ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
-    return new OnigResult(region, searchString);
+    return new OnigResult(region);
   } else {
     onig_region_free(region, 1);
     return NULL;
