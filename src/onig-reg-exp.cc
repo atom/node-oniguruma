@@ -31,6 +31,9 @@ bool OnigRegExp::Contains(const string& value) {
 }
 
 OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
+  if (!regex_)
+    ThrowException(Exception::Error(String::New("RegExp is not valid")));
+
   int end = searchString.size();
   OnigRegion* region = onig_region_new();
   const UChar* searchData = (const UChar*)searchString.data();
