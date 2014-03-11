@@ -27,6 +27,7 @@ int OnigResult::LengthAt(int index) {
   if (bytes > 0) {
     const char *search = searchString_.data() + *(region_->beg + index);
     return UnicodeUtils::characters_in_bytes(search, bytes);
-  } else
+  } else {
     return 0;
+  }
 }

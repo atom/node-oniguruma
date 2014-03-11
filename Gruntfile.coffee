@@ -29,10 +29,6 @@ module.exports = (grunt) ->
           include: false
         legal:
           copyright: false
-        readability:
-          braces: false
-        runtime:
-          sizeof: false
         whitespace:
           line_length: false
 
