@@ -2,8 +2,9 @@
 #include "onig-result.h"
 #include "unicode-utils.h"
 
-OnigResult::OnigResult(OnigRegion* region, const string& searchString) : searchString_(searchString) {
-  region_ = region;
+OnigResult::OnigResult(OnigRegion* region, const string& searchString)
+    : searchString_(searchString),
+      region_(region) {
 }
 
 OnigResult::~OnigResult() {
