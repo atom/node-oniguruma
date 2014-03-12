@@ -2,8 +2,8 @@
 #include "onig-result.h"
 #include "unicode-utils.h"
 
-OnigResult::OnigResult(OnigRegion* region) {
-  region_ = region;
+OnigResult::OnigResult(OnigRegion* region)
+    : region_(region) {
 }
 
 OnigResult::~OnigResult() {

@@ -6,7 +6,9 @@
 using ::v8::Exception;
 using ::v8::String;
 
-OnigRegExp::OnigRegExp(const string& source) : source_(source) {
+OnigRegExp::OnigRegExp(const string& source)
+    : source_(source),
+      regex_(NULL) {
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
   int status = onig_new(&regex_, sourceData, sourceData + source.length(),
@@ -28,7 +30,13 @@ bool OnigRegExp::Contains(const string& value) {
   return source_.find(value) != string::npos;
 }
 
-OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
+shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
+                                          size_t position) {
+  if (!regex_) {
+    ThrowException(Exception::Error(String::New("RegExp is not valid")));
+    return NULL;
+  }
+
   int end = searchString.size();
   OnigRegion* region = onig_region_new();
   const UChar* searchData = (const UChar*)searchString.data();
@@ -37,7 +45,7 @@ OnigResult* OnigRegExp::Search(const string& searchString, size_t position) {
                            ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
-    return new OnigResult(region);
+    return shared_ptr<OnigResult>(new OnigResult(region));
   } else {
     onig_region_free(region, 1);
     return NULL;
