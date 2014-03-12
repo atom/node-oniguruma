@@ -78,7 +78,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     bool useCachedResult = false;
     shared_ptr<OnigResult> result;
 
-    if (index <= maxCachedIndex) {
+    if (useCachedResults && index <= maxCachedIndex) {
       result = cachedResults[index];
       useCachedResult = (!result || result->LocationAt(0) >= charOffset);
     }
