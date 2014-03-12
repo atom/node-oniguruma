@@ -32,7 +32,7 @@ class OnigScanner : public node::ObjectWrap {
     ~OnigScanner();
 
     Handle<Value> FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
-    Handle<Value> CaptureIndicesForMatch(OnigResult* result);
+    Handle<Value> CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters);
     void ClearCachedResults();
 
     vector<shared_ptr<OnigRegExp>> regExps;

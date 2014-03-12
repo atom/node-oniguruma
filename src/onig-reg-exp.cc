@@ -45,7 +45,7 @@ shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
                            ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
-    return shared_ptr<OnigResult>(new OnigResult(region, searchString));
+    return shared_ptr<OnigResult>(new OnigResult(region));
   } else {
     onig_region_free(region, 1);
     return NULL;

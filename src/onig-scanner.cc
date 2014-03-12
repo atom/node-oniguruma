@@ -50,14 +50,19 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
   int charOffset = v8StartLocation->Value();
+  int byteOffset = charOffset;
+  bool hasMultibyteCharacters = v8String->Length() != v8String->Utf8Length();
 
+  if (hasMultibyteCharacters) {
 #ifdef _WIN32
-  String::Value utf16Value(v8String);
-  int byteOffset = UnicodeUtils::bytes_in_characters(
+    String::Value utf16Value(v8String);
+    byteOffset = UnicodeUtils::bytes_in_characters(
       reinterpret_cast<const wchar_t*>(*utf16Value), charOffset);
 #else
-  int byteOffset = UnicodeUtils::bytes_in_characters(*utf8Value, charOffset);
+    byteOffset = UnicodeUtils::bytes_in_characters(string.data(), charOffset);
 #endif
+  }
+
   int bestIndex = -1;
   int bestLocation = 0;
   OnigResult* bestResult = NULL;
@@ -80,7 +85,15 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
 
     if (useCachedResults && index <= maxCachedIndex) {
       result = cachedResults[index];
-      useCachedResult = (!result || result->LocationAt(0) >= charOffset);
+      if (result) {
+        int location = result->LocationAt(0);
+        if (hasMultibyteCharacters) {
+          location = UnicodeUtils::characters_in_bytes(string.data(), location);
+        }
+        useCachedResult = location >= charOffset;
+      } else {
+        useCachedResult = true;
+      }
     }
 
     if (!useCachedResult) {
@@ -89,8 +102,12 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
       maxCachedIndex = index;
     }
 
-    if (result && result->Count() > 0) {
+    if (result != NULL && result->Count() > 0) {
       int location = result->LocationAt(0);
+      if (hasMultibyteCharacters) {
+        location =  UnicodeUtils::characters_in_bytes(string.data(), location);
+      }
+
       if (bestIndex == -1 || location < bestLocation) {
         bestLocation = location;
         bestResult = result.get();
@@ -109,7 +126,7 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
   if (bestIndex >= 0) {
     Local<Object> result = Object::New();
     result->Set(String::NewSymbol("index"), Number::New(bestIndex));
-    result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult));
+    result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult, v8String, string.data(), hasMultibyteCharacters));
     result->Set(String::NewSymbol("scanner"), v8Scanner);
     return result;
   } else {
@@ -122,12 +139,18 @@ void OnigScanner::ClearCachedResults() {
   cachedResults.clear();
 }
 
-Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result) {
+Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters) {
   int resultCount = result->Count();
   Local<Array> captures = Array::New(resultCount);
+
   for (int index = 0; index < resultCount; index++) {
     int captureLength = result->LengthAt(index);
     int captureStart = result->LocationAt(index);
+
+    if (hasMultibyteCharacters) {
+      captureLength = UnicodeUtils::characters_in_bytes(string + captureStart, captureLength);
+      captureStart = UnicodeUtils::characters_in_bytes(string, captureStart);
+    }
 
     Local<Object> capture = Object::New();
     capture->Set(String::NewSymbol("index"), Number::New(index));
