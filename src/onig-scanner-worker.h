@@ -21,7 +21,7 @@ class OnigScannerWorker : public NanAsyncWorker {
                     string lastMatchedString,
                     int maxCachedIndex,
                     int lastStartLocation,
-                    string string,
+                    string stringToSearch,
                     bool hasMultibyteCharacters,
                     int charOffset)
     : NanAsyncWorker(callback),
@@ -31,7 +31,7 @@ class OnigScannerWorker : public NanAsyncWorker {
       maxCachedIndex(maxCachedIndex),
       lastStartLocation(lastStartLocation),
       charOffset(charOffset),
-      string(string),
+      stringToSearch(stringToSearch),
       hasMultibyteCharacters(hasMultibyteCharacters),
       bestIndex(-1),
       bestResult(NULL) {}
@@ -48,7 +48,7 @@ class OnigScannerWorker : public NanAsyncWorker {
   int maxCachedIndex;
   int lastStartLocation;
   int charOffset;
-  string string;
+  string stringToSearch;
   bool hasMultibyteCharacters;
   int bestIndex;
   shared_ptr<OnigResult> bestResult;

@@ -12,11 +12,11 @@ void OnigScannerWorker::Execute() {
   int byteOffset = charOffset;
   if (hasMultibyteCharacters) {
     // TODO(kevinsawicki): Support windows
-    byteOffset = UnicodeUtils::bytes_in_characters(string.data(), charOffset);
+    byteOffset = UnicodeUtils::bytes_in_characters(stringToSearch.data(), charOffset);
   }
 
   int bestLocation = 0;
-  bool useCachedResults = (string == lastMatchedString && byteOffset >= lastStartLocation);
+  bool useCachedResults = (stringToSearch == lastMatchedString && byteOffset >= lastStartLocation);
   lastStartLocation = byteOffset;
 
   vector< shared_ptr<OnigRegExp> >::iterator iter = regExps.begin();
@@ -32,7 +32,7 @@ void OnigScannerWorker::Execute() {
       if (result) {
         int location = result->LocationAt(0);
         if (hasMultibyteCharacters) {
-          location = UnicodeUtils::characters_in_bytes(string.data(), location);
+          location = UnicodeUtils::characters_in_bytes(stringToSearch.data(), location);
         }
         useCachedResult = location >= charOffset;
       } else {
@@ -41,7 +41,7 @@ void OnigScannerWorker::Execute() {
     }
 
     if (!useCachedResult) {
-      result = regExp->Search(string, byteOffset);
+      result = regExp->Search(stringToSearch, byteOffset);
       // TODO(kevinsawicki): add to cache
       maxCachedIndex = index;
     }
@@ -49,7 +49,7 @@ void OnigScannerWorker::Execute() {
     if (result != NULL && result->Count() > 0) {
       int location = result->LocationAt(0);
       if (hasMultibyteCharacters) {
-        location =  UnicodeUtils::characters_in_bytes(string.data(), location);
+        location =  UnicodeUtils::characters_in_bytes(stringToSearch.data(), location);
       }
 
       if (bestIndex == -1 || location < bestLocation) {
@@ -82,8 +82,8 @@ void OnigScannerWorker::HandleOKCallback() {
       int captureStart = bestResult->LocationAt(index);
 
       if (hasMultibyteCharacters) {
-        captureLength = UnicodeUtils::characters_in_bytes(string.data() + captureStart, captureLength);
-        captureStart = UnicodeUtils::characters_in_bytes(string.data(), captureStart);
+        captureLength = UnicodeUtils::characters_in_bytes(stringToSearch.data() + captureStart, captureLength);
+        captureStart = UnicodeUtils::characters_in_bytes(stringToSearch.data(), captureStart);
       }
 
       Local<Object> capture = Object::New();
