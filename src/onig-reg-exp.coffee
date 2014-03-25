@@ -5,7 +5,7 @@ class OnigRegExp
   constructor: (@source) ->
     @scanner = new OnigScanner([@source])
 
-  search: (string, startPosition=0) ->
+  searchSync: (string, startPosition=0) ->
     if result = @scanner.findNextMatchSync(string, startPosition)
       {captureIndices} = result
       for capture in captureIndices
@@ -14,4 +14,4 @@ class OnigRegExp
     else
       null
 
-  test: (string) -> @search(string)?
+  testSync: (string) -> @searchSync(string)?
