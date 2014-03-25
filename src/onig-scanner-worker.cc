@@ -11,8 +11,11 @@ using ::v8::Value;
 void OnigScannerWorker::Execute() {
   int byteOffset = charOffset;
   if (hasMultibyteCharacters) {
-    // TODO(kevinsawicki): Support windows
+#ifdef _WIN32
+    byteOffset = UnicodeUtils::bytes_in_characters(utf16StringToSearch.get(), charOffset);
+#else
     byteOffset = UnicodeUtils::bytes_in_characters(stringToSearch.data(), charOffset);
+#endif
   }
 
   int bestLocation = 0;

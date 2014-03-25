@@ -62,7 +62,14 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
   string string(*utf8Value);
   bool hasMultibyteCharacters = v8String->Length() != v8String->Utf8Length();
   NanCallback *callback = new NanCallback(v8Callback);
-  NanAsyncQueueWorker(new OnigScannerWorker(callback, regExps, cachedResults, lastMatchedString, maxCachedIndex, lastStartLocation, string, hasMultibyteCharacters, charOffset));
+
+  wchar_t *utf16String = NULL;
+#ifdef _WIN32
+  String::Value utf16Value(v8String);
+  utf16String = reinterpret_cast<wchar_t*>(*utf16Value);
+#endif
+  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, cachedResults, lastMatchedString, maxCachedIndex, lastStartLocation, string, utf16String, hasMultibyteCharacters, charOffset);
+  NanAsyncQueueWorker(worker);
   NanReturnUndefined();
 }
 
