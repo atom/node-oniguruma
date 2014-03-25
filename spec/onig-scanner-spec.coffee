@@ -20,7 +20,7 @@ describe "OnigScanner", ->
         match = scanner.findNextMatchSync('ab…cde21', 5)
         expect(match.index).toBe 1
 
-  fdescribe "::findNextMatch", ->
+  describe "::findNextMatch", ->
     matchCallback = null
 
     beforeEach ->
