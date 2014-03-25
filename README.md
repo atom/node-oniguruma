@@ -28,7 +28,7 @@ Create a new scanner with the given patterns.
 
 `patterns` - An array of string patterns.
 
-### OnigScanner.findNextMatch(string, startPosition)
+### OnigScanner::findNextMatchSync(string, startPosition)
 
 Find the next match from a given position.
 
@@ -42,7 +42,7 @@ Returns an object containing details about the match or `null` if no match.
 
 ```coffeescript
 scanner = new OnigScanner(['c', 'a(b)?'])
-match = scanner.findNextMatch('abc')
+match = scanner.findNextMatchSync('abc')
 console.log match
 {
   index: 1,  # Index of the best pattern match

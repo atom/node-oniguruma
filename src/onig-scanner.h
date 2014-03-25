@@ -27,11 +27,11 @@ class OnigScanner : public node::ObjectWrap {
 
   private:
     static NAN_METHOD(New);
-    static NAN_METHOD(FindNextMatch);
+    static NAN_METHOD(FindNextMatchSync);
     explicit OnigScanner(Handle<Array> sources);
     ~OnigScanner();
 
-    Handle<Value> FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
+    Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
     Handle<Value> CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters);
     void ClearCachedResults();
 

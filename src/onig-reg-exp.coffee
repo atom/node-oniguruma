@@ -6,7 +6,7 @@ class OnigRegExp
     @scanner = new OnigScanner([@source])
 
   search: (string, startPosition=0) ->
-    if result = @scanner.findNextMatch(string, startPosition)
+    if result = @scanner.findNextMatchSync(string, startPosition)
       {captureIndices} = result
       for capture in captureIndices
         capture.match = string[capture.start...capture.end]
