@@ -59,7 +59,7 @@ Create a new regex with the given pattern.
 
 `pattern` - A string pattern.
 
-### OnigRegExp.search(string, startPosition)
+### OnigRegExp::search(string, startPosition)
 
 Search the string for a match starting at the given position.
 
@@ -81,7 +81,7 @@ console.log match
 ]
 ```
 
-## OnigRegExp.test(string)
+## OnigRegExp::test(string)
 
 Test if this regular expression matches the given string.
 
