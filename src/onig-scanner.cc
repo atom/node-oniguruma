@@ -14,7 +14,7 @@ void OnigScanner::Init(Handle<Object> target) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
   tpl->SetClassName(String::NewSymbol("OnigScanner"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("_findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("findNextMatchSync"), FunctionTemplate::New(OnigScanner::FindNextMatchSync)->GetFunction());
 
   target->Set(String::NewSymbol("OnigScanner"), tpl->GetFunction());

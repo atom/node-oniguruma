@@ -68,3 +68,26 @@ describe "OnigScanner", ->
       runs ->
         expect(matchCallback.argsForCall[4][0]).toBeNull()
         expect(matchCallback.argsForCall[4][1]).toBeNull()
+
+    it "includes the scanner with the results", ->
+      scanner = new OnigScanner(["a"])
+      scanner.findNextMatch("a", 0, matchCallback)
+
+      waitsFor ->
+        matchCallback.callCount is 1
+
+      runs ->
+        expect(matchCallback.argsForCall[0][0]).toBeNull()
+        expect(matchCallback.argsForCall[0][1].scanner).toBe scanner
+
+    describe "when the string searched contains unicode characters", ->
+      it "returns the correct matching pattern", ->
+        scanner = new OnigScanner(["1", "2"])
+        scanner.findNextMatch('ab…cde21', 5, matchCallback)
+
+        waitsFor ->
+          matchCallback.callCount is 1
+
+        runs ->
+          expect(matchCallback.argsForCall[0][0]).toBeNull()
+          expect(matchCallback.argsForCall[0][1].index).toBe 1
