@@ -1,6 +1,7 @@
 #include "onig-scanner.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
+#include "onig-scanner-worker.h"
 #include "unicode-utils.h"
 
 using ::v8::Function;
@@ -13,6 +14,7 @@ void OnigScanner::Init(Handle<Object> target) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
   tpl->SetClassName(String::NewSymbol("OnigScanner"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("findNextMatchSync"), FunctionTemplate::New(OnigScanner::FindNextMatchSync)->GetFunction());
 
   target->Set(String::NewSymbol("OnigScanner"), tpl->GetFunction());
@@ -33,6 +35,12 @@ NAN_METHOD(OnigScanner::FindNextMatchSync) {
   NanReturnValue(scanner->FindNextMatchSync(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), args.This()));
 }
 
+NAN_METHOD(OnigScanner::FindNextMatch) {
+  NanScope();
+  OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(args.This());
+  NanReturnValue(scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), Local<Function>::Cast(args[2]), args.This()));
+}
+
 OnigScanner::OnigScanner(Handle<Array> sources) {
   int length = sources->Length();
   regExps.resize(length);
@@ -45,6 +53,18 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 }
 
 OnigScanner::~OnigScanner() {}
+
+Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner) {
+  NanScope();
+
+  int charOffset = v8StartLocation->Value();
+  String::Utf8Value utf8Value(v8String);
+  string string(*utf8Value);
+  bool hasMultibyteCharacters = v8String->Length() != v8String->Utf8Length();
+  NanCallback *callback = new NanCallback(v8Callback);
+  NanAsyncQueueWorker(new OnigScannerWorker(callback, regExps, cachedResults, lastMatchedString, maxCachedIndex, lastStartLocation, string, hasMultibyteCharacters, charOffset));
+  NanReturnUndefined();
+}
 
 Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);

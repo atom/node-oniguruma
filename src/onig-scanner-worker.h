@@ -1,0 +1,57 @@
+#ifndef SRC_ONIG_SCANNER_WORKER_H_
+#define SRC_ONIG_SCANNER_WORKER_H_
+
+#include <node.h>
+#include <string>
+#include <vector>
+#include "nan.h"
+#include "onig-reg-exp.h"
+#include "onig-result.h"
+#include "unicode-utils.h"
+
+using ::std::string;
+using ::std::shared_ptr;
+using ::std::vector;
+
+class OnigScannerWorker : public NanAsyncWorker {
+ public:
+  OnigScannerWorker(NanCallback *callback,
+                    vector<shared_ptr<OnigRegExp>> regExps,
+                    vector<shared_ptr<OnigResult>> cachedResults,
+                    string lastMatchedString,
+                    int maxCachedIndex,
+                    int lastStartLocation,
+                    string string,
+                    bool hasMultibyteCharacters,
+                    int charOffset)
+    : NanAsyncWorker(callback),
+      regExps(regExps),
+      cachedResults(cachedResults),
+      lastMatchedString(lastMatchedString),
+      maxCachedIndex(maxCachedIndex),
+      lastStartLocation(lastStartLocation),
+      charOffset(charOffset),
+      string(string),
+      hasMultibyteCharacters(hasMultibyteCharacters),
+      bestIndex(-1),
+      bestResult(NULL) {}
+
+  ~OnigScannerWorker() {}
+
+  void Execute();
+  void HandleOKCallback();
+
+ private:
+  vector<shared_ptr<OnigRegExp>> regExps;
+  vector<shared_ptr<OnigResult>> cachedResults;
+  string lastMatchedString;
+  int maxCachedIndex;
+  int lastStartLocation;
+  int charOffset;
+  string string;
+  bool hasMultibyteCharacters;
+  int bestIndex;
+  shared_ptr<OnigResult> bestResult;
+};
+
+#endif  // SRC_ONIG_SCANNER_WORKER_H_

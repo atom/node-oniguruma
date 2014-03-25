@@ -93,6 +93,7 @@
         'src/onig-result.cc',
         'src/onig-reg-exp.cc',
         'src/onig-scanner.cc',
+        'src/onig-scanner-worker.cc',
       ],
       'conditions': [
         ['OS=="mac"', {

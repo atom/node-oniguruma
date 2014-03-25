@@ -8,6 +8,7 @@
 #include "nan.h"
 
 using ::v8::Array;
+using ::v8::Function;
 using ::v8::Handle;
 using ::v8::Number;
 using ::v8::Object;
@@ -27,10 +28,12 @@ class OnigScanner : public node::ObjectWrap {
 
   private:
     static NAN_METHOD(New);
+    static NAN_METHOD(FindNextMatch);
     static NAN_METHOD(FindNextMatchSync);
     explicit OnigScanner(Handle<Array> sources);
     ~OnigScanner();
 
+    Handle<Value> FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner);
     Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
     Handle<Value> CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters);
     void ClearCachedResults();
