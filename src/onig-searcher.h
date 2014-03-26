@@ -16,7 +16,6 @@ class OnigSearcher {
     : regExps(regExps),
       maxCachedIndex(-1),
       lastStartLocation(-1) {
-
     cachedResults.resize(regExps.size());
   }
 
