@@ -7,6 +7,7 @@
 #include "nan.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
+#include "onig-searcher.h"
 #include "unicode-utils.h"
 
 using ::std::string;
@@ -17,28 +18,18 @@ class OnigScannerWorker : public NanAsyncWorker {
  public:
   OnigScannerWorker(NanCallback *callback,
                     vector<shared_ptr<OnigRegExp>> regExps,
-                    vector<shared_ptr<OnigResult>> cachedResults,
-                    string lastMatchedString,
-                    int maxCachedIndex,
-                    int lastStartLocation,
-                    bool useCachedResults,
                     string stringToSearch,
                     wchar_t *utf16StringToSearch,
                     bool hasMultibyteCharacters,
                     int charOffset)
     : NanAsyncWorker(callback),
       regExps(regExps),
-      cachedResults(cachedResults),
-      lastMatchedString(lastMatchedString),
-      maxCachedIndex(maxCachedIndex),
-      lastStartLocation(lastStartLocation),
-      charOffset(charOffset),
       stringToSearch(stringToSearch),
       utf16StringToSearch(utf16StringToSearch),
       hasMultibyteCharacters(hasMultibyteCharacters),
-      useCachedResults(useCachedResults),
-      bestIndex(-1),
-      bestResult(NULL) {}
+      charOffset(charOffset) {
+    searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
+  }
 
   ~OnigScannerWorker() {}
 
@@ -47,16 +38,11 @@ class OnigScannerWorker : public NanAsyncWorker {
 
  private:
   vector<shared_ptr<OnigRegExp>> regExps;
-  vector<shared_ptr<OnigResult>> cachedResults;
-  string lastMatchedString;
-  int maxCachedIndex;
-  int lastStartLocation;
-  int charOffset;
   string stringToSearch;
   shared_ptr<wchar_t> utf16StringToSearch;
   bool hasMultibyteCharacters;
-  bool useCachedResults;
-  int bestIndex;
+  int charOffset;
+  shared_ptr<OnigSearcher> searcher;
   shared_ptr<OnigResult> bestResult;
 };
 

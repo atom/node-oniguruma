@@ -9,68 +9,13 @@ using ::v8::String;
 using ::v8::Value;
 
 void OnigScannerWorker::Execute() {
-  int byteOffset = charOffset;
-  if (hasMultibyteCharacters) {
-#ifdef _WIN32
-    byteOffset = UnicodeUtils::bytes_in_characters(utf16StringToSearch.get(), charOffset);
-#else
-    byteOffset = UnicodeUtils::bytes_in_characters(stringToSearch.data(), charOffset);
-#endif
-  }
-
-  int bestLocation = 0;
-  vector< shared_ptr<OnigRegExp> >::iterator iter = regExps.begin();
-  int index = 0;
-  while (iter < regExps.end()) {
-    OnigRegExp *regExp = (*iter).get();
-
-    bool useCachedResult = false;
-    shared_ptr<OnigResult> result;
-
-    if (useCachedResults && index <= maxCachedIndex) {
-      result = cachedResults[index];
-      if (result) {
-        int location = result->LocationAt(0);
-        if (hasMultibyteCharacters) {
-          location = UnicodeUtils::characters_in_bytes(stringToSearch.data(), location);
-        }
-        useCachedResult = location >= charOffset;
-      } else {
-        useCachedResult = true;
-      }
-    }
-
-    if (!useCachedResult) {
-      result = regExp->Search(stringToSearch, byteOffset);
-      // TODO(kevinsawicki): add to cache
-      maxCachedIndex = index;
-    }
-
-    if (result != NULL && result->Count() > 0) {
-      int location = result->LocationAt(0);
-      if (hasMultibyteCharacters) {
-        location =  UnicodeUtils::characters_in_bytes(stringToSearch.data(), location);
-      }
-
-      if (bestResult.get() == NULL || location < bestLocation) {
-        bestLocation = location;
-        bestResult = result;
-      }
-
-      if (location == charOffset) {
-        break;
-      }
-    }
-
-    ++iter;
-    index++;
-  }
+  bestResult = searcher.get()->Search(stringToSearch, utf16StringToSearch.get(), hasMultibyteCharacters, charOffset);
 }
 
 void OnigScannerWorker::HandleOKCallback() {
   NanScope();
 
-  if (bestResult.get() != NULL) {
+  if (bestResult != NULL) {
     Local<Object> result = Object::New();
     result->Set(String::NewSymbol("index"), Number::New(bestResult.get()->Index()));
 

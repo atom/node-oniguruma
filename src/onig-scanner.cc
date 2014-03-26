@@ -1,6 +1,7 @@
 #include "onig-scanner.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
+#include "onig-searcher.h"
 #include "onig-scanner-worker.h"
 #include "unicode-utils.h"
 
@@ -45,34 +46,22 @@ NAN_METHOD(OnigScanner::FindNextMatch) {
 OnigScanner::OnigScanner(Handle<Array> sources) {
   int length = sources->Length();
   regExps.resize(length);
-  cachedResults.resize(length);
 
   for (int i = 0; i < length; i++) {
     String::Utf8Value utf8Value(sources->Get(i));
     regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value), i));
   }
+
+  searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
 }
 
 OnigScanner::~OnigScanner() {}
-
-bool OnigScanner::UseCachedResults(string stringToSearch, int charOffset) {
-  bool useCachedResults = (stringToSearch == lastMatchedString && charOffset >= lastStartLocation);
-  lastStartLocation = charOffset;
-
-  if (!useCachedResults) {
-    ClearCachedResults();
-    lastMatchedString = stringToSearch;
-  }
-
-  return useCachedResults;
-}
 
 void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
   int charOffset = v8StartLocation->Value();
   bool hasMultibyteCharacters = v8String->Length() != v8String->Utf8Length();
-  bool useCachedResults = UseCachedResults(string, charOffset);
   NanCallback *callback = new NanCallback(v8Callback);
 
   wchar_t *utf16String = NULL;
@@ -81,94 +70,32 @@ void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartL
   utf16String = reinterpret_cast<wchar_t*>(*utf16Value);
 #endif
 
-  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps,
-    cachedResults, lastMatchedString, maxCachedIndex, lastStartLocation,
-    useCachedResults, string, utf16String, hasMultibyteCharacters, charOffset);
+  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, string, utf16String, hasMultibyteCharacters, charOffset);
   NanAsyncQueueWorker(worker);
 }
 
 Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
-  string string(*utf8Value);
+  string stringToSearch(*utf8Value);
   int charOffset = v8StartLocation->Value();
-  int byteOffset = charOffset;
   bool hasMultibyteCharacters = v8String->Length() != v8String->Utf8Length();
 
-  if (hasMultibyteCharacters) {
+  wchar_t *utf16String = NULL;
 #ifdef _WIN32
-    String::Value utf16Value(v8String);
-    byteOffset = UnicodeUtils::bytes_in_characters(
-      reinterpret_cast<const wchar_t*>(*utf16Value), charOffset);
-#else
-    byteOffset = UnicodeUtils::bytes_in_characters(string.data(), charOffset);
+  String::Value utf16Value(v8String);
+  utf16String = reinterpret_cast<wchar_t*>(*utf16Value);
 #endif
-  }
 
-  int bestLocation = 0;
-  OnigResult* bestResult = NULL;
-  bool useCachedResults = UseCachedResults(string, charOffset);
-
-  vector< shared_ptr<OnigRegExp> >::iterator iter = regExps.begin();
-  int index = 0;
-  while (iter < regExps.end()) {
-    OnigRegExp *regExp = (*iter).get();
-
-    bool useCachedResult = false;
-    shared_ptr<OnigResult> result;
-
-    if (useCachedResults && index <= maxCachedIndex) {
-      result = cachedResults[index];
-      if (result) {
-        int location = result->LocationAt(0);
-        if (hasMultibyteCharacters) {
-          location = UnicodeUtils::characters_in_bytes(string.data(), location);
-        }
-        useCachedResult = location >= charOffset;
-      } else {
-        useCachedResult = true;
-      }
-    }
-
-    if (!useCachedResult) {
-      result = regExp->Search(string, byteOffset);
-      cachedResults[index] = result;
-      maxCachedIndex = index;
-    }
-
-    if (result != NULL && result->Count() > 0) {
-      int location = result->LocationAt(0);
-      if (hasMultibyteCharacters) {
-        location =  UnicodeUtils::characters_in_bytes(string.data(), location);
-      }
-
-      if (bestResult == NULL || location < bestLocation) {
-        bestLocation = location;
-        bestResult = result.get();
-      }
-
-      if (location == charOffset) {
-        break;
-      }
-    }
-
-    ++iter;
-    index++;
-  }
-
+  shared_ptr<OnigResult> bestResult = searcher->Search(stringToSearch, utf16String, hasMultibyteCharacters, charOffset);
   if (bestResult != NULL) {
     Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("index"), Number::New(bestResult->Index()));
-    result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult, v8String, string.data(), hasMultibyteCharacters));
+    result->Set(String::NewSymbol("index"), Number::New(bestResult.get()->Index()));
+    result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult.get(), v8String, stringToSearch.data(), hasMultibyteCharacters));
     result->Set(String::NewSymbol("scanner"), v8Scanner);
     return result;
   } else {
     return Null();
   }
-}
-
-void OnigScanner::ClearCachedResults() {
-  maxCachedIndex = -1;
-  cachedResults.clear();
 }
 
 Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters) {

@@ -1,10 +1,10 @@
 #ifndef SRC_ONIG_SCANNER_H_
 #define SRC_ONIG_SCANNER_H_
 
+#include "onig-searcher.h"
 #include <string>
 #include <vector>
 #include <memory>
-
 #include "nan.h"
 
 using ::v8::Array;
@@ -36,14 +36,9 @@ class OnigScanner : public node::ObjectWrap {
     void FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner);
     Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
     Handle<Value> CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters);
-    void ClearCachedResults();
-    bool UseCachedResults(string stringToSearch, int charOffset);
 
     vector<shared_ptr<OnigRegExp>> regExps;
-    vector<shared_ptr<OnigResult>> cachedResults;
-    string lastMatchedString;
-    int maxCachedIndex;
-    int lastStartLocation;
+    shared_ptr<OnigSearcher> searcher;
 };
 
 #endif  // SRC_ONIG_SCANNER_H_
