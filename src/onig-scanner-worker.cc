@@ -19,9 +19,6 @@ void OnigScannerWorker::Execute() {
   }
 
   int bestLocation = 0;
-  bool useCachedResults = (stringToSearch == lastMatchedString && byteOffset >= lastStartLocation);
-  lastStartLocation = byteOffset;
-
   vector< shared_ptr<OnigRegExp> >::iterator iter = regExps.begin();
   int index = 0;
   while (iter < regExps.end()) {

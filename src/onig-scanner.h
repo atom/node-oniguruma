@@ -37,6 +37,7 @@ class OnigScanner : public node::ObjectWrap {
     Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
     Handle<Value> CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters);
     void ClearCachedResults();
+    bool UseCachedResults(string stringToSearch, int charOffset);
 
     vector<shared_ptr<OnigRegExp>> regExps;
     vector<shared_ptr<OnigResult>> cachedResults;

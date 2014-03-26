@@ -54,13 +54,26 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 
 OnigScanner::~OnigScanner() {}
 
+bool OnigScanner::UseCachedResults(string stringToSearch, int charOffset) {
+  bool useCachedResults = (stringToSearch == lastMatchedString && charOffset >= lastStartLocation);
+  lastStartLocation = charOffset;
+
+  if (!useCachedResults) {
+    ClearCachedResults();
+    lastMatchedString = stringToSearch;
+  }
+
+  return useCachedResults;
+}
+
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner) {
   NanScope();
 
-  int charOffset = v8StartLocation->Value();
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
+  int charOffset = v8StartLocation->Value();
   bool hasMultibyteCharacters = v8String->Length() != v8String->Utf8Length();
+  bool useCachedResults = UseCachedResults(string, charOffset);
   NanCallback *callback = new NanCallback(v8Callback);
 
   wchar_t *utf16String = NULL;
@@ -68,7 +81,10 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
   String::Value utf16Value(v8String);
   utf16String = reinterpret_cast<wchar_t*>(*utf16Value);
 #endif
-  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, cachedResults, lastMatchedString, maxCachedIndex, lastStartLocation, string, utf16String, hasMultibyteCharacters, charOffset);
+
+  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps,
+    cachedResults, lastMatchedString, maxCachedIndex, lastStartLocation,
+    useCachedResults, string, utf16String, hasMultibyteCharacters, charOffset);
   NanAsyncQueueWorker(worker);
   NanReturnUndefined();
 }
@@ -93,14 +109,7 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
   int bestIndex = -1;
   int bestLocation = 0;
   OnigResult* bestResult = NULL;
-
-  bool useCachedResults = (string == lastMatchedString && byteOffset >= lastStartLocation);
-  lastStartLocation = byteOffset;
-
-  if (!useCachedResults) {
-    ClearCachedResults();
-    lastMatchedString = string;
-  }
+  bool useCachedResults = UseCachedResults(string, charOffset);
 
   vector< shared_ptr<OnigRegExp> >::iterator iter = regExps.begin();
   int index = 0;
