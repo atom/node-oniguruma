@@ -67,8 +67,6 @@ bool OnigScanner::UseCachedResults(string stringToSearch, int charOffset) {
 }
 
 Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner) {
-  NanScope();
-
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
   int charOffset = v8StartLocation->Value();
