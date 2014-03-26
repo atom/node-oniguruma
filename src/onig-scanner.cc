@@ -1,7 +1,6 @@
 #include "onig-scanner.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
-#include "onig-searcher.h"
 #include "onig-scanner-worker.h"
 #include "unicode-utils.h"
 
