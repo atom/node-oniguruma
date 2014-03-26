@@ -38,7 +38,8 @@ NAN_METHOD(OnigScanner::FindNextMatchSync) {
 NAN_METHOD(OnigScanner::FindNextMatch) {
   NanScope();
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(args.This());
-  NanReturnValue(scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), Local<Function>::Cast(args[2]), args.This()));
+  scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), Local<Function>::Cast(args[2]), args.This());
+  NanReturnUndefined();
 }
 
 OnigScanner::OnigScanner(Handle<Array> sources) {
@@ -66,7 +67,7 @@ bool OnigScanner::UseCachedResults(string stringToSearch, int charOffset) {
   return useCachedResults;
 }
 
-Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner) {
+void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
   int charOffset = v8StartLocation->Value();
@@ -84,7 +85,6 @@ Handle<Value> OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number>
     cachedResults, lastMatchedString, maxCachedIndex, lastStartLocation,
     useCachedResults, string, utf16String, hasMultibyteCharacters, charOffset);
   NanAsyncQueueWorker(worker);
-  NanReturnUndefined();
 }
 
 Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
