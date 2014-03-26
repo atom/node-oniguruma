@@ -49,7 +49,7 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 
   for (int i = 0; i < length; i++) {
     String::Utf8Value utf8Value(sources->Get(i));
-    regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
+    regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value), i));
   }
 }
 
@@ -104,7 +104,6 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
 #endif
   }
 
-  int bestIndex = -1;
   int bestLocation = 0;
   OnigResult* bestResult = NULL;
   bool useCachedResults = UseCachedResults(string, charOffset);
@@ -142,10 +141,9 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
         location =  UnicodeUtils::characters_in_bytes(string.data(), location);
       }
 
-      if (bestIndex == -1 || location < bestLocation) {
+      if (bestResult == NULL || location < bestLocation) {
         bestLocation = location;
         bestResult = result.get();
-        bestIndex = index;
       }
 
       if (location == charOffset) {
@@ -157,9 +155,9 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
     index++;
   }
 
-  if (bestIndex >= 0) {
+  if (bestResult != NULL) {
     Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("index"), Number::New(bestIndex));
+    result->Set(String::NewSymbol("index"), Number::New(bestResult->Index()));
     result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult, v8String, string.data(), hasMultibyteCharacters));
     result->Set(String::NewSymbol("scanner"), v8Scanner);
     return result;

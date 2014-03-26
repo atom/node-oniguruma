@@ -2,7 +2,8 @@
 #include "onig-result.h"
 #include "unicode-utils.h"
 
-OnigResult::OnigResult(OnigRegion* region): region_(region) {}
+OnigResult::OnigResult(OnigRegion* region, int indexInScanner)
+  : region_(region), indexInScanner(indexInScanner) {}
 
 OnigResult::~OnigResult() {
   onig_region_free(region_, 1);

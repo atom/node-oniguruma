@@ -13,7 +13,7 @@ class OnigResult;
 
 class OnigRegExp {
   public:
-    explicit OnigRegExp(const string& source);
+    explicit OnigRegExp(const string& source, int indexInScanner);
     ~OnigRegExp();
 
     bool Contains(const string& value);
@@ -26,6 +26,7 @@ class OnigRegExp {
 
     string source_;
     regex_t* regex_;
+    int indexInScanner;
 };
 
 #endif  // SRC_ONIG_REG_EXP_H_

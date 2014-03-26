@@ -52,10 +52,9 @@ void OnigScannerWorker::Execute() {
         location =  UnicodeUtils::characters_in_bytes(stringToSearch.data(), location);
       }
 
-      if (bestIndex == -1 || location < bestLocation) {
+      if (bestResult.get() == NULL || location < bestLocation) {
         bestLocation = location;
         bestResult = result;
-        bestIndex = index;
       }
 
       if (location == charOffset) {
@@ -71,9 +70,9 @@ void OnigScannerWorker::Execute() {
 void OnigScannerWorker::HandleOKCallback() {
   NanScope();
 
-  if (bestIndex >= 0) {
+  if (bestResult.get() != NULL) {
     Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("index"), Number::New(bestIndex));
+    result->Set(String::NewSymbol("index"), Number::New(bestResult.get()->Index()));
 
     int resultCount = bestResult.get()->Count();
     Local<Array> captures = Array::New(resultCount);
