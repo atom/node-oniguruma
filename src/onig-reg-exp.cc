@@ -34,7 +34,7 @@ shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
                                           size_t position) {
   if (!regex_) {
     ThrowException(Exception::Error(String::New("RegExp is not valid")));
-    return NULL;
+    return shared_ptr<OnigResult>();
   }
 
   int end = searchString.size();
@@ -48,6 +48,6 @@ shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
     return shared_ptr<OnigResult>(new OnigResult(region));
   } else {
     onig_region_free(region, 1);
-    return NULL;
+    return shared_ptr<OnigResult>();
   }
 }
