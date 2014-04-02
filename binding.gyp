@@ -13,6 +13,11 @@
             'ONIG_EXTERN=extern',
           ],
         }],
+        ['OS=="linux"', {
+          'cflags': [
+            '-w',
+          ],
+        }],
       ],
       'direct_dependent_settings': {
         'include_dirs': [
@@ -98,7 +103,8 @@
         }],
         ['OS=="linux"', {
           'cflags': [
-            '-std=c++0x'
+            '-std=c++0x',
+            '-Wno-unused-result',
           ],
           'cflags_cc!': [
             '-fno-rtti'
