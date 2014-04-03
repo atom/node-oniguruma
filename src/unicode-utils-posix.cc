@@ -8,12 +8,12 @@ int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
   if (bytes <= 0)
     return 0;
 
-  mblen(NULL, 0);
   setlocale(LC_CTYPE, "en_US.UTF-8");
+  mbstate_t mbState = {{0}};
 
   int characters = 0;
   while (bytes > 0) {
-    int characterLength = mblen(string, bytes);
+    int characterLength = mbrlen(string, bytes, &mbState);
     if (characterLength < 1)
       break;
     if (characterLength == 4)
@@ -30,13 +30,13 @@ int UnicodeUtils::bytes_in_characters(const char* string, int characters) {
   if (characters <= 0)
     return 0;
 
-  mblen(NULL, 0);
   setlocale(LC_CTYPE, "en_US.UTF-8");
+  mbstate_t mbState = {{0}};
 
   int bytes = 0;
   int length = strlen(string);
   while (length > 0) {
-    int characterLength = mblen(string, length);
+    int characterLength = mbrlen(string, length, &mbState);
     if (characterLength < 1)
       break;
 
