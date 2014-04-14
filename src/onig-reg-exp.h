@@ -18,6 +18,7 @@ class OnigRegExp {
 
     bool Contains(const string& value);
     int LocationAt(int index);
+    int Index() { return indexInScanner; }
     shared_ptr<OnigResult> Search(const string &searchString, size_t position);
 
   private:

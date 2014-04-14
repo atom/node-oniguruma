@@ -90,6 +90,7 @@
       ],
       'include_dirs': [ '<!(node -e "require(\'nan\')")' ],
       'sources': [
+        'src/onig-cache.cc',
         'src/onig-result.cc',
         'src/onig-reg-exp.cc',
         'src/onig-scanner.cc',
