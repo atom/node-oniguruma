@@ -19,6 +19,8 @@
   "homepage": "http://atom.github.io/node-oniguruma",
   "keywords": [
     "regex",
+    "regexp",
+    "re",
     "regular expression"
   ],
   "devDependencies": {
