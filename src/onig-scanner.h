@@ -34,8 +34,8 @@ class OnigScanner : public node::ObjectWrap {
     explicit OnigScanner(Handle<Array> sources);
     ~OnigScanner();
 
-    void FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner);
-    Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner);
+    void FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback);
+    Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation);
     Handle<Value> CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters);
 
     vector<shared_ptr<OnigRegExp>> regExps;

@@ -37,7 +37,7 @@ Find the next match from a given position.
 
 `string` - The string to search.
 
-`startPosition` - The position to start at, defaults to `0`.
+`startPosition` - The optional position to start at, defaults to `0`.
 
 `callback` - The `(error, match)` function to call when done, `match` will
 null when there is no match.
@@ -57,14 +57,13 @@ scanner.findNextMatch 'abc', (error, match) ->
   }
 ```
 
-
 ### OnigScanner::findNextMatchSync(string, startPosition)
 
 Find the next match from a given position.
 
 `string` - The string to search.
 
-`startPosition` - The position to start at, defaults to `0`.
+`startPosition` - The optional position to start at, defaults to `0`.
 
 Returns an object containing details about the match or `null` if no match.
 
@@ -95,7 +94,7 @@ Synchronously search the string for a match starting at the given position.
 
 `string` - The string to search.
 
-`startPosition` - The position to start the search at, defaults to `0`.
+`startPosition` - The optional position to start the search at, defaults to `0`.
 
 `callback` - The `(error, match)` function to call when done, `match` will be
 null if no matches were found. `match` will be an array of objects for each
@@ -119,7 +118,7 @@ Synchronously search the string for a match starting at the given position.
 
 `string` - The string to search.
 
-`startPosition` - The position to start the search at, defaults to `0`.
+`startPosition` - The optional position to start the search at, defaults to `0`.
 
 Returns an array of objects for each matched group or `null` if no match was
 found.

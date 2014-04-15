@@ -15,7 +15,7 @@ void OnigScanner::Init(Handle<Object> target) {
   tpl->SetClassName(String::NewSymbol("OnigScanner"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   tpl->PrototypeTemplate()->Set(String::NewSymbol("_findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("findNextMatchSync"), FunctionTemplate::New(OnigScanner::FindNextMatchSync)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("_findNextMatchSync"), FunctionTemplate::New(OnigScanner::FindNextMatchSync)->GetFunction());
 
   target->Set(String::NewSymbol("OnigScanner"), tpl->GetFunction());
 }
@@ -32,13 +32,13 @@ NAN_METHOD(OnigScanner::New) {
 NAN_METHOD(OnigScanner::FindNextMatchSync) {
   NanScope();
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(args.This());
-  NanReturnValue(scanner->FindNextMatchSync(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), args.This()));
+  NanReturnValue(scanner->FindNextMatchSync(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1])));
 }
 
 NAN_METHOD(OnigScanner::FindNextMatch) {
   NanScope();
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(args.This());
-  scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), Local<Function>::Cast(args[2]), args.This());
+  scanner->FindNextMatch(Local<String>::Cast(args[0]), Local<Number>::Cast(args[1]), Local<Function>::Cast(args[2]));
   NanReturnUndefined();
 }
 
@@ -57,7 +57,7 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 
 OnigScanner::~OnigScanner() {}
 
-void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback, Handle<Value> v8Scanner) {
+void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback) {
   String::Utf8Value utf8Value(v8String);
   string string(*utf8Value);
   int charOffset = v8StartLocation->Value();
@@ -74,7 +74,7 @@ void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartL
   NanAsyncQueueWorker(worker);
 }
 
-Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Value> v8Scanner) {
+Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation) {
   String::Utf8Value utf8Value(v8String);
   string stringToSearch(*utf8Value);
   int charOffset = v8StartLocation->Value();
@@ -91,7 +91,6 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
     Local<Object> result = Object::New();
     result->Set(String::NewSymbol("index"), Number::New(bestResult->Index()));
     result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult.get(), v8String, stringToSearch.data(), hasMultibyteCharacters));
-    result->Set(String::NewSymbol("scanner"), v8Scanner);
     return result;
   } else {
     return Null();
