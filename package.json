@@ -21,7 +21,8 @@
     "regex",
     "regexp",
     "re",
-    "regular expression"
+    "regular expression",
+    "async"
   ],
   "devDependencies": {
     "async": "~0.7.0",
