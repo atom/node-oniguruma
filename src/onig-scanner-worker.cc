@@ -9,20 +9,20 @@ using ::v8::String;
 using ::v8::Value;
 
 void OnigScannerWorker::Execute() {
-  bestResult = searcher.get()->Search(stringToSearch, utf16StringToSearch.get(), hasMultibyteCharacters, charOffset);
+  bestResult = searcher->Search(stringToSearch, utf16StringToSearch.get(), hasMultibyteCharacters, charOffset);
 }
 
 void OnigScannerWorker::HandleOKCallback() {
   NanScope();
 
   // Try to reuse the cached results across async searches
-  cache.get()->Reset(searcher.get()->GetCache());
+  cache->Reset(searcher->GetCache());
 
   if (bestResult != NULL) {
     Local<Object> result = Object::New();
     result->Set(String::NewSymbol("index"), Number::New(bestResult.get()->Index()));
 
-    int resultCount = bestResult.get()->Count();
+    int resultCount = bestResult->Count();
     Local<Array> captures = Array::New(resultCount);
     for (int index = 0; index < resultCount; index++) {
       int captureLength = bestResult->LengthAt(index);

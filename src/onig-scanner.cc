@@ -89,7 +89,7 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
   shared_ptr<OnigResult> bestResult = searcher->Search(stringToSearch, utf16String, hasMultibyteCharacters, charOffset);
   if (bestResult != NULL) {
     Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("index"), Number::New(bestResult.get()->Index()));
+    result->Set(String::NewSymbol("index"), Number::New(bestResult->Index()));
     result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult.get(), v8String, stringToSearch.data(), hasMultibyteCharacters));
     result->Set(String::NewSymbol("scanner"), v8Scanner);
     return result;
