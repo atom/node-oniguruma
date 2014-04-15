@@ -24,7 +24,7 @@ void OnigCache::Reset(const OnigCache& cache) {
   results = cache.results;
 }
 
-shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, const string &searchString, int byteOffset, bool hasMultibyteCharacters) {
+shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, const string &searchString, int byteOffset) {
   shared_ptr<OnigResult> result;
   int index = regExp->Index();
   bool useCachedResult = false;

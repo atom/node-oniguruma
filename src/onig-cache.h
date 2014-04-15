@@ -26,7 +26,7 @@ class OnigCache {
   void Clear();
   void Init(const string &searchString, int byteOffset);
   void Reset(const OnigCache& cache);
-  shared_ptr<OnigResult> Search(OnigRegExp *regExp, const string &searchString, int byteOffset, bool hasMultibyteCharacters);
+  shared_ptr<OnigResult> Search(OnigRegExp *regExp, const string &searchString, int byteOffset);
 
  private:
   vector<shared_ptr<OnigResult>> results;

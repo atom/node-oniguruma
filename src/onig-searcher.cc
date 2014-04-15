@@ -18,7 +18,7 @@ shared_ptr<OnigResult> OnigSearcher::Search(string stringToSearch, wchar_t* utf1
   vector< shared_ptr<OnigRegExp> >::iterator iter = regExps.begin();
   while (iter < regExps.end()) {
     OnigRegExp *regExp = (*iter).get();
-    shared_ptr<OnigResult> result = cache.Search(regExp, stringToSearch, byteOffset, hasMultibyteCharacters);
+    shared_ptr<OnigResult> result = cache.Search(regExp, stringToSearch, byteOffset);
     if (result != NULL && result->Count() > 0) {
       int location = result->LocationAt(0);
       if (hasMultibyteCharacters) {
