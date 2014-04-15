@@ -64,10 +64,11 @@ void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartL
   bool hasMultibyteCharacters = v8String->Length() != v8String->Utf8Length();
   NanCallback *callback = new NanCallback(v8Callback);
 
-  shared_ptr<wchar_t> utf16String;
 #ifdef _WIN32
   String::Value utf16Value(v8String);
-  utf16String = shared_ptr<wchar_t>(reinterpret_cast<wchar_t*>(*utf16Value));
+  shared_ptr<wchar_t> utf16String(wcsdup(reinterpret_cast<wchar_t*>(*utf16Value)));
+#else
+  shared_ptr<wchar_t> utf16String;
 #endif
 
   OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, string, utf16String, hasMultibyteCharacters, charOffset, asyncCache);
