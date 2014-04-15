@@ -9,7 +9,7 @@ int UnicodeUtils::characters_in_bytes(const char* string, int bytes) {
     return 0;
 
   setlocale(LC_CTYPE, "en_US.UTF-8");
-  mbstate_t mbState = {{0}};
+  mbstate_t mbState = {};
 
   int characters = 0;
   while (bytes > 0) {
@@ -31,7 +31,7 @@ int UnicodeUtils::bytes_in_characters(const char* string, int characters) {
     return 0;
 
   setlocale(LC_CTYPE, "en_US.UTF-8");
-  mbstate_t mbState = {{0}};
+  mbstate_t mbState = {};
 
   int bytes = 0;
   int length = strlen(string);
