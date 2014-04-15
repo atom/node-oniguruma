@@ -19,23 +19,28 @@
   "homepage": "http://atom.github.io/node-oniguruma",
   "keywords": [
     "regex",
+    "regexp",
+    "re",
     "regular expression"
   ],
   "devDependencies": {
+    "async": "~0.7.0",
+    "coffee-script": "~1.7.1",
     "grunt": "~0.4.0",
-    "grunt-contrib-coffee": "~0.4.0",
-    "grunt-shell": "~0.2.1",
     "grunt-cli": "~0.1.6",
-    "jasmine-focused": "1.x",
     "grunt-coffeelint": "0.0.6",
+    "grunt-contrib-coffee": "~0.9.0",
+    "grunt-shell": "~0.2.1",
+    "jasmine-focused": "1.x",
     "node-cpplint": "~0.1.5"
   },
   "dependencies": {
-    "nan": "0.7.0",
+    "nan": "~0.8.0",
     "bindings": "~1.0.0"
   },
   "scripts": {
     "prepublish": "grunt publish",
-    "test": "grunt test"
+    "test": "grunt test",
+    "benchmark": "benchmark/benchmark.coffee"
   }
 }

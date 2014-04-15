@@ -6,9 +6,10 @@
 using ::v8::Exception;
 using ::v8::String;
 
-OnigRegExp::OnigRegExp(const string& source)
+OnigRegExp::OnigRegExp(const string& source, int indexInScanner)
     : source_(source),
-      regex_(NULL) {
+      regex_(NULL),
+      indexInScanner(indexInScanner) {
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
   int status = onig_new(&regex_, sourceData, sourceData + source.length(),
@@ -45,7 +46,7 @@ shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
                            ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
-    return shared_ptr<OnigResult>(new OnigResult(region));
+    return shared_ptr<OnigResult>(new OnigResult(region, indexInScanner));
   } else {
     onig_region_free(region, 1);
     return shared_ptr<OnigResult>();

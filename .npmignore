@@ -21,3 +21,4 @@ deps/onig/sample/syntax
 *~
 .npmignore
 .node-version
+benchmark
