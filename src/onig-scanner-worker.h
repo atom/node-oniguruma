@@ -21,14 +21,16 @@ class OnigScannerWorker : public NanAsyncWorker {
                     string stringToSearch,
                     shared_ptr<wchar_t> utf16StringToSearch,
                     bool hasMultibyteCharacters,
-                    int charOffset)
+                    int charOffset,
+                    shared_ptr<OnigCache> cache)
     : NanAsyncWorker(callback),
       regExps(regExps),
       stringToSearch(stringToSearch),
       utf16StringToSearch(utf16StringToSearch),
       hasMultibyteCharacters(hasMultibyteCharacters),
-      charOffset(charOffset) {
-    searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
+      charOffset(charOffset),
+      cache(cache) {
+    searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps, *cache.get()));
   }
 
   ~OnigScannerWorker() {}
@@ -42,6 +44,7 @@ class OnigScannerWorker : public NanAsyncWorker {
   shared_ptr<wchar_t> utf16StringToSearch;
   bool hasMultibyteCharacters;
   int charOffset;
+  shared_ptr<OnigCache> cache;
   shared_ptr<OnigSearcher> searcher;
   shared_ptr<OnigResult> bestResult;
 };

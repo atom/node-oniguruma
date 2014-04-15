@@ -14,6 +14,7 @@ using ::std::vector;
 class OnigCache {
  public:
   explicit OnigCache(int maxSize) :
+    maxSize(maxSize),
     maxCachedIndex(-1),
     lastStartLocation(-1),
     useCache(false) {
@@ -24,10 +25,12 @@ class OnigCache {
 
   void Clear();
   void Init(const string &searchString, int byteOffset);
+  void Reset(const OnigCache& cache);
   shared_ptr<OnigResult> Search(OnigRegExp *regExp, const string &searchString, int byteOffset, bool hasMultibyteCharacters);
 
  private:
   vector<shared_ptr<OnigResult>> results;
+  int maxSize;
   string lastMatchedString;
   int maxCachedIndex;
   int lastStartLocation;

@@ -17,8 +17,13 @@ class OnigSearcher {
     : regExps(regExps),
       cache(regExps.size()) {}
 
+  OnigSearcher(vector<shared_ptr<OnigRegExp>> regExps, OnigCache cache)
+    : regExps(regExps),
+      cache(cache) {}
+
   ~OnigSearcher() {}
 
+  const OnigCache& GetCache() { return cache; }
   shared_ptr<OnigResult> Search(string stringToSearch, wchar_t* utf16StringToSearch, bool hasMultibyteCharacters, int charOffset);
 
  private:

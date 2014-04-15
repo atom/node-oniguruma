@@ -15,6 +15,9 @@ void OnigScannerWorker::Execute() {
 void OnigScannerWorker::HandleOKCallback() {
   NanScope();
 
+  // Try to reuse the cached results across async searches
+  cache.get()->Reset(searcher.get()->GetCache());
+
   if (bestResult != NULL) {
     Local<Object> result = Object::New();
     result->Set(String::NewSymbol("index"), Number::New(bestResult.get()->Index()));

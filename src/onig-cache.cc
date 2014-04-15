@@ -4,6 +4,7 @@
 void OnigCache::Clear() {
   maxCachedIndex = -1;
   results.clear();
+  results.resize(maxSize);
 }
 
 void OnigCache::Init(const string &stringToSearch, int byteOffset) {
@@ -16,6 +17,13 @@ void OnigCache::Init(const string &stringToSearch, int byteOffset) {
   }
 }
 
+void OnigCache::Reset(const OnigCache& cache) {
+  lastMatchedString = cache.lastMatchedString;
+  maxCachedIndex = cache.maxCachedIndex;
+  lastStartLocation = cache.lastStartLocation;
+  results = cache.results;
+}
+
 shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, const string &searchString, int byteOffset, bool hasMultibyteCharacters) {
   shared_ptr<OnigResult> result;
   int index = regExp->Index();
@@ -23,15 +31,7 @@ shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, const string &searc
 
   if (useCache && index <= maxCachedIndex) {
     result = results[index];
-    if (result != NULL) {
-      int location = result->LocationAt(0);
-      if (hasMultibyteCharacters) {
-        location = UnicodeUtils::characters_in_bytes(searchString.data(), location);
-      }
-      useCachedResult = location >= byteOffset;
-    } else {
-      useCachedResult = true;
-    }
+    useCachedResult = result == NULL || result->LocationAt(0) >= byteOffset;
   }
 
   if (!useCachedResult) {

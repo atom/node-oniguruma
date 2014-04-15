@@ -52,6 +52,7 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
   }
 
   searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
+  asyncCache = shared_ptr<OnigCache>(new OnigCache(length));
 }
 
 OnigScanner::~OnigScanner() {}
@@ -69,7 +70,7 @@ void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartL
   utf16String = shared_ptr<OnigRegExp>(reinterpret_cast<wchar_t*>(*utf16Value));
 #endif
 
-  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, string, utf16String, hasMultibyteCharacters, charOffset);
+  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, string, utf16String, hasMultibyteCharacters, charOffset, asyncCache);
   NanAsyncQueueWorker(worker);
 }
 

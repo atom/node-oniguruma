@@ -1,6 +1,7 @@
 #ifndef SRC_ONIG_SCANNER_H_
 #define SRC_ONIG_SCANNER_H_
 
+#include "onig-cache.h"
 #include "onig-searcher.h"
 #include <string>
 #include <vector>
@@ -39,6 +40,7 @@ class OnigScanner : public node::ObjectWrap {
 
     vector<shared_ptr<OnigRegExp>> regExps;
     shared_ptr<OnigSearcher> searcher;
+    shared_ptr<OnigCache> asyncCache;
 };
 
 #endif  // SRC_ONIG_SCANNER_H_
