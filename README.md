@@ -1,4 +1,4 @@
-# Oniguruma Node module [![Build Status](https://travis-ci.org/atom/node-oniguruma.png)](https://travis-ci.org/atom/node-oniguruma)
+# Oniguruma Node module [![Build Status](https://travis-ci.org/atom/node-oniguruma.svg)](https://travis-ci.org/atom/node-oniguruma)
 
 Native Node bindings to the Oniguruma regular expressions library.
 
