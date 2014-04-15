@@ -136,7 +136,7 @@ console.log match
 ]
 ```
 
-### OnigRegExp::test(string)
+### OnigRegExp::test(string, callback)
 
 Synchronously test if this regular expression matches the given string.
 
