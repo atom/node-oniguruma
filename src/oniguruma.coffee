@@ -1,7 +1,7 @@
 {OnigScanner} = require('bindings')('onig_scanner.node')
 OnigRegExp = require './onig-reg-exp'
 
-OnigScanner::findNextMatch = (string, startPosition, callback) ->
+OnigScanner::findNextMatch = (string, startPosition=0, callback) ->
   if typeof startPosition is 'function'
     callback = startPosition
     startPosition = 0
