@@ -24,7 +24,6 @@ class OnigScannerWorker : public NanAsyncWorker {
                     int charOffset,
                     shared_ptr<OnigCache> cache)
     : NanAsyncWorker(callback),
-      regExps(regExps),
       stringToSearch(stringToSearch),
       utf16StringToSearch(utf16StringToSearch),
       hasMultibyteCharacters(hasMultibyteCharacters),
@@ -39,7 +38,6 @@ class OnigScannerWorker : public NanAsyncWorker {
   void HandleOKCallback();
 
  private:
-  vector<shared_ptr<OnigRegExp>> regExps;
   string stringToSearch;
   shared_ptr<wchar_t> utf16StringToSearch;
   bool hasMultibyteCharacters;
