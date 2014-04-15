@@ -1,4 +1,5 @@
 #include "onig-scanner-worker.h"
+#include "unicode-utils.h"
 
 using ::v8::Array;
 using ::v8::Local;

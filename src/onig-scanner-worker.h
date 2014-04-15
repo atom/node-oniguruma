@@ -4,11 +4,11 @@
 #include <node.h>
 #include <string>
 #include <vector>
+
 #include "nan.h"
 #include "onig-reg-exp.h"
 #include "onig-result.h"
 #include "onig-searcher.h"
-#include "unicode-utils.h"
 
 using ::std::string;
 using ::std::shared_ptr;
