@@ -24,7 +24,7 @@ class OnigSearcher {
   ~OnigSearcher() {}
 
   const OnigCache& GetCache() { return cache; }
-  shared_ptr<OnigResult> Search(string stringToSearch, wchar_t* utf16StringToSearch, bool hasMultibyteCharacters, int charOffset);
+  shared_ptr<OnigResult> Search(const string& stringToSearch, wchar_t* utf16StringToSearch, bool hasMultibyteCharacters, int charOffset);
 
  private:
   vector<shared_ptr<OnigRegExp>> regExps;

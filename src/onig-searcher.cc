@@ -1,7 +1,7 @@
 #include "onig-searcher.h"
 #include "unicode-utils.h"
 
-shared_ptr<OnigResult> OnigSearcher::Search(string stringToSearch, wchar_t* utf16StringToSearch, bool hasMultibyteCharacters, int charOffset) {
+shared_ptr<OnigResult> OnigSearcher::Search(const string& stringToSearch, wchar_t* utf16StringToSearch, bool hasMultibyteCharacters, int charOffset) {
   int byteOffset = charOffset;
   if (hasMultibyteCharacters) {
 #ifdef _WIN32
