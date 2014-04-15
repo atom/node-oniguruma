@@ -21,7 +21,7 @@ void OnigScannerWorker::HandleOKCallback() {
 
   if (bestResult != NULL) {
     Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("index"), Number::New(bestResult.get()->Index()));
+    result->Set(String::NewSymbol("index"), Number::New(bestResult->Index()));
 
     int resultCount = bestResult->Count();
     Local<Array> captures = Array::New(resultCount);
