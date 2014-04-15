@@ -4,6 +4,9 @@ Native Node bindings to the Oniguruma regular expressions library.
 
 Read all about Oniguruma regular expressions [here](http://www.geocities.jp/kosako3/oniguruma/doc/RE.txt).
 
+Version 2.0 of this library added an asynchronous API, the old synchronous
+methods have been renamed to have a `Sync` suffix.
+
 ## Installing
 
 ```sh
@@ -27,6 +30,33 @@ npm install oniguruma
 Create a new scanner with the given patterns.
 
 `patterns` - An array of string patterns.
+
+### OnigScanner::findNextMatch(string, startPosition, callback)
+
+Find the next match from a given position.
+
+`string` - The string to search.
+
+`startPosition` - The position to start at, defaults to `0`.
+
+`callback` - The `(error, match)` function to call when done, `match` will
+null when there is no match.
+
+#### Example
+
+```coffeescript
+scanner = new OnigScanner(['c', 'a(b)?'])
+scanner.findNextMatch 'abc', (error, match) ->
+  console.log match
+  {
+    index: 1,  # Index of the best pattern match
+    captureIndices: [
+      {index: 0, start: 0, end: 2, length: 2},  # Entire match
+      {index: 1, start: 1, end: 2, length: 1}   # Match of first capture group
+    ]
+  }
+```
+
 
 ### OnigScanner::findNextMatchSync(string, startPosition)
 
@@ -59,9 +89,33 @@ Create a new regex with the given pattern.
 
 `pattern` - A string pattern.
 
-### OnigRegExp::search(string, startPosition)
+### OnigRegExp::search(string, startPosition, callback)
 
-Search the string for a match starting at the given position.
+Synchronously search the string for a match starting at the given position.
+
+`string` - The string to search.
+
+`startPosition` - The position to start the search at, defaults to `0`.
+
+`callback` - The `(error, match)` function to call when done, `match` will be
+null if no matches were found. `match` will be an array of objects for each
+matched group on a successful search.
+
+#### Example
+
+```coffeescript
+regex = new OnigRegExp('a([b-d])c')
+regex.search '!abcdef', (error, match) ->
+  console.log match
+  [
+    {index: 0, start: 1, end: 4, match: 'abc', length: 3}, # Entire match
+    {index: 1, start: 2, end: 3, match: 'b', length: 1}    # Match of first capture group
+  ]
+```
+
+### OnigRegExp::searchSync(string, startPosition)
+
+Synchronously search the string for a match starting at the given position.
 
 `string` - The string to search.
 
@@ -70,10 +124,11 @@ Search the string for a match starting at the given position.
 Returns an array of objects for each matched group or `null` if no match was
 found.
 
-### Example
+#### Example
+
 ```coffeescript
 regex = new OnigRegExp('a([b-d])c')
-match = regex.search('!abcdef')
+match = regex.searchSync('!abcdef')
 console.log match
 [
   {index: 0, start: 1, end: 4, match: 'abc', length: 3}, # Entire match
@@ -81,10 +136,35 @@ console.log match
 ]
 ```
 
-## OnigRegExp::test(string)
+### OnigRegExp::test(string)
 
-Test if this regular expression matches the given string.
+Synchronously test if this regular expression matches the given string.
+
+`string` - The string to test against.
+
+`callback` - The `(error, matches)` function to call when done, `matches` will
+be `true` if at least one match is found, `false` otherwise.
+
+#### Example
+
+```coffeescript
+regex = new OnigRegExp('a([b-d])c')
+regex.test 'abcdef', (error, matches) ->
+  console.log matches # true
+```
+
+### OnigRegExp::testSync(string)
+
+Synchronously test if this regular expression matches the given string.
 
 `string` - The string to test against.
 
 Returns `true` if at least one match, `false` otherwise.
+
+#### Example
+
+```coffeescript
+regex = new OnigRegExp('a([b-d])c')
+matches = regex.testSync('abcdef')
+console.log matches # true
+```
