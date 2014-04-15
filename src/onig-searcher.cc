@@ -5,7 +5,7 @@ shared_ptr<OnigResult> OnigSearcher::Search(string stringToSearch, wchar_t* utf1
   int byteOffset = charOffset;
   if (hasMultibyteCharacters) {
 #ifdef _WIN32
-    byteOffset = UnicodeUtils::bytes_in_characters(utf16StringToSearch.get(), charOffset);
+    byteOffset = UnicodeUtils::bytes_in_characters(utf16StringToSearch, charOffset);
 #else
     byteOffset = UnicodeUtils::bytes_in_characters(stringToSearch.data(), charOffset);
 #endif
