@@ -59,7 +59,7 @@ scanner.findNextMatch 'abc', (error, match) ->
 
 ### OnigScanner::findNextMatchSync(string, startPosition)
 
-Find the next match from a given position.
+Synchronously find the next match from a given position.
 
 `string` - The string to search.
 
@@ -90,7 +90,7 @@ Create a new regex with the given pattern.
 
 ### OnigRegExp::search(string, startPosition, callback)
 
-Synchronously search the string for a match starting at the given position.
+Search the string for a match starting at the given position.
 
 `string` - The string to search.
 
@@ -137,7 +137,7 @@ console.log match
 
 ### OnigRegExp::test(string, callback)
 
-Synchronously test if this regular expression matches the given string.
+Test if this regular expression matches the given string.
 
 `string` - The string to test against.
 
