@@ -1,46 +1,32 @@
 #!/usr/bin/env coffee
 
-# This script is just a simple runner to test that the library does not crash
-# when creating lots of scanners and searching lots of random strings.
-
-async = require 'async'
-crypto = require 'crypto'
+fs = require 'fs'
+path = require 'path'
 {OnigScanner} = require '../src/oniguruma'
 
-randomString = ->
-  string = ''
-  for i in [1..10]
-    string += crypto.createHash('sha1').update(Math.random().toString(), 'utf8').digest('hex')
-  string
+scanner = new OnigScanner(['this', 'var', 'selector', 'window'])
+
+lines = fs.readFileSync(path.join(__dirname, 'large.js'), 'utf8').split('\n')[0..25]
+
+startTime = Date.now()
+matches = 0
+
+for line in lines
+  for position in [0..line.length]
+    matches++ if scanner.findNextMatchSync(line, position)
+
+console.log "sync:  #{matches} matches in #{Date.now() - startTime}ms"
 
 matches = 0
+callsInProgress = 0
+
+callback = (error, match) ->
+  matches++ if match?
+  if --callsInProgress is 0
+    console.log "async: #{matches} matches in #{Date.now() - startTime}ms"
+
 startTime = Date.now()
-
-for i in [1..100]
-  scanner = new OnigScanner(["a", "b", "cd", "de"])
-  for j in [1..10]
-    string = randomString()
-    index = 0
-    while match = scanner.findNextMatchSync(string, index)
-      index++
-      matches++
-
-console.log("Found #{matches} matches synchronously in #{Date.now() - startTime}ms")
-
-matches = 0
-startTime = Date.now()
-
-queue = async.queue ({scanner, string, index}, callback) ->
-  scanner.findNextMatch string, index, (error, match) ->
-    if match?
-      matches++
-      index++
-      queue.push({scanner, string, index})
-    callback(error)
-queue.concurrency = Infinity
-queue.drain = ->
-  console.log("Found #{matches} matches asynchronosly in #{Date.now() - startTime}ms")
-
-for i in [1..100]
-  scanner = new OnigScanner(["a", "b", "cd", "de"])
-  queue.push({scanner, string: randomString(), index: 0}) for j in [1..10]
+for line in lines
+  for position in [0..line.length]
+    callsInProgress++
+    scanner.findNextMatch(line, position, callback)
