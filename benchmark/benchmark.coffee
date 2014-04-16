@@ -6,7 +6,7 @@ path = require 'path'
 
 scanner = new OnigScanner(['this', 'var', 'selector', 'window'])
 
-lines = fs.readFileSync(path.join(__dirname, 'large.js'), 'utf8').split('\n')[0..25]
+lines = fs.readFileSync(path.join(__dirname, 'large.js'), 'utf8').split('\n')
 
 startTime = Date.now()
 matches = 0
