@@ -19,7 +19,7 @@ OnigRegExp::OnigRegExp(const string& source, int indexInScanner)
   if (status != ONIG_NORMAL) {
     UChar errorString[ONIG_MAX_ERROR_MESSAGE_LEN];
     onig_error_code_to_str(errorString, status, &error);
-    ThrowException(Exception::Error(String::New(reinterpret_cast<char*>(errorString))));
+    NanThrowError(Exception::Error(NanNew(reinterpret_cast<char*>(errorString))));
   }
 }
 
@@ -34,7 +34,7 @@ bool OnigRegExp::Contains(const string& value) {
 shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
                                           size_t position) {
   if (!regex_) {
-    ThrowException(Exception::Error(String::New("RegExp is not valid")));
+    NanThrowError(Exception::Error(NanNew("RegExp is not valid")));
     return shared_ptr<OnigResult>();
   }
 

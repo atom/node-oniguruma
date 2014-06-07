@@ -20,11 +20,11 @@ void OnigScannerWorker::HandleOKCallback() {
   cache->Reset(searcher->GetCache());
 
   if (bestResult != NULL) {
-    Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("index"), Number::New(bestResult->Index()));
+    Local<Object> result = NanNew<Object>();
+    result->Set(NanNew("index"), NanNew<Number>(bestResult->Index()));
 
     int resultCount = bestResult->Count();
-    Local<Array> captures = Array::New(resultCount);
+    Local<Array> captures = NanNew<Array>(resultCount);
     for (int index = 0; index < resultCount; index++) {
       int captureLength = bestResult->LengthAt(index);
       int captureStart = bestResult->LocationAt(index);
@@ -34,24 +34,24 @@ void OnigScannerWorker::HandleOKCallback() {
         captureStart = UnicodeUtils::characters_in_bytes(stringToSearch.data(), captureStart);
       }
 
-      Local<Object> capture = Object::New();
-      capture->Set(String::NewSymbol("index"), Number::New(index));
-      capture->Set(String::NewSymbol("start"), Number::New(captureStart));
-      capture->Set(String::NewSymbol("end"), Number::New(captureStart + captureLength));
-      capture->Set(String::NewSymbol("length"), Number::New(captureLength));
+      Local<Object> capture = NanNew<Object>();
+      capture->Set(NanNew("index"), NanNew<Number>(index));
+      capture->Set(NanNew("start"), NanNew<Number>(captureStart));
+      capture->Set(NanNew("end"), NanNew<Number>(captureStart + captureLength));
+      capture->Set(NanNew("length"), NanNew<Number>(captureLength));
       captures->Set(index, capture);
     }
-    result->Set(String::NewSymbol("captureIndices"), captures);
+    result->Set(NanNew("captureIndices"), captures);
 
     Local<Value> argv[] = {
-      Local<Value>::New(Null()),
-      Local<Value>::New(result)
+      NanNull(),
+      NanNew(result)
     };
     callback->Call(2, argv);
   } else {
     Local<Value> argv[] = {
-      Local<Value>::New(Null()),
-      Local<Value>::New(Null())
+      NanNull(),
+      NanNull()
     };
     callback->Call(2, argv);
   }

@@ -11,13 +11,13 @@ using ::v8::Local;
 using ::v8::Null;
 
 void OnigScanner::Init(Handle<Object> target) {
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(OnigScanner::New);
-  tpl->SetClassName(String::NewSymbol("OnigScanner"));
+  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(OnigScanner::New);
+  tpl->SetClassName(NanNew("OnigScanner"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("_findNextMatch"), FunctionTemplate::New(OnigScanner::FindNextMatch)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("_findNextMatchSync"), FunctionTemplate::New(OnigScanner::FindNextMatchSync)->GetFunction());
+  tpl->PrototypeTemplate()->Set(NanNew("_findNextMatch"), NanNew<FunctionTemplate>(OnigScanner::FindNextMatch)->GetFunction());
+  tpl->PrototypeTemplate()->Set(NanNew("_findNextMatchSync"), NanNew<FunctionTemplate>(OnigScanner::FindNextMatchSync)->GetFunction());
 
-  target->Set(String::NewSymbol("OnigScanner"), tpl->GetFunction());
+  target->Set(NanNew("OnigScanner"), tpl->GetFunction());
 }
 
 NODE_MODULE(onig_scanner, OnigScanner::Init)
@@ -89,18 +89,18 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
 
   shared_ptr<OnigResult> bestResult = searcher->Search(stringToSearch, utf16String, hasMultibyteCharacters, charOffset);
   if (bestResult != NULL) {
-    Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("index"), Number::New(bestResult->Index()));
-    result->Set(String::NewSymbol("captureIndices"), CaptureIndicesForMatch(bestResult.get(), v8String, stringToSearch.data(), hasMultibyteCharacters));
+    Local<Object> result = NanNew<Object>();
+    result->Set(NanNew("index"), NanNew<Number>(bestResult->Index()));
+    result->Set(NanNew("captureIndices"), CaptureIndicesForMatch(bestResult.get(), v8String, stringToSearch.data(), hasMultibyteCharacters));
     return result;
   } else {
-    return Null();
+    return NanNull();
   }
 }
 
 Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, Handle<String> v8String, const char* string, bool hasMultibyteCharacters) {
   int resultCount = result->Count();
-  Local<Array> captures = Array::New(resultCount);
+  Local<Array> captures = NanNew<Array>(resultCount);
 
   for (int index = 0; index < resultCount; index++) {
     int captureLength = result->LengthAt(index);
@@ -111,11 +111,11 @@ Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, Handle<Str
       captureStart = UnicodeUtils::characters_in_bytes(string, captureStart);
     }
 
-    Local<Object> capture = Object::New();
-    capture->Set(String::NewSymbol("index"), Number::New(index));
-    capture->Set(String::NewSymbol("start"), Number::New(captureStart));
-    capture->Set(String::NewSymbol("end"), Number::New(captureStart + captureLength));
-    capture->Set(String::NewSymbol("length"), Number::New(captureLength));
+    Local<Object> capture = NanNew<Object>();
+    capture->Set(NanNew("index"), NanNew<Number>(index));
+    capture->Set(NanNew("start"), NanNew<Number>(captureStart));
+    capture->Set(NanNew("end"), NanNew<Number>(captureStart + captureLength));
+    capture->Set(NanNew("length"), NanNew<Number>(captureLength));
     captures->Set(index, capture);
   }
 
