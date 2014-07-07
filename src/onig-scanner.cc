@@ -105,6 +105,7 @@ Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, Handle<Str
   for (int index = 0; index < resultCount; index++) {
     int captureLength = result->LengthAt(index);
     int captureStart = result->LocationAt(index);
+    std::string captureName(result->NameAt(index));
 
     if (hasMultibyteCharacters) {
       captureLength = UnicodeUtils::characters_in_bytes(string + captureStart, captureLength);
@@ -116,6 +117,9 @@ Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, Handle<Str
     capture->Set(String::NewSymbol("start"), Number::New(captureStart));
     capture->Set(String::NewSymbol("end"), Number::New(captureStart + captureLength));
     capture->Set(String::NewSymbol("length"), Number::New(captureLength));
+    if (captureName.length() > 0) {
+      capture->Set(String::NewSymbol("name"), String::New(captureName.data()));
+    }
     captures->Set(index, capture);
   }
 

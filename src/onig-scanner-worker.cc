@@ -28,6 +28,7 @@ void OnigScannerWorker::HandleOKCallback() {
     for (int index = 0; index < resultCount; index++) {
       int captureLength = bestResult->LengthAt(index);
       int captureStart = bestResult->LocationAt(index);
+      std::string captureName(bestResult->NameAt(index));
 
       if (hasMultibyteCharacters) {
         captureLength = UnicodeUtils::characters_in_bytes(stringToSearch.data() + captureStart, captureLength);
@@ -39,6 +40,9 @@ void OnigScannerWorker::HandleOKCallback() {
       capture->Set(String::NewSymbol("start"), Number::New(captureStart));
       capture->Set(String::NewSymbol("end"), Number::New(captureStart + captureLength));
       capture->Set(String::NewSymbol("length"), Number::New(captureLength));
+      if (captureName.length() > 0) {
+        capture->Set(String::NewSymbol("name"), String::New(captureName.data()));
+      }
       captures->Set(index, capture);
     }
     result->Set(String::NewSymbol("captureIndices"), captures);
