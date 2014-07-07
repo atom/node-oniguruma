@@ -8,6 +8,7 @@ using ::v8::String;
 
 OnigRegExp::OnigRegExp(const string& source, int indexInScanner)
     : source_(source),
+      group_names_(),
       regex_(NULL),
       indexInScanner(indexInScanner) {
   OnigErrorInfo error;
@@ -20,7 +21,25 @@ OnigRegExp::OnigRegExp(const string& source, int indexInScanner)
     UChar errorString[ONIG_MAX_ERROR_MESSAGE_LEN];
     onig_error_code_to_str(errorString, status, &error);
     ThrowException(Exception::Error(String::New(reinterpret_cast<char*>(errorString))));
+    return;
   }
+
+  onig_foreach_name(regex_, &OnigRegExp::name_callback, this);
+}
+
+/* static */
+int OnigRegExp::name_callback(const UChar* name, const UChar* name_end, int ngroup_num, int* group_nums, regex_t* regex, void* _that) {
+  OnigRegExp *that = static_cast<OnigRegExp*>(_that);
+
+  for (int i = 0; i < ngroup_num; i++) {
+    int group = *(group_nums + i);
+    if (static_cast<int>(that->group_names_.size()) < (group + 1)) {
+      that->group_names_.resize(group + 1);
+    }
+    that->group_names_[group] = std::string((const char *)name);
+  }
+
+  return 0;
 }
 
 OnigRegExp::~OnigRegExp() {
@@ -46,7 +65,7 @@ shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
                            ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
-    return shared_ptr<OnigResult>(new OnigResult(region, indexInScanner));
+    return shared_ptr<OnigResult>(new OnigResult(region, group_names_, indexInScanner));
   } else {
     onig_region_free(region, 1);
     return shared_ptr<OnigResult>();

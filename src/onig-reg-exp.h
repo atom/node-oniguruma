@@ -3,11 +3,13 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "oniguruma.h"
 
 using ::std::shared_ptr;
 using ::std::string;
+using ::std::vector;
 
 class OnigResult;
 
@@ -22,10 +24,13 @@ class OnigRegExp {
     shared_ptr<OnigResult> Search(const string &searchString, size_t position);
 
   private:
+    static int name_callback(const UChar* name, const UChar* name_end, int ngroup_num, int* group_nums, regex_t* regex, void* _this);
+
     OnigRegExp(const OnigRegExp&);  // Disallow copying
     OnigRegExp &operator=(const OnigRegExp&);  // Disallow copying
 
     string source_;
+    vector<string> group_names_;
     regex_t* regex_;
     int indexInScanner;
 };

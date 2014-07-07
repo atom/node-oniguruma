@@ -2,8 +2,11 @@
 #include "onig-result.h"
 #include "unicode-utils.h"
 
-OnigResult::OnigResult(OnigRegion* region, int indexInScanner)
-  : region_(region), indexInScanner(indexInScanner) {}
+OnigResult::OnigResult(OnigRegion* region, const vector<string>& group_names, int indexInScanner)
+  : region_(region),
+    group_names_(group_names),
+    indexInScanner(indexInScanner)
+{ }
 
 OnigResult::~OnigResult() {
   onig_region_free(region_, 1);
@@ -27,4 +30,11 @@ int OnigResult::LengthAt(int index) {
     return bytes;
   else
     return 0;
+}
+
+string OnigResult::NameAt(int index) {
+  if (index + 1 > static_cast<int>(group_names_.size())) {
+    return std::string();
+  }
+  return group_names_[index];
 }
