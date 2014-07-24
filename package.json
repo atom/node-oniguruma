@@ -2,7 +2,7 @@
   "main": "./lib/oniguruma.js",
   "name": "oniguruma",
   "description": "oniguruma regular expression library",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "licenses": [
     {
       "type": "MIT",
@@ -36,7 +36,7 @@
     "node-cpplint": "~0.1.5"
   },
   "dependencies": {
-    "nan": "~0.8.0",
+    "nan": "1.2.0",
     "bindings": "~1.0.0"
   },
   "scripts": {
