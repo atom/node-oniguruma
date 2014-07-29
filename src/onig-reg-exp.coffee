@@ -1,4 +1,4 @@
-{OnigScanner} = require('bindings')('onig_scanner.node')
+{OnigScanner} = require('../build/Release/onig_scanner.node')
 
 module.exports =
 class OnigRegExp
