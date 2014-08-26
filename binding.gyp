@@ -108,6 +108,7 @@
           'cflags': [
             '-std=c++0x',
             '-Wno-unused-result',
+            '-Wno-missing-field-initializers',
           ],
           'cflags_cc!': [
             '-fno-rtti'
