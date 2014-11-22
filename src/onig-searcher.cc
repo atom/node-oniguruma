@@ -30,7 +30,7 @@ shared_ptr<OnigResult> OnigSearcher::Search(const string& stringToSearch, wchar_
         bestResult = result;
       }
 
-      if (location == charOffset) {
+      if (location == byteOffset) {
         break;
       }
     }
