@@ -133,6 +133,11 @@
             'src/unicode-utils-posix.cc'
           ],
         }],
+        ['OS=="freebsd"', {
+          'cflags': [
+            '-std=c++0x',
+          ]
+        }]
       ]
     }
   ]
