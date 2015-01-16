@@ -2,7 +2,7 @@
   "main": "./lib/oniguruma.js",
   "name": "oniguruma",
   "description": "oniguruma regular expression library",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "licenses": [
     {
       "type": "MIT",
