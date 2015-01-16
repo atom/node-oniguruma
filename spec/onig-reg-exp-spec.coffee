@@ -144,6 +144,8 @@ describe 'OnigRegExp', ->
     it 'returns true if the string matches the pattern', ->
       expect(new OnigRegExp("a[b-d]c").testSync('aec')).toBe false
       expect(new OnigRegExp("a[b-d]c").testSync('abc')).toBe true
+      expect(new OnigRegExp(false).testSync(false)).toBe true
+      expect(new OnigRegExp(false).testSync(true)).toBe false
 
   describe '::test(string, callback)', ->
     it 'calls back with true if the string matches the pattern', ->

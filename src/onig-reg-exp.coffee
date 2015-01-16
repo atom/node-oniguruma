@@ -1,4 +1,4 @@
-{OnigScanner} = require('../build/Release/onig_scanner.node')
+{OnigScanner} = require '../build/Release/onig_scanner.node'
 
 module.exports =
 class OnigRegExp
@@ -8,6 +8,7 @@ class OnigRegExp
   captureIndicesForMatch: (string, match) ->
     if match?
       {captureIndices} = match
+      string = @scanner.convertToString(string)
       for capture in captureIndices
         capture.match = string[capture.start...capture.end]
       captureIndices

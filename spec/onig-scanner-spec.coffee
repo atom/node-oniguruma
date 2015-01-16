@@ -20,6 +20,20 @@ describe "OnigScanner", ->
         match = scanner.findNextMatchSync('ab…cde21', 5)
         expect(match.index).toBe 1
 
+    it "returns false when the input string isn't a string", ->
+      scanner = new OnigScanner(["1"])
+      expect(scanner.findNextMatchSync()).toBe null
+      expect(scanner.findNextMatchSync(null)).toBe null
+      expect(scanner.findNextMatchSync(2)).toBe null
+      expect(scanner.findNextMatchSync(false)).toBe null
+
+    it "uses 0 as the start position when the input start position isn't a valid number", ->
+      scanner = new OnigScanner(["1"])
+      expect(scanner.findNextMatchSync('a1', Infinity).index).toBe 0
+      expect(scanner.findNextMatchSync('a1', -1).index).toBe 0
+      expect(scanner.findNextMatchSync('a1', false).index).toBe 0
+      expect(scanner.findNextMatchSync('a1', 'food').index).toBe 0
+
   describe "::findNextMatch", ->
     matchCallback = null
 
