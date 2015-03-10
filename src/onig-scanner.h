@@ -1,12 +1,12 @@
 #ifndef SRC_ONIG_SCANNER_H_
 #define SRC_ONIG_SCANNER_H_
 
+#include "nan.h"
 #include "onig-cache.h"
 #include "onig-searcher.h"
 #include <string>
 #include <vector>
 #include <memory>
-#include "nan.h"
 
 using ::v8::Array;
 using ::v8::Function;
