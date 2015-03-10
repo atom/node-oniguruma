@@ -12,22 +12,22 @@ using ::std::string;
 class OnigResult;
 
 class OnigRegExp {
-  public:
-    explicit OnigRegExp(const string& source, int indexInScanner);
-    ~OnigRegExp();
+ public:
+  explicit OnigRegExp(const string& source, int indexInScanner);
+  ~OnigRegExp();
 
-    bool Contains(const string& value);
-    int LocationAt(int index);
-    int Index() { return indexInScanner; }
-    shared_ptr<OnigResult> Search(const string &searchString, size_t position);
+  bool Contains(const string& value);
+  int LocationAt(int index);
+  int Index() { return indexInScanner; }
+  shared_ptr<OnigResult> Search(const string &searchString, size_t position);
 
-  private:
-    OnigRegExp(const OnigRegExp&);  // Disallow copying
-    OnigRegExp &operator=(const OnigRegExp&);  // Disallow copying
+ private:
+  OnigRegExp(const OnigRegExp&);  // Disallow copying
+  OnigRegExp &operator=(const OnigRegExp&);  // Disallow copying
 
-    string source_;
-    regex_t* regex_;
-    int indexInScanner;
+  string source_;
+  regex_t* regex_;
+  int indexInScanner;
 };
 
 #endif  // SRC_ONIG_REG_EXP_H_
