@@ -122,6 +122,11 @@
             4530,  # C++ exception handler used, but unwind semantics are not enabled
             4996,  # 'v8::Persistent<T>::New': was declared deprecated
           ],
+          'msvs_settings': {
+            'VCCLCompilerTool' : {
+              'AdditionalOptions' : ['/EHsc']
+            }
+          },
           'defines': [
             'ONIG_EXTERN=extern',
           ],
