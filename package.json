@@ -27,6 +27,7 @@
   "devDependencies": {
     "async": "~0.9.0",
     "coffee-script": "~1.9.1",
+    "coffeelint": "~1.9.2",
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.13",
     "grunt-coffeelint": "0.0.13",
