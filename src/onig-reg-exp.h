@@ -20,6 +20,7 @@ class OnigRegExp {
     int LocationAt(int index);
     int Index() { return indexInScanner; }
     shared_ptr<OnigResult> Search(const string &searchString, size_t position);
+    shared_ptr<OnigResult> Search(const char* data, size_t position, size_t end);
 
   private:
     OnigRegExp(const OnigRegExp&);  // Disallow copying
