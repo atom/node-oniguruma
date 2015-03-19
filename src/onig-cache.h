@@ -11,6 +11,8 @@ using ::std::shared_ptr;
 using ::std::string;
 using ::std::vector;
 
+class OnigStringContext;
+
 class OnigCache {
  public:
   explicit OnigCache(int maxSize) :
@@ -24,14 +26,14 @@ class OnigCache {
   ~OnigCache() {}
 
   void Clear();
-  void Init(const string &searchString, int byteOffset);
+  void Init(shared_ptr<OnigStringContext> searchString, int byteOffset);
   void Reset(const OnigCache& cache);
-  shared_ptr<OnigResult> Search(OnigRegExp *regExp, const string &searchString, int byteOffset);
+  shared_ptr<OnigResult> Search(OnigRegExp *regExp, shared_ptr<OnigStringContext> searchString, int byteOffset);
 
  private:
   vector<shared_ptr<OnigResult>> results;
   int maxSize;
-  string lastMatchedString;
+  shared_ptr<OnigStringContext> lastMatchedString;
   int maxCachedIndex;
   int lastStartLocation;
   bool useCache;
