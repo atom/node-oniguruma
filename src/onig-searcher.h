@@ -11,6 +11,8 @@ using ::std::string;
 using ::std::shared_ptr;
 using ::std::vector;
 
+class OnigStringContext;
+
 class OnigSearcher {
  public:
   explicit OnigSearcher(vector<shared_ptr<OnigRegExp>> regExps)
@@ -24,7 +26,7 @@ class OnigSearcher {
   ~OnigSearcher() {}
 
   const OnigCache& GetCache() { return cache; }
-  shared_ptr<OnigResult> Search(const string& stringToSearch, wchar_t* utf16StringToSearch, bool hasMultibyteCharacters, int charOffset);
+  shared_ptr<OnigResult> Search(shared_ptr<OnigStringContext> source, int charOffset);
 
  private:
   vector<shared_ptr<OnigRegExp>> regExps;

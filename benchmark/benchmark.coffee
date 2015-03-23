@@ -4,29 +4,36 @@ fs = require 'fs'
 path = require 'path'
 {OnigScanner} = require '../src/oniguruma'
 
-scanner = new OnigScanner(['this', 'var', 'selector', 'window'])
+runBenchmarkSync = (lines, scanner) ->
+  startTime = Date.now()
+  matches = 0
 
-lines = fs.readFileSync(path.join(__dirname, 'large.js'), 'utf8').split('\n')
+  for line in lines
+    for position in [0..line.length]
+      matches++ if scanner.findNextMatchSync(line, position)
 
-startTime = Date.now()
-matches = 0
+  console.log "sync:  #{matches} matches in #{Date.now() - startTime}ms"
 
-for line in lines
-  for position in [0..line.length]
-    matches++ if scanner.findNextMatchSync(line, position)
+runBenchmarkAsync =  (lines, scanner) ->
+  matches = 0
+  callsInProgress = 0
 
-console.log "sync:  #{matches} matches in #{Date.now() - startTime}ms"
+  callback = (error, match) ->
+    matches++ if match?
+    if --callsInProgress is 0
+      console.log "async: #{matches} matches in #{Date.now() - startTime}ms"
 
-matches = 0
-callsInProgress = 0
+  startTime = Date.now()
+  for line in lines
+    for position in [0..line.length]
+      callsInProgress++
+      scanner.findNextMatch(line, position, callback)
 
-callback = (error, match) ->
-  matches++ if match?
-  if --callsInProgress is 0
-    console.log "async: #{matches} matches in #{Date.now() - startTime}ms"
-
-startTime = Date.now()
-for line in lines
-  for position in [0..line.length]
-    callsInProgress++
-    scanner.findNextMatch(line, position, callback)
+console.log 'oneline.js'
+runBenchmarkSync(fs.readFileSync(path.join(__dirname, 'oneline.js'), 'utf8').split('\n'),
+                 new OnigScanner(['\\[', '\\]', '\\{', '\\}']))
+console.log 'large.js'
+runBenchmarkSync(fs.readFileSync(path.join(__dirname, 'large.js'), 'utf8').split('\n'),
+                 new OnigScanner(['this', 'var', 'selector', 'window']))
+runBenchmarkAsync(fs.readFileSync(path.join(__dirname, 'large.js'), 'utf8').split('\n'),
+                  new OnigScanner(['this', 'var', 'selector', 'window']))

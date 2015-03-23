@@ -1,4 +1,5 @@
 #include "onig-scanner-worker.h"
+#include "onig-string-context.h"
 #include "unicode-utils.h"
 
 using ::v8::Array;
@@ -10,7 +11,7 @@ using ::v8::String;
 using ::v8::Value;
 
 void OnigScannerWorker::Execute() {
-  bestResult = searcher->Search(stringToSearch, utf16StringToSearch.get(), hasMultibyteCharacters, charOffset);
+  bestResult = searcher->Search(source, charOffset);
 }
 
 void OnigScannerWorker::HandleOKCallback() {
@@ -29,9 +30,9 @@ void OnigScannerWorker::HandleOKCallback() {
       int captureLength = bestResult->LengthAt(index);
       int captureStart = bestResult->LocationAt(index);
 
-      if (hasMultibyteCharacters) {
-        captureLength = UnicodeUtils::characters_in_bytes(stringToSearch.data() + captureStart, captureLength);
-        captureStart = UnicodeUtils::characters_in_bytes(stringToSearch.data(), captureStart);
+      if (source->has_multibyte_characters()) {
+        captureLength = UnicodeUtils::characters_in_bytes(source->utf8_value() + captureStart, captureLength);
+        captureStart = UnicodeUtils::characters_in_bytes(source->utf8_value(), captureStart);
       }
 
       Local<Object> capture = NanNew<Object>();

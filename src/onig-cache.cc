@@ -1,4 +1,5 @@
 #include "onig-cache.h"
+#include "onig-string-context.h"
 #include "unicode-utils.h"
 
 void OnigCache::Clear() {
@@ -7,7 +8,7 @@ void OnigCache::Clear() {
   results.resize(maxSize);
 }
 
-void OnigCache::Init(const string &stringToSearch, int byteOffset) {
+void OnigCache::Init(shared_ptr<OnigStringContext> stringToSearch, int byteOffset) {
   useCache = (stringToSearch == lastMatchedString && byteOffset >= lastStartLocation);
   lastStartLocation = byteOffset;
 
@@ -24,7 +25,7 @@ void OnigCache::Reset(const OnigCache& cache) {
   results = cache.results;
 }
 
-shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, const string &searchString, int byteOffset) {
+shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, shared_ptr<OnigStringContext> searchString, int byteOffset) {
   shared_ptr<OnigResult> result;
   int index = regExp->Index();
   bool useCachedResult = false;
@@ -35,7 +36,7 @@ shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, const string &searc
   }
 
   if (!useCachedResult) {
-    result = regExp->Search(searchString, byteOffset);
+    result = regExp->Search(searchString->utf8_value(), byteOffset, searchString->utf8_length());
     results[index] = result;
     maxCachedIndex = index;
   }

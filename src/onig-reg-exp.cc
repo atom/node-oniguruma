@@ -33,14 +33,18 @@ bool OnigRegExp::Contains(const string& value) {
 
 shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
                                           size_t position) {
+  return Search(searchString.data(), position, searchString.size());
+}
+
+shared_ptr<OnigResult> OnigRegExp::Search(const char* data,
+                                          size_t position, size_t end) {
   if (!regex_) {
     NanThrowError(Exception::Error(NanNew<String>("RegExp is not valid")));
     return shared_ptr<OnigResult>();
   }
 
-  int end = searchString.size();
+  const UChar* searchData = reinterpret_cast<const UChar*>(data);
   OnigRegion* region = onig_region_new();
-  const UChar* searchData = (const UChar*)searchString.data();
   int status = onig_search(regex_, searchData, searchData + end,
                            searchData + position, searchData + end, region,
                            ONIG_OPTION_NONE);
