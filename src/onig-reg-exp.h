@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "nan.h"
 #include "oniguruma.h"
 
 using ::std::shared_ptr;
