@@ -262,7 +262,7 @@ static int IsAlpha(int enc, int c)
 }
 
 #ifdef _WIN32
-static int isblank(char c) {
+static int isblank(int c) {
   if (c == ' ' || c == '\t')
     return 1;
   else

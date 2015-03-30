@@ -1,12 +1,12 @@
 #ifndef SRC_ONIG_SCANNER_H_
 #define SRC_ONIG_SCANNER_H_
 
+#include "nan.h"
 #include "onig-cache.h"
 #include "onig-searcher.h"
 #include <string>
 #include <vector>
 #include <memory>
-#include "nan.h"
 
 using ::v8::Array;
 using ::v8::Function;
@@ -25,24 +25,24 @@ class OnigResult;
 class OnigStringContext;
 
 class OnigScanner : public node::ObjectWrap {
-  public:
-    static void Init(Handle<Object> target);
+ public:
+  static void Init(Handle<Object> target);
 
-  private:
-    static NAN_METHOD(New);
-    static NAN_METHOD(FindNextMatch);
-    static NAN_METHOD(FindNextMatchSync);
-    explicit OnigScanner(Handle<Array> sources);
-    ~OnigScanner();
+ private:
+  static NAN_METHOD(New);
+  static NAN_METHOD(FindNextMatch);
+  static NAN_METHOD(FindNextMatchSync);
+  explicit OnigScanner(Handle<Array> sources);
+  ~OnigScanner();
 
-    void FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback);
-    Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation);
-    Handle<Value> CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source);
+  void FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback);
+  Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation);
+  Handle<Value> CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source);
 
-    vector<shared_ptr<OnigRegExp>> regExps;
-    shared_ptr<OnigSearcher> searcher;
-    shared_ptr<OnigCache> asyncCache;
-    shared_ptr<OnigStringContext> lastSource;
+  vector<shared_ptr<OnigRegExp>> regExps;
+  shared_ptr<OnigSearcher> searcher;
+  shared_ptr<OnigCache> asyncCache;
+  shared_ptr<OnigStringContext> lastSource;
 };
 
 #endif  // SRC_ONIG_SCANNER_H_
