@@ -104,7 +104,7 @@
             'MACOSX_DEPLOYMENT_TARGET': '10.7.0',
           }
         }],
-        ['OS=="linux"', {
+        ['OS in "linux solaris"', {
           'cflags': [
             '-std=c++0x',
             '-Wno-unused-result',
