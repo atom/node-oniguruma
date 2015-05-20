@@ -37,7 +37,7 @@
     "node-cpplint": "~0.4.0"
   },
   "dependencies": {
-    "nan": "~1.7.0"
+    "nan": "https://atom.io/download/atom-shell/nan-1.6.1.tgz"
   },
   "scripts": {
     "prepublish": "grunt publish",
