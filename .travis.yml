@@ -11,3 +11,7 @@ node_js:
 
 git:
   depth: 10
+
+branches:
+  only:
+    - master
