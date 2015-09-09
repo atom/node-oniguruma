@@ -6,8 +6,7 @@ notifications:
     on_failure: change
 
 node_js:
-  - "0.10"
-  - "0.11"
+  - "iojs-v4.0.0"
 
 git:
   depth: 10
