@@ -15,17 +15,17 @@ void OnigScannerWorker::Execute() {
 }
 
 void OnigScannerWorker::HandleOKCallback() {
-  NanScope();
+  Nan::HandleScope scope;
 
   // Try to reuse the cached results across async searches
   cache->Reset(searcher->GetCache());
 
   if (bestResult != NULL) {
-    Local<Object> result = NanNew<Object>();
-    result->Set(NanNew<String>("index"), NanNew<Number>(bestResult->Index()));
+    Local<Object> result = Nan::New<Object>();
+    result->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));
 
     int resultCount = bestResult->Count();
-    Local<Array> captures = NanNew<Array>(resultCount);
+    Local<Array> captures = Nan::New<Array>(resultCount);
     for (int index = 0; index < resultCount; index++) {
       int captureLength = bestResult->LengthAt(index);
       int captureStart = bestResult->LocationAt(index);
@@ -35,24 +35,24 @@ void OnigScannerWorker::HandleOKCallback() {
         captureStart = UnicodeUtils::characters_in_bytes(source->utf8_value(), captureStart);
       }
 
-      Local<Object> capture = NanNew<Object>();
-      capture->Set(NanNew<String>("index"), NanNew<Number>(index));
-      capture->Set(NanNew<String>("start"), NanNew<Number>(captureStart));
-      capture->Set(NanNew<String>("end"), NanNew<Number>(captureStart + captureLength));
-      capture->Set(NanNew<String>("length"), NanNew<Number>(captureLength));
+      Local<Object> capture = Nan::New<Object>();
+      capture->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
+      capture->Set(Nan::New<String>("start").ToLocalChecked(), Nan::New<Number>(captureStart));
+      capture->Set(Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureStart + captureLength));
+      capture->Set(Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureLength));
       captures->Set(index, capture);
     }
-    result->Set(NanNew<String>("captureIndices"), captures);
+    result->Set(Nan::New<String>("captureIndices").ToLocalChecked(), captures);
 
     Local<Value> argv[] = {
-      NanNull(),
+      Nan::Null(),
       result
     };
     callback->Call(2, argv);
   } else {
     Local<Value> argv[] = {
-      NanNull(),
-      NanNull()
+      Nan::Null(),
+      Nan::Null()
     };
     callback->Call(2, argv);
   }

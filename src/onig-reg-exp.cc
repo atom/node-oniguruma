@@ -17,7 +17,7 @@ OnigRegExp::OnigRegExp(const string& source, int indexInScanner)
   if (status != ONIG_NORMAL) {
     UChar errorString[ONIG_MAX_ERROR_MESSAGE_LEN];
     onig_error_code_to_str(errorString, status, &error);
-    NanThrowError(Exception::Error(NanNew<String>(reinterpret_cast<char*>(errorString))));
+    Nan::ThrowError(Exception::Error(Nan::New<String>(reinterpret_cast<char*>(errorString)).ToLocalChecked()));
   }
 }
 
@@ -37,7 +37,7 @@ shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
 shared_ptr<OnigResult> OnigRegExp::Search(const char* data,
                                           size_t position, size_t end) {
   if (!regex_) {
-    NanThrowError(Exception::Error(NanNew<String>("RegExp is not valid")));
+    Nan::ThrowError(Exception::Error(Nan::New<String>("RegExp is not valid").ToLocalChecked()));
     return shared_ptr<OnigResult>();
   }
 

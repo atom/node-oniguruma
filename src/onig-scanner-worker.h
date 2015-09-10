@@ -14,14 +14,14 @@ using ::std::string;
 using ::std::shared_ptr;
 using ::std::vector;
 
-class OnigScannerWorker : public NanAsyncWorker {
+class OnigScannerWorker : public Nan::AsyncWorker {
  public:
-  OnigScannerWorker(NanCallback *callback,
+  OnigScannerWorker(Nan::Callback *callback,
                     vector<shared_ptr<OnigRegExp>> regExps,
                     shared_ptr<OnigStringContext> source,
                     int charOffset,
                     shared_ptr<OnigCache> cache)
-    : NanAsyncWorker(callback),
+    : Nan::AsyncWorker(callback),
       source(source),
       charOffset(charOffset),
       cache(cache) {
