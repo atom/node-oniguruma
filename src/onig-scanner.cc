@@ -25,20 +25,20 @@ void OnigScanner::Init(Handle<Object> target) {
 NODE_MODULE(onig_scanner, OnigScanner::Init)
 
 NAN_METHOD(OnigScanner::New) {
-  Nan::HandleScope();
+  Nan::HandleScope scope;
   OnigScanner* scanner = new OnigScanner(Local<Array>::Cast(info[0]));
   scanner->Wrap(info.This());
   info.GetReturnValue().SetUndefined();
 }
 
 NAN_METHOD(OnigScanner::FindNextMatchSync) {
-  Nan::HandleScope();
+  Nan::HandleScope scope;
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(info.This());
   info.GetReturnValue().Set((scanner->FindNextMatchSync(Local<String>::Cast(info[0]), Local<Number>::Cast(info[1]))));
 }
 
 NAN_METHOD(OnigScanner::FindNextMatch) {
-  Nan::HandleScope();
+  Nan::HandleScope scope;
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(info.This());
   scanner->FindNextMatch(Local<String>::Cast(info[0]), Local<Number>::Cast(info[1]), Local<Function>::Cast(info[2]));
   info.GetReturnValue().SetUndefined();

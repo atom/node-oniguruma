@@ -15,7 +15,7 @@ void OnigScannerWorker::Execute() {
 }
 
 void OnigScannerWorker::HandleOKCallback() {
-  Nan::HandleScope();
+  Nan::HandleScope scope;
 
   // Try to reuse the cached results across async searches
   cache->Reset(searcher->GetCache());
