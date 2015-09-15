@@ -4,11 +4,7 @@
 OnigStringContext::OnigStringContext(Handle<String> str)
 // The v8::Persistent API changed recently and now it requires v8::Isolate
 // to the constructor argument.
-#if (0 == NODE_MAJOR_VERSION && 11 <= NODE_MINOR_VERSION) || (1 <= NODE_MAJOR_VERSION)
-  : v8String(Isolate::GetCurrent(), str),
-#else
-  : v8String(Persistent<String>::New(str)),
-#endif
+  : v8String(Nan::Global<String>(str)),
     utf8Value(str),
 #ifdef _WIN32
     utf16Value(str),
@@ -18,8 +14,4 @@ OnigStringContext::OnigStringContext(Handle<String> str)
 
 bool OnigStringContext::IsSame(Handle<String> other) const {
   return v8String == other;
-}
-
-OnigStringContext::~OnigStringContext() {
-    v8String.Reset();
 }

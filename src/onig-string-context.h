@@ -19,7 +19,6 @@ class OnigStringContext {
   bool HasMultibyteCharacters() const;
   const char* utf8_value() const { return *utf8Value; }
   size_t utf8_length() const { return utf8Value.length(); }
-  ~OnigStringContext();
 
 #ifdef _WIN32
   const wchar_t* utf16_value() const { return reinterpret_cast<const wchar_t*>(*utf16Value); }
@@ -28,7 +27,7 @@ class OnigStringContext {
   bool has_multibyte_characters() const { return hasMultibyteCharacters; }
 
  private:
-  Persistent<String> v8String;
+  Nan::Global<String> v8String;
   String::Utf8Value utf8Value;
 #ifdef _WIN32
   String::Value utf16Value;
