@@ -19,3 +19,7 @@ OnigStringContext::OnigStringContext(Handle<String> str)
 bool OnigStringContext::IsSame(Handle<String> other) const {
   return v8String == other;
 }
+
+OnigStringContext::~OnigStringContext() {
+    v8String.Reset();
+}

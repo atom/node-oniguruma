@@ -19,6 +19,7 @@ class OnigStringContext {
   bool HasMultibyteCharacters() const;
   const char* utf8_value() const { return *utf8Value; }
   size_t utf8_length() const { return utf8Value.length(); }
+  ~OnigStringContext();
 
 #ifdef _WIN32
   const wchar_t* utf16_value() const { return reinterpret_cast<const wchar_t*>(*utf16Value); }
