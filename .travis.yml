@@ -13,12 +13,15 @@ addons:
 
 node_js:
   - "iojs"
-  
+  - "node"
+  - "0.10"
+  - "0.12"
+
 install:
   - export CXX=g++-4.8
   - $CXX --version
   - npm i
-  
+
 notifications:
   email:
     on_success: never
