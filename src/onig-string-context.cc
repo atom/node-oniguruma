@@ -21,5 +21,9 @@ bool OnigStringContext::IsSame(Handle<String> other) const {
 }
 
 OnigStringContext::~OnigStringContext() {
-    v8String.Reset();
+#if (0 == NODE_MAJOR_VERSION && 10 == NODE_MINOR_VERSION)
+  v8String.Dispose();
+#else
+  v8String.Reset();
+#endif
 }
