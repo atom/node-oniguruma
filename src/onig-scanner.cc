@@ -12,7 +12,7 @@ using ::v8::Local;
 using ::v8::Null;
 using ::v8::String;
 
-void OnigScanner::Init(Handle<Object> target) {
+void OnigScanner::Init(Local<Object> target) {
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(OnigScanner::New);
   tpl->SetClassName(Nan::New<String>("OnigScanner").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
@@ -44,7 +44,7 @@ NAN_METHOD(OnigScanner::FindNextMatch) {
   info.GetReturnValue().SetUndefined();
 }
 
-OnigScanner::OnigScanner(Handle<Array> sources) {
+OnigScanner::OnigScanner(Local<Array> sources) {
   int length = sources->Length();
   regExps.resize(length);
 
@@ -59,7 +59,7 @@ OnigScanner::OnigScanner(Handle<Array> sources) {
 
 OnigScanner::~OnigScanner() {}
 
-void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback) {
+void OnigScanner::FindNextMatch(Local<String> v8String, Local<Number> v8StartLocation, Local<Function> v8Callback) {
   int charOffset = v8StartLocation->Value();
   Nan::Callback *callback = new Nan::Callback(v8Callback);
   shared_ptr<OnigStringContext> source = shared_ptr<OnigStringContext>(new OnigStringContext(v8String));
@@ -69,7 +69,7 @@ void OnigScanner::FindNextMatch(Handle<String> v8String, Handle<Number> v8StartL
   Nan::AsyncQueueWorker(worker);
 }
 
-Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation) {
+Local<Value> OnigScanner::FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation) {
   if (!lastSource || !lastSource->IsSame(v8String))
     lastSource = shared_ptr<OnigStringContext>(new OnigStringContext(v8String));
   int charOffset = v8StartLocation->Value();
@@ -85,7 +85,7 @@ Handle<Value> OnigScanner::FindNextMatchSync(Handle<String> v8String, Handle<Num
   }
 }
 
-Handle<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source) {
+Local<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source) {
   int resultCount = result->Count();
   Local<Array> captures = Nan::New<Array>(resultCount);
 

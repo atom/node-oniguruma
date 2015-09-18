@@ -11,7 +11,7 @@
 
 using ::v8::Array;
 using ::v8::Function;
-using ::v8::Handle;
+using ::v8::Local;
 using ::v8::Number;
 using ::v8::Object;
 using ::v8::String;
@@ -27,18 +27,18 @@ class OnigStringContext;
 
 class OnigScanner : public node::ObjectWrap {
  public:
-  static void Init(Handle<Object> target);
+  static void Init(Local<Object> target);
 
  private:
   static NAN_METHOD(New);
   static NAN_METHOD(FindNextMatch);
   static NAN_METHOD(FindNextMatchSync);
-  explicit OnigScanner(Handle<Array> sources);
+  explicit OnigScanner(Local<Array> sources);
   ~OnigScanner();
 
-  void FindNextMatch(Handle<String> v8String, Handle<Number> v8StartLocation, Handle<Function> v8Callback);
-  Handle<Value> FindNextMatchSync(Handle<String> v8String, Handle<Number> v8StartLocation);
-  Handle<Value> CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source);
+  void FindNextMatch(Local<String> v8String, Local<Number> v8StartLocation, Local<Function> v8Callback);
+  Local<Value> FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation);
+  Local<Value> CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source);
 
   vector<shared_ptr<OnigRegExp>> regExps;
   shared_ptr<OnigSearcher> searcher;
