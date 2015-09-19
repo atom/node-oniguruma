@@ -38,7 +38,9 @@ shared_ptr<OnigResult> OnigCache::Search(OnigRegExp *regExp, shared_ptr<OnigStri
   if (!useCachedResult) {
     result = regExp->Search(searchString->utf8_value(), byteOffset, searchString->utf8_length());
     results[index] = result;
-    maxCachedIndex = index;
+    if (index > maxCachedIndex) {
+      maxCachedIndex = index;
+    }
   }
 
   return result;
