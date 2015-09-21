@@ -17,7 +17,11 @@ OnigStringContext::OnigStringContext(Handle<String> str)
 }
 
 bool OnigStringContext::IsSame(Handle<String> other) const {
-  return v8String == other;
+#if (0 == NODE_MAJOR_VERSION && 11 <= NODE_MINOR_VERSION) || (1 <= NODE_MAJOR_VERSION)
+  return other->StrictEquals(v8::Local<String>::New(Isolate::GetCurrent(), v8String));
+#else
+  return other->StrictEquals(v8String);
+#endif
 }
 
 OnigStringContext::~OnigStringContext() {
