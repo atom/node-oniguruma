@@ -27,7 +27,7 @@ class OnigStringContext {
   bool has_multibyte_characters() const { return hasMultibyteCharacters; }
 
  private:
-  Nan::Global<String> v8String;
+  Nan::Persistent<String, Nan::CopyablePersistentTraits<String>> v8String;
   String::Utf8Value utf8Value;
 #ifdef _WIN32
   String::Value utf16Value;
