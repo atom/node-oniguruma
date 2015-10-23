@@ -140,6 +140,10 @@ describe 'OnigRegExp', ->
         expect(match[0].start).toBe 3
         expect(match[0].match).toBe "'"
 
+        match = regex.searchSync("'\uD835\uDF97'", 3)
+        expect(match[0].start).toBe 3
+        expect(match[0].match).toBe "'"
+
   describe '::testSync(string)', ->
     it 'returns true if the string matches the pattern', ->
       expect(new OnigRegExp("a[b-d]c").testSync('aec')).toBe false
