@@ -41,8 +41,11 @@ int UnicodeUtils::bytes_in_characters(const char* string, int characters) {
       break;
 
     bytes += characterLength;
-    if (--characters == 0)
-      break;
+    if (characterLength == 4)
+      characters -= 2;
+    else
+      characters--;
+    if (characters <= 0) break;
 
     length -= characterLength;
     string += characterLength;

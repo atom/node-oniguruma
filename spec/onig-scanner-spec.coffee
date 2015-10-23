@@ -20,6 +20,25 @@ describe "OnigScanner", ->
         match = scanner.findNextMatchSync('ab…cde21', 5)
         expect(match.index).toBe 1
 
+    describe "when the string searched contains surrogate pairs", ->
+      it "counts paired characters as 2 characters in both arguments and return values", ->
+        scanner = new OnigScanner(["Y", "X"])
+        match = scanner.findNextMatchSync('a💻bYX', 0)
+        expect(match.captureIndices).toEqual [{index: 0, start: 4, end: 5, length: 1}]
+
+        match = scanner.findNextMatchSync('a💻bYX', 1)
+        expect(match.captureIndices).toEqual [{index: 0, start: 4, end: 5, length: 1}]
+
+        match = scanner.findNextMatchSync('a💻bYX', 3)
+        expect(match.captureIndices).toEqual [{index: 0, start: 4, end: 5, length: 1}]
+
+        match = scanner.findNextMatchSync('a💻bYX', 4)
+        expect(match.captureIndices).toEqual [{index: 0, start: 4, end: 5, length: 1}]
+
+        match = scanner.findNextMatchSync('a💻bYX', 5)
+        expect(match.index).toBe 1
+        expect(match.captureIndices).toEqual [{index: 0, start: 5, end: 6, length: 1}]
+
     it "returns false when the input string isn't a string", ->
       scanner = new OnigScanner(["1"])
       expect(scanner.findNextMatchSync()).toBe null
