@@ -1,11 +1,7 @@
 #ifndef SRC_ONIG_RESULT_H_
 #define SRC_ONIG_RESULT_H_
 
-#include <string>
-
-using ::std::string;
-
-class OnigRegExp;
+#include "oniguruma.h"
 
 class OnigResult {
  public:
@@ -16,6 +12,7 @@ class OnigResult {
   int LocationAt(int index);
   int LengthAt(int index);
   int Index() { return indexInScanner; }
+  void SetIndex(int newIndex) { indexInScanner = newIndex; }
 
  private:
   OnigResult(const OnigResult&);  // Disallow copying

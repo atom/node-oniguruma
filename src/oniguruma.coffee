@@ -1,4 +1,5 @@
 {OnigScanner} = require '../build/Release/onig_scanner.node'
+{OnigString} = require '../build/Release/onig_scanner.node'
 OnigRegExp = require './onig-reg-exp'
 
 OnigScanner::findNextMatch = (string, startPosition=0, callback) ->
@@ -35,5 +36,6 @@ OnigScanner::convertToNumber = (value) ->
   value = Math.max(value, 0)
   value
 
+exports.OnigString = OnigString
 exports.OnigScanner = OnigScanner
 exports.OnigRegExp = OnigRegExp

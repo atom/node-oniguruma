@@ -1,16 +1,13 @@
 #ifndef SRC_ONIG_SCANNER_WORKER_H_
 #define SRC_ONIG_SCANNER_WORKER_H_
 
-#include <node.h>
-#include <string>
+#include <memory>
 #include <vector>
 
 #include "nan.h"
 #include "onig-reg-exp.h"
-#include "onig-result.h"
 #include "onig-searcher.h"
 
-using ::std::string;
 using ::std::shared_ptr;
 using ::std::vector;
 
@@ -18,25 +15,24 @@ class OnigScannerWorker : public Nan::AsyncWorker {
  public:
   OnigScannerWorker(Nan::Callback *callback,
                     vector<shared_ptr<OnigRegExp>> regExps,
-                    shared_ptr<OnigStringContext> source,
-                    int charOffset,
-                    shared_ptr<OnigCache> cache)
+                    Local<String> v8String,
+                    int charOffset)
     : Nan::AsyncWorker(callback),
-      source(source),
-      charOffset(charOffset),
-      cache(cache) {
-    searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps, *cache.get()));
+      charOffset(charOffset) {
+        source = new OnigString(v8String);
+    searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
   }
 
-  ~OnigScannerWorker() {}
+  ~OnigScannerWorker() {
+    delete source;
+  }
 
   void Execute();
   void HandleOKCallback();
 
  private:
-  shared_ptr<OnigStringContext> source;
+  OnigString* source;
   int charOffset;
-  shared_ptr<OnigCache> cache;
   shared_ptr<OnigSearcher> searcher;
   shared_ptr<OnigResult> bestResult;
 };

@@ -1,13 +1,15 @@
 #include "onig-reg-exp.h"
-#include "onig-result.h"
 
 using ::v8::Exception;
 using ::v8::String;
 
-OnigRegExp::OnigRegExp(const string& source, int indexInScanner)
+OnigRegExp::OnigRegExp(const string& source)
     : source_(source),
-      regex_(NULL),
-      indexInScanner(indexInScanner) {
+      regex_(NULL) {
+  lastSearchStrUniqueId = -1;
+  lastSearchPosition = -1;
+  lastSearchResult = NULL;
+
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
   int status = onig_new(&regex_, sourceData, sourceData + source.length(),
@@ -25,13 +27,17 @@ OnigRegExp::~OnigRegExp() {
   if (regex_) onig_free(regex_);
 }
 
-bool OnigRegExp::Contains(const string& value) {
-  return source_.find(value) != string::npos;
-}
+shared_ptr<OnigResult> OnigRegExp::Search(OnigString* str, int position) {
+  if (lastSearchStrUniqueId == str->uniqueId() && lastSearchPosition <= position) {
+    if (lastSearchResult == NULL || lastSearchResult->LocationAt(0) >= position) {
+      return lastSearchResult;
+    }
+  }
 
-shared_ptr<OnigResult> OnigRegExp::Search(const string& searchString,
-                                          size_t position) {
-  return Search(searchString.data(), position, searchString.size());
+  lastSearchStrUniqueId = str->uniqueId();
+  lastSearchPosition = position;
+  lastSearchResult = Search(str->utf8_value(), position, str->utf8_length());
+  return lastSearchResult;
 }
 
 shared_ptr<OnigResult> OnigRegExp::Search(const char* data,
@@ -48,7 +54,7 @@ shared_ptr<OnigResult> OnigRegExp::Search(const char* data,
                            ONIG_OPTION_NONE);
 
   if (status != ONIG_MISMATCH) {
-    return shared_ptr<OnigResult>(new OnigResult(region, indexInScanner));
+    return shared_ptr<OnigResult>(new OnigResult(region, -1));
   } else {
     onig_region_free(region, 1);
     return shared_ptr<OnigResult>();

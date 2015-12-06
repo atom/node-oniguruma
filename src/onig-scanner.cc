@@ -1,16 +1,7 @@
 #include "onig-scanner.h"
-#include "onig-string-context.h"
-#include "onig-reg-exp.h"
-#include "onig-result.h"
 #include "onig-scanner-worker.h"
-#include "unicode-utils.h"
 
-using ::v8::Function;
 using ::v8::FunctionTemplate;
-using ::v8::HandleScope;
-using ::v8::Local;
-using ::v8::Null;
-using ::v8::String;
 
 void OnigScanner::Init(Local<Object> target) {
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(OnigScanner::New);
@@ -22,7 +13,12 @@ void OnigScanner::Init(Local<Object> target) {
   target->Set(Nan::New<String>("OnigScanner").ToLocalChecked(), tpl->GetFunction());
 }
 
-NODE_MODULE(onig_scanner, OnigScanner::Init)
+void InitModule(Local<Object> target) {
+  OnigScanner::Init(target);
+  OnigString::Init(target);
+}
+
+NODE_MODULE(onig_scanner, InitModule)
 
 NAN_METHOD(OnigScanner::New) {
   Nan::HandleScope scope;
@@ -34,7 +30,20 @@ NAN_METHOD(OnigScanner::New) {
 NAN_METHOD(OnigScanner::FindNextMatchSync) {
   Nan::HandleScope scope;
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(info.This());
-  info.GetReturnValue().Set((scanner->FindNextMatchSync(Local<String>::Cast(info[0]), Local<Number>::Cast(info[1]))));
+
+  Local<Value> param1 = Local<Value>::Cast(info[0]);
+  Local<Number> param2 = Local<Number>::Cast(info[1]);
+  Local<Value> result;
+
+  if (param1->IsString()) {
+    Local<String> v8String = Local<String>::Cast(info[0]);
+    result = scanner->FindNextMatchSync(v8String, param2);
+  } else {
+    OnigString* onigString = node::ObjectWrap::Unwrap<OnigString>(info[0]->ToObject());
+    result = scanner->FindNextMatchSync(onigString, param2);
+  }
+
+  info.GetReturnValue().Set(result);
 }
 
 NAN_METHOD(OnigScanner::FindNextMatch) {
@@ -50,11 +59,10 @@ OnigScanner::OnigScanner(Local<Array> sources) {
 
   for (int i = 0; i < length; i++) {
     String::Utf8Value utf8Value(sources->Get(i));
-    regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value), i));
+    regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
   }
 
   searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
-  asyncCache = shared_ptr<OnigCache>(new OnigCache(length));
 }
 
 OnigScanner::~OnigScanner() {}
@@ -62,41 +70,39 @@ OnigScanner::~OnigScanner() {}
 void OnigScanner::FindNextMatch(Local<String> v8String, Local<Number> v8StartLocation, Local<Function> v8Callback) {
   int charOffset = v8StartLocation->Value();
   Nan::Callback *callback = new Nan::Callback(v8Callback);
-  shared_ptr<OnigStringContext> source = shared_ptr<OnigStringContext>(new OnigStringContext(v8String));
 
-
-  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, source, charOffset, asyncCache);
+  OnigScannerWorker *worker = new OnigScannerWorker(callback, regExps, v8String, charOffset);
   Nan::AsyncQueueWorker(worker);
 }
 
 Local<Value> OnigScanner::FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation) {
-  if (!lastSource || !lastSource->IsSame(v8String))
-    lastSource = shared_ptr<OnigStringContext>(new OnigStringContext(v8String));
+  OnigString* source = new OnigString(v8String);
+  Local<Value> r = FindNextMatchSync(source, v8StartLocation);
+  delete source;
+  return r;
+}
+
+Local<Value> OnigScanner::FindNextMatchSync(OnigString* source, Local<Number> v8StartLocation) {
   int charOffset = v8StartLocation->Value();
 
-  shared_ptr<OnigResult> bestResult = searcher->Search(lastSource, charOffset);
+  shared_ptr<OnigResult> bestResult = searcher->Search(source, charOffset);
   if (bestResult != NULL) {
     Local<Object> result = Nan::New<Object>();
     result->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));
-    result->Set(Nan::New<String>("captureIndices").ToLocalChecked(), CaptureIndicesForMatch(bestResult.get(), lastSource));
+    result->Set(Nan::New<String>("captureIndices").ToLocalChecked(), CaptureIndicesForMatch(bestResult.get(), source));
     return result;
   } else {
     return Nan::Null();
   }
 }
 
-Local<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source) {
+Local<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, OnigString* source) {
   int resultCount = result->Count();
   Local<Array> captures = Nan::New<Array>(resultCount);
 
   for (int index = 0; index < resultCount; index++) {
-    int captureLength = result->LengthAt(index);
-    int captureStart = result->LocationAt(index);
-
-    if (source->has_multibyte_characters()) {
-      captureLength = UnicodeUtils::characters_in_bytes(source->utf8_value() + captureStart, captureLength);
-      captureStart = UnicodeUtils::characters_in_bytes(source->utf8_value(), captureStart);
-    }
+    int captureStart = source->ConvertUtf8OffsetToUtf16(result->LocationAt(index));
+    int captureLength = source->ConvertUnicodeLengthToUtf16(captureStart, result->LengthAt(index));
 
     Local<Object> capture = Nan::New<Object>();
     capture->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));

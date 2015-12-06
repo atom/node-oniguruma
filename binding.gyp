@@ -89,13 +89,12 @@
       ],
       'include_dirs': [ '<!(node -e "require(\'nan\')")' ],
       'sources': [
-        'src/onig-cache.cc',
         'src/onig-result.cc',
         'src/onig-reg-exp.cc',
         'src/onig-scanner.cc',
         'src/onig-scanner-worker.cc',
         'src/onig-searcher.cc',
-        'src/onig-string-context.cc',
+        'src/onig-string.cc'
       ],
       'conditions': [
         ['OS=="mac"', {
@@ -128,13 +127,7 @@
           'defines': [
             'ONIG_EXTERN=extern',
           ],
-          'sources': [
-            'src/unicode-utils-win.cc'
-          ],
-        }, {
-          'sources': [
-            'src/unicode-utils-posix.cc'
-          ],
+
         }],
         ['OS=="freebsd"', {
           'cflags': [
