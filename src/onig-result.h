@@ -1,6 +1,7 @@
 #ifndef SRC_ONIG_RESULT_H_
 #define SRC_ONIG_RESULT_H_
 
+#include "nan.h"
 #include "oniguruma.h"
 
 class OnigResult {
