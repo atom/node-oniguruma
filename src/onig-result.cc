@@ -1,6 +1,4 @@
-#include "oniguruma.h"
 #include "onig-result.h"
-#include "unicode-utils.h"
 
 OnigResult::OnigResult(OnigRegion* region, int indexInScanner)
   : region_(region), indexInScanner(indexInScanner) {}

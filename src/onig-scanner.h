@@ -1,12 +1,10 @@
 #ifndef SRC_ONIG_SCANNER_H_
 #define SRC_ONIG_SCANNER_H_
 
-#include <string>
-#include <vector>
-#include <memory>
-
 #include "nan.h"
-#include "onig-cache.h"
+#include "onig-string.h"
+#include "onig-result.h"
+#include "onig-reg-exp.h"
 #include "onig-searcher.h"
 
 using ::v8::Array;
@@ -17,13 +15,8 @@ using ::v8::Object;
 using ::v8::String;
 using ::v8::Value;
 
-using ::std::string;
 using ::std::shared_ptr;
 using ::std::vector;
-
-class OnigRegExp;
-class OnigResult;
-class OnigStringContext;
 
 class OnigScanner : public node::ObjectWrap {
  public:
@@ -37,13 +30,12 @@ class OnigScanner : public node::ObjectWrap {
   ~OnigScanner();
 
   void FindNextMatch(Local<String> v8String, Local<Number> v8StartLocation, Local<Function> v8Callback);
+  Local<Value> FindNextMatchSync(OnigString* onigString, Local<Number> v8StartLocation);
   Local<Value> FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation);
-  Local<Value> CaptureIndicesForMatch(OnigResult* result, shared_ptr<OnigStringContext> source);
+  static Local<Value> CaptureIndicesForMatch(OnigResult* result, OnigString* source);
 
   vector<shared_ptr<OnigRegExp>> regExps;
   shared_ptr<OnigSearcher> searcher;
-  shared_ptr<OnigCache> asyncCache;
-  shared_ptr<OnigStringContext> lastSource;
 };
 
 #endif  // SRC_ONIG_SCANNER_H_
