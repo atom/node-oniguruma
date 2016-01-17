@@ -7,9 +7,19 @@
         ['OS=="win"', {
           'msvs_disabled_warnings': [
             4244,  # conversion from '__int64' to 'int', possible loss of data
+            4311,  # pointer truncation from 'OnigUChar *' to 'unsigned int'
+            4312,  # conversion from 'OnigStackIndex' to 'void *' of greater size
           ],
           'defines': [
             'ONIG_EXTERN=extern',
+          ],
+          'include_dirs': [
+            'deps/onig/win32'
+          ],
+        }],
+        ['OS!="win"', {
+          'include_dirs': [
+            'deps'
           ],
         }],
         ['OS=="linux"', {
@@ -116,8 +126,6 @@
         ['OS=="win"', {
           'msvs_disabled_warnings': [
             4244,  # conversion from 'double' to 'int', possible loss of data
-            4267,  # conversion from 'size_t' to 'int', possible loss of data
-            4530,  # C++ exception handler used, but unwind semantics are not enabled
           ],
           'msvs_settings': {
             'VCCLCompilerTool' : {
