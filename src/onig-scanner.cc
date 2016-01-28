@@ -102,13 +102,13 @@ Local<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, OnigString*
 
   for (int index = 0; index < resultCount; index++) {
     int captureStart = source->ConvertUtf8OffsetToUtf16(result->LocationAt(index));
-    int captureLength = source->ConvertUnicodeLengthToUtf16(captureStart, result->LengthAt(index));
+    int captureEnd = source->ConvertUtf8OffsetToUtf16(result->LocationAt(index) + result->LengthAt(index));
 
     Local<Object> capture = Nan::New<Object>();
     capture->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
     capture->Set(Nan::New<String>("start").ToLocalChecked(), Nan::New<Number>(captureStart));
-    capture->Set(Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureStart + captureLength));
-    capture->Set(Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureLength));
+    capture->Set(Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureEnd));
+    capture->Set(Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureEnd - captureStart));
     captures->Set(index, capture);
   }
 

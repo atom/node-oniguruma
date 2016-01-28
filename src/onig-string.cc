@@ -18,27 +18,29 @@ NAN_METHOD(OnigString::New) {
 }
 
 OnigString::OnigString(Local<String> value)
-  : utf8Value(value) {
+  : utf8Value(value), utf8_length_(utf8Value.length()) {
   static int idGenerator = 0;
   uniqueId_ = ++idGenerator;
 
-  hasMultiByteChars = (value->Length() != value->Utf8Length());
+  hasMultiByteChars = (value->Length() != utf8_length_);
 
   if (hasMultiByteChars) {
     String::Value utf16Value(value);
+    utf16_length_ = utf16Value.length();
 
-    utf16OffsetToUtf8 = new int[utf16Value.length()];
-    utf16OffsetIsCodePointEnd = new bool[utf16Value.length()];
-    utf8OffsetToUtf16 = new int[utf8Value.length()];
+    utf16OffsetToUtf8 = new int[utf16_length_ + 1];
+    utf16OffsetToUtf8[utf16_length_] = utf8_length_;
+
+    utf8OffsetToUtf16 = new int[utf8_length_ + 1];
+    utf8OffsetToUtf16[utf8_length_] = utf16_length_;
 
     // http://stackoverflow.com/a/148766
     unsigned int codepoint = 0;
     int i8 = 0;
-    for (int i16 = 0, len = utf16Value.length(); i16 < len; i16++) {
+    for (int i16 = 0, len = utf16_length_; i16 < len; i16++) {
       uint16_t in = (*utf16Value)[i16];
 
       utf16OffsetToUtf8[i16] = i8;
-      utf16OffsetIsCodePointEnd[i16] = false;
 
       if (in >= 0xd800 && in <= 0xdbff) {
         codepoint = ((in - 0xd800) << 10) + 0x10000;
@@ -49,7 +51,6 @@ OnigString::OnigString(Local<String> value)
           codepoint = in;
         }
 
-        utf16OffsetIsCodePointEnd[i16] = true;
         if (codepoint <= 0x7f) {
           utf8OffsetToUtf16[i8] = i16;
           i8++;
@@ -84,7 +85,6 @@ OnigString::OnigString(Local<String> value)
 OnigString::~OnigString() {
   if (hasMultiByteChars) {
     delete []utf16OffsetToUtf8;
-    delete []utf16OffsetIsCodePointEnd;
     delete []utf8OffsetToUtf16;
   }
 }
@@ -101,20 +101,4 @@ int OnigString::ConvertUtf16OffsetToUtf8(int utf16Offset) {
     return utf16OffsetToUtf8[utf16Offset];
   }
   return utf16Offset;
-}
-
-int OnigString::ConvertUnicodeLengthToUtf16(int utf16Offset, int codePointLength) {
-  if (hasMultiByteChars) {
-    int result = 0;
-    while (codePointLength > 0) {
-      bool isCodePointEnd = utf16OffsetIsCodePointEnd[utf16Offset + result];
-      if (isCodePointEnd) {
-        codePointLength--;
-      }
-      result++;
-    }
-    return result;
-  }
-
-  return codePointLength;
 }

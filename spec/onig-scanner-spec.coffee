@@ -53,6 +53,12 @@ describe "OnigScanner", ->
       expect(scanner.findNextMatchSync('a1', false).index).toBe 0
       expect(scanner.findNextMatchSync('a1', 'food').index).toBe 0
 
+  describe "when the regular expression contains double byte characters", ->
+    it "returns the correct match length", ->
+      scanner = new OnigScanner(["Возврат"])
+      match = scanner.findNextMatchSync('Возврат long_var_name;', 0)
+      expect(match.captureIndices).toEqual [{index: 0, start: 0, end: 7, length: 7}]
+
   describe "::findNextMatch", ->
     matchCallback = null
 
