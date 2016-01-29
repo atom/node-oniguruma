@@ -19,13 +19,13 @@ void OnigScannerWorker::HandleOKCallback() {
     Local<Array> captures = Nan::New<Array>(resultCount);
     for (int index = 0; index < resultCount; index++) {
       int captureStart = source->ConvertUtf8OffsetToUtf16(bestResult->LocationAt(index));
-      int captureLength = source->ConvertUnicodeLengthToUtf16(captureStart, bestResult->LengthAt(index));
+      int captureEnd = source->ConvertUtf8OffsetToUtf16(bestResult->LocationAt(index) + bestResult->LengthAt(index));
 
       Local<Object> capture = Nan::New<Object>();
       capture->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
       capture->Set(Nan::New<String>("start").ToLocalChecked(), Nan::New<Number>(captureStart));
-      capture->Set(Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureStart + captureLength));
-      capture->Set(Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureLength));
+      capture->Set(Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureEnd));
+      capture->Set(Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureEnd - captureStart));
       captures->Set(index, capture);
     }
     result->Set(Nan::New<String>("captureIndices").ToLocalChecked(), captures);

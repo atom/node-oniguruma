@@ -20,21 +20,23 @@ class OnigString : public node::ObjectWrap {
   int uniqueId() { return uniqueId_; }
 
   const char* utf8_value() const { return *utf8Value; }
-  size_t utf8_length() const { return utf8Value.length(); }
+  size_t utf8_length() const { return utf8_length_; }
 
   int ConvertUtf8OffsetToUtf16(int utf8Offset);
   int ConvertUtf16OffsetToUtf8(int utf16Offset);
-  int ConvertUnicodeLengthToUtf16(int utf16Offset, int codePointLength);
 
  private:
   static NAN_METHOD(New);
 
   int uniqueId_;
   String::Utf8Value utf8Value;
+  size_t utf8_length_;
   bool hasMultiByteChars;
+
+  // - the following members are used only if hasMultiByteChars is true
+  size_t utf16_length_;
   int *utf16OffsetToUtf8;
   int *utf8OffsetToUtf16;
-  bool *utf16OffsetIsCodePointEnd;
 };
 
 #endif  // SRC_ONIG_STRING_H_
