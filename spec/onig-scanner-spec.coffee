@@ -20,6 +20,10 @@ describe "OnigScanner", ->
         match = scanner.findNextMatchSync('ab…cde21', 5)
         expect(match.index).toBe 1
 
+        scanner = new OnigScanner(['\"'])
+        match = scanner.findNextMatchSync('{"…": 1}', 1)
+        expect(match.captureIndices).toEqual [{index: 0, start: 1, end: 2, length: 1}]
+
     describe "when the string searched contains surrogate pairs", ->
       it "counts paired characters as 2 characters in both arguments and return values", ->
         scanner = new OnigScanner(["Y", "X"])

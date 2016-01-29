@@ -36,6 +36,7 @@ OnigString::OnigString(Local<String> value)
 
     // http://stackoverflow.com/a/148766
     unsigned int codepoint = 0;
+    int i16_codepoint_start = 0;
     int i8 = 0;
     for (int i16 = 0, len = utf16_length_; i16 < len; i16++) {
       uint16_t in = (*utf16Value)[i16];
@@ -52,31 +53,32 @@ OnigString::OnigString(Local<String> value)
         }
 
         if (codepoint <= 0x7f) {
-          utf8OffsetToUtf16[i8] = i16;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
         } else if (codepoint <= 0x7ff) {
-          utf8OffsetToUtf16[i8] = i16;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
-          utf8OffsetToUtf16[i8] = i16;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
         } else if (codepoint <= 0xffff) {
-          utf8OffsetToUtf16[i8] = i16 - 1;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
-          utf8OffsetToUtf16[i8] = i16 - 1;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
-          utf8OffsetToUtf16[i8] = i16 - 1;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
         } else {
-          utf8OffsetToUtf16[i8] = i16 - 1;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
-          utf8OffsetToUtf16[i8] = i16 - 1;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
-          utf8OffsetToUtf16[i8] = i16 - 1;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
-          utf8OffsetToUtf16[i8] = i16 - 1;
+          utf8OffsetToUtf16[i8] = i16_codepoint_start;
           i8++;
         }
         codepoint = 0;
+        i16_codepoint_start = i16 + 1;
       }
     }
   }
