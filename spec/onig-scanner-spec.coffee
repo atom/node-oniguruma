@@ -63,6 +63,43 @@ describe "OnigScanner", ->
       match = scanner.findNextMatchSync('Возврат long_var_name;', 0)
       expect(match.captureIndices).toEqual [{index: 0, start: 0, end: 7, length: 7}]
 
+  describe "when the input string contains invalid surrogate pairs", ->
+    it "interprets them as a code point", ->
+      scanner = new OnigScanner(["X"])
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xd83c) + 'X', 0)
+      expect(match.captureIndices).toEqual [{index: 0, start: 0, end: 1, length: 1}]
+
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xd83c) + 'X', 1)
+      expect(match.captureIndices).toEqual [{index: 0, start: 2, end: 3, length: 1}]
+
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xd83c) + 'X', 2)
+      expect(match.captureIndices).toEqual [{index: 0, start: 2, end: 3, length: 1}]
+
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xdfff) + 'X', 0)
+      expect(match.captureIndices).toEqual [{index: 0, start: 0, end: 1, length: 1}]
+
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xdfff) + 'X', 1)
+      expect(match.captureIndices).toEqual [{index: 0, start: 2, end: 3, length: 1}]
+
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xdfff) + 'X', 2)
+      expect(match.captureIndices).toEqual [{index: 0, start: 2, end: 3, length: 1}]
+
+      # These are actually valid, just testing the min & max
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xd800) + String.fromCharCode(0xdc00) + 'X', 2)
+      expect(match.captureIndices).toEqual [{index: 0, start: 3, end: 4, length: 1}]
+
+      match = scanner.findNextMatchSync('X' + String.fromCharCode(0xdbff) + String.fromCharCode(0xdfff) + 'X', 2)
+      expect(match.captureIndices).toEqual [{index: 0, start: 3, end: 4, length: 1}]
+
+  describe "when the start offset is out of bounds", ->
+    it "it gets clamped", ->
+      scanner = new OnigScanner(["X"])
+      match = scanner.findNextMatchSync('X💻X', -1000)
+      expect(match.captureIndices).toEqual [{index: 0, start: 0, end: 1, length: 1}]
+
+      match = scanner.findNextMatchSync('X💻X', 1000)
+      expect(match).toEqual null
+
   describe "::findNextMatch", ->
     matchCallback = null
 
