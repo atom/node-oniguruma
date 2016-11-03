@@ -92,7 +92,7 @@ int OnigString::ConvertUtf8OffsetToUtf16(int utf8Offset) {
     if (utf8Offset < 0) {
       return 0;
     }
-    if ((size_t)utf8Offset > utf8_length_) {
+    if (utf8Offset > utf8_length_) {
       return utf16_length_;
     }
     return utf8OffsetToUtf16[utf8Offset];
@@ -105,7 +105,7 @@ int OnigString::ConvertUtf16OffsetToUtf8(int utf16Offset) {
     if (utf16Offset < 0) {
       return 0;
     }
-    if ((size_t)utf16Offset > utf16_length_) {
+    if (utf16Offset > utf16_length_) {
       return utf8_length_;
     }
     return utf16OffsetToUtf8[utf16Offset];

@@ -30,11 +30,11 @@ class OnigString : public node::ObjectWrap {
 
   int uniqueId_;
   String::Utf8Value utf8Value;
-  size_t utf8_length_;
+  int utf8_length_;
   bool hasMultiByteChars;
 
   // - the following members are used only if hasMultiByteChars is true
-  size_t utf16_length_;
+  int utf16_length_;
   int *utf16OffsetToUtf8;
   int *utf8OffsetToUtf16;
 };
