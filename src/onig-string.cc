@@ -13,8 +13,12 @@ void OnigString::Init(Local<Object> target) {
 }
 
 void OnigString::New(const Nan::FunctionCallbackInfo<v8::Value> &info) {
-  OnigString* scanner = new OnigString(Local<String>::Cast(info[0]));
-  scanner->Wrap(info.This());
+  if (info[0]->IsString()) {
+    OnigString* scanner = new OnigString(Local<String>::Cast(info[0]));
+    scanner->Wrap(info.This());
+  } else {
+    Nan::ThrowTypeError("Argument must be a string");
+  }
 }
 
 void OnigString::ToString(const Nan::FunctionCallbackInfo<v8::Value> &info) {

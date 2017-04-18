@@ -21,4 +21,8 @@ describe('OnigString', () => {
     onigString.substring({})
     onigString.substring(null, undefined)
   })
+
+  it('handles invalid arguments', () => {
+    expect(() => new OnigString(undefined)).toThrow('Argument must be a string')
+  })
 })
