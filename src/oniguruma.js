@@ -2,7 +2,8 @@ const {OnigScanner, OnigString} = require('../build/Release/onig_scanner.node')
 
 class OnigRegExp {
   constructor (source) {
-    this.scanner = new OnigScanner([source.toString()])
+    this.source = source.toString()
+    this.scanner = new OnigScanner([this.source])
   }
 
   captureIndicesForMatch (string, match) {
