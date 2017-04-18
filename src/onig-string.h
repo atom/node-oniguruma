@@ -13,7 +13,8 @@ class OnigString : public node::ObjectWrap {
   std::vector<uint16_t> content;
 
  private:
-  static NAN_METHOD(New);
+  static void New(const Nan::FunctionCallbackInfo<v8::Value> &info);
+  static void Length(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
 };
 
 #endif  // SRC_ONIG_STRING_H_
