@@ -3,17 +3,17 @@
 using ::v8::Exception;
 using ::v8::String;
 
-OnigRegExp::OnigRegExp(const string& source)
-    : source_(source),
-      regex_(NULL) {
+OnigRegExp::OnigRegExp(const OnigString &source) : regex_(NULL) {
   lastSearchStrUniqueId = -1;
   lastSearchPosition = -1;
   lastSearchResult = NULL;
 
   OnigErrorInfo error;
-  const UChar* sourceData = (const UChar*)source.data();
-  int status = onig_new(&regex_, sourceData, sourceData + source.length(),
-                        ONIG_OPTION_CAPTURE_GROUP, ONIG_ENCODING_UTF8,
+
+  const UChar* sourceStart = reinterpret_cast<const UChar *>(source.content.data());
+  const UChar* sourceEnd = reinterpret_cast<const UChar *>(source.content.data() + source.content.size());
+  int status = onig_new(&regex_, sourceStart, sourceEnd,
+                        ONIG_OPTION_CAPTURE_GROUP, ONIG_ENCODING_UTF16_LE,
                         ONIG_SYNTAX_DEFAULT, &error);
 
   if (status != ONIG_NORMAL) {
@@ -28,35 +28,37 @@ OnigRegExp::~OnigRegExp() {
 }
 
 shared_ptr<OnigResult> OnigRegExp::Search(OnigString* str, int position) {
-  if (lastSearchStrUniqueId == str->uniqueId() && lastSearchPosition <= position) {
+  if (lastSearchStrUniqueId == str->uniqueId && lastSearchPosition <= position) {
     if (lastSearchResult == NULL || lastSearchResult->LocationAt(0) >= position) {
       return lastSearchResult;
     }
   }
 
-  lastSearchStrUniqueId = str->uniqueId();
+  lastSearchStrUniqueId = str->uniqueId;
   lastSearchPosition = position;
-  lastSearchResult = Search(str->utf8_value(), position, str->utf8_length());
-  return lastSearchResult;
-}
 
-shared_ptr<OnigResult> OnigRegExp::Search(const char* data,
-                                          size_t position, size_t end) {
   if (!regex_) {
     Nan::ThrowError(Exception::Error(Nan::New<String>("RegExp is not valid").ToLocalChecked()));
     return shared_ptr<OnigResult>();
   }
 
-  const UChar* searchData = reinterpret_cast<const UChar*>(data);
+  const uint16_t *data = str->content.data();
+  const UChar* searchStart = reinterpret_cast<const UChar*>(data);
+  const UChar* searchPosition = reinterpret_cast<const UChar*>(data + position);
+  const UChar* searchEnd = reinterpret_cast<const UChar*>(data + str->content.size());
+
   OnigRegion* region = onig_region_new();
-  int status = onig_search(regex_, searchData, searchData + end,
-                           searchData + position, searchData + end, region,
-                           ONIG_OPTION_NONE);
+  int status = onig_search(
+    regex_, searchStart, searchEnd, searchPosition, searchEnd, region,
+    ONIG_OPTION_NONE
+  );
 
   if (status != ONIG_MISMATCH) {
-    return shared_ptr<OnigResult>(new OnigResult(region, -1));
+    lastSearchResult = shared_ptr<OnigResult>(new OnigResult(region, -1));
   } else {
     onig_region_free(region, 1);
-    return shared_ptr<OnigResult>();
+    lastSearchResult = shared_ptr<OnigResult>();
   }
+
+  return lastSearchResult;
 }

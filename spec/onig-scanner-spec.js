@@ -77,8 +77,9 @@ describe('OnigScanner', () => {
       let match = scanner.findNextMatchSync(`X${String.fromCharCode(0xd83c)}X`, 0)
       expect(match.captureIndices).toEqual([{index: 0, start: 0, end: 1, length: 1}])
 
+      // Characters after unmatched high surrogates are not found.
       match = scanner.findNextMatchSync(`X${String.fromCharCode(0xd83c)}X`, 1)
-      expect(match.captureIndices).toEqual([{index: 0, start: 2, end: 3, length: 1}])
+      expect(match).toBeNull()
 
       match = scanner.findNextMatchSync(`X${String.fromCharCode(0xd83c)}X`, 2)
       expect(match.captureIndices).toEqual([{index: 0, start: 2, end: 3, length: 1}])

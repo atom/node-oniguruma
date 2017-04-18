@@ -1,8 +1,6 @@
 #include "onig-scanner-worker.h"
 
-using ::v8::Array;
-using ::v8::Number;
-using ::v8::Value;
+using namespace v8;
 
 void OnigScannerWorker::Execute() {
   bestResult = searcher->Search(source, charOffset);
@@ -18,8 +16,8 @@ void OnigScannerWorker::HandleOKCallback() {
     int resultCount = bestResult->Count();
     Local<Array> captures = Nan::New<Array>(resultCount);
     for (int index = 0; index < resultCount; index++) {
-      int captureStart = source->ConvertUtf8OffsetToUtf16(bestResult->LocationAt(index));
-      int captureEnd = source->ConvertUtf8OffsetToUtf16(bestResult->LocationAt(index) + bestResult->LengthAt(index));
+      int captureStart = bestResult->LocationAt(index);
+      int captureEnd = bestResult->LocationAt(index) + bestResult->LengthAt(index);
 
       Local<Object> capture = Nan::New<Object>();
       capture->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
