@@ -32,7 +32,7 @@
     "nan": "^2.0.9"
   },
   "scripts": {
-    "test": "jasmine-focused --coffee --captureExceptions spec/*",
+    "test": "jasmine-focused --captureExceptions spec/*",
     "benchmark": "benchmark/benchmark.coffee"
   }
 }
