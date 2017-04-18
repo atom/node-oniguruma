@@ -1,4 +1,4 @@
-{OnigScanner} = require '../lib/oniguruma'
+{OnigScanner} = require '..'
 
 describe "OnigScanner", ->
   describe "::findNextMatchSync", ->

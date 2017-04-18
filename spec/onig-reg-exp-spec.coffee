@@ -1,4 +1,4 @@
-{OnigRegExp} = require '../lib/oniguruma'
+{OnigRegExp} = require '..'
 
 describe 'OnigRegExp', ->
   describe '::search(string, index, callback)', ->
