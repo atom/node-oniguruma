@@ -14,6 +14,8 @@ class OnigString : public node::ObjectWrap {
 
  private:
   static void New(const Nan::FunctionCallbackInfo<v8::Value> &info);
+  static void ToString(const Nan::FunctionCallbackInfo<v8::Value> &info);
+  static void Substring(const Nan::FunctionCallbackInfo<v8::Value> &info);
   static void Length(v8::Local<v8::String>, const Nan::PropertyCallbackInfo<v8::Value> &);
 };
 
