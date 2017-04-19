@@ -1,7 +1,7 @@
 #include "onig-scanner.h"
 #include "onig-scanner-worker.h"
 
-using ::v8::FunctionTemplate;
+using namespace v8;
 
 void OnigScanner::Init(Local<Object> target) {
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(OnigScanner::New);
@@ -58,8 +58,8 @@ OnigScanner::OnigScanner(Local<Array> sources) {
   regExps.resize(length);
 
   for (int i = 0; i < length; i++) {
-    String::Utf8Value utf8Value(sources->Get(i));
-    regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
+    Local<String> source = Local<String>::Cast(sources->Get(i));
+    regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(OnigString(source)));
   }
 
   searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
@@ -101,8 +101,8 @@ Local<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, OnigString*
   Local<Array> captures = Nan::New<Array>(resultCount);
 
   for (int index = 0; index < resultCount; index++) {
-    int captureStart = source->ConvertUtf8OffsetToUtf16(result->LocationAt(index));
-    int captureEnd = source->ConvertUtf8OffsetToUtf16(result->LocationAt(index) + result->LengthAt(index));
+    int captureStart = result->LocationAt(index);
+    int captureEnd = result->LocationAt(index) + result->LengthAt(index);
 
     Local<Object> capture = Nan::New<Object>();
     capture->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));

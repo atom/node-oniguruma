@@ -1,5 +1,7 @@
 #include "onig-result.h"
 
+static const unsigned BYTES_PER_UTF16_CHARACTER = 2;
+
 OnigResult::OnigResult(OnigRegion* region, int indexInScanner)
   : region_(region), indexInScanner(indexInScanner) {}
 
@@ -14,7 +16,7 @@ int OnigResult::Count() {
 int OnigResult::LocationAt(int index) {
   int bytes = *(region_->beg + index);
   if (bytes > 0)
-    return bytes;
+    return bytes / BYTES_PER_UTF16_CHARACTER;
   else
     return 0;
 }
@@ -22,7 +24,7 @@ int OnigResult::LocationAt(int index) {
 int OnigResult::LengthAt(int index) {
   int bytes = *(region_->end + index) - *(region_->beg + index);
   if (bytes > 0)
-    return bytes;
+    return bytes / BYTES_PER_UTF16_CHARACTER;
   else
     return 0;
 }

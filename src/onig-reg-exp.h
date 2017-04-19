@@ -12,7 +12,7 @@ using ::std::string;
 
 class OnigRegExp {
  public:
-  explicit OnigRegExp(const string& source);
+  explicit OnigRegExp(const OnigString &source);
   ~OnigRegExp();
 
   shared_ptr<OnigResult> Search(OnigString* str, int position);
@@ -23,7 +23,6 @@ class OnigRegExp {
 
   shared_ptr<OnigResult> Search(const char* data, size_t position, size_t end);
 
-  string source_;
   regex_t* regex_;
 
   int lastSearchStrUniqueId;

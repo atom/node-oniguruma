@@ -1,8 +1,6 @@
 #include "onig-searcher.h"
 
 shared_ptr<OnigResult> OnigSearcher::Search(OnigString* source, int charOffset) {
-  int byteOffset = source->ConvertUtf16OffsetToUtf8(charOffset);
-
   int bestLocation = 0;
   shared_ptr<OnigResult> bestResult;
 
@@ -10,7 +8,7 @@ shared_ptr<OnigResult> OnigSearcher::Search(OnigString* source, int charOffset) 
   int index = 0;
   while (iter < regExps.end()) {
     OnigRegExp *regExp = (*iter).get();
-    shared_ptr<OnigResult> result = regExp->Search(source, byteOffset);
+    shared_ptr<OnigResult> result = regExp->Search(source, charOffset);
     if (result != NULL && result->Count() > 0) {
       int location = result->LocationAt(0);
 
@@ -20,7 +18,7 @@ shared_ptr<OnigResult> OnigSearcher::Search(OnigString* source, int charOffset) 
         bestResult->SetIndex(index);
       }
 
-      if (location == byteOffset) {
+      if (location == charOffset) {
         break;
       }
     }

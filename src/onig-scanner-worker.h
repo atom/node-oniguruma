@@ -8,14 +8,11 @@
 #include "onig-reg-exp.h"
 #include "onig-searcher.h"
 
-using ::std::shared_ptr;
-using ::std::vector;
-
 class OnigScannerWorker : public Nan::AsyncWorker {
  public:
   OnigScannerWorker(Nan::Callback *callback,
-                    vector<shared_ptr<OnigRegExp>> regExps,
-                    Local<String> v8String,
+                    std::vector<std::shared_ptr<OnigRegExp>> regExps,
+                    v8::Local<v8::String> v8String,
                     int charOffset)
     : Nan::AsyncWorker(callback),
       charOffset(charOffset) {
@@ -33,8 +30,8 @@ class OnigScannerWorker : public Nan::AsyncWorker {
  private:
   OnigString* source;
   int charOffset;
-  shared_ptr<OnigSearcher> searcher;
-  shared_ptr<OnigResult> bestResult;
+  std::shared_ptr<OnigSearcher> searcher;
+  std::shared_ptr<OnigResult> bestResult;
 };
 
 #endif  // SRC_ONIG_SCANNER_WORKER_H_
