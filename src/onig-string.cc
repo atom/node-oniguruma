@@ -11,10 +11,15 @@ void OnigString::Init(Local<Object> target) {
 }
 
 NAN_METHOD(OnigString::New) {
-  Nan::HandleScope scope;
-  OnigString* scanner = new OnigString(Local<String>::Cast(info[0]));
-  scanner->Wrap(info.This());
-  info.GetReturnValue().SetUndefined();
+  Local<String> content = Local<String>::Cast(info[0]);
+  if (!content->IsString()) {
+    Nan::ThrowTypeError("Argument must be a string");
+    return;
+  }
+
+  OnigString* string = new OnigString(content);
+  string->Wrap(info.This());
+  info.This()->Set(Nan::New("content").ToLocalChecked(), content);
 }
 
 OnigString::OnigString(Local<String> value)

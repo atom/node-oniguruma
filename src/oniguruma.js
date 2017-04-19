@@ -86,6 +86,18 @@ OnigScanner.prototype.convertToNumber = function (value) {
   return value
 }
 
+OnigString.prototype.substring = function (start, end) {
+  return this.content.substring(start, end)
+}
+
+OnigString.prototype.toString = function (start, end) {
+  return this.content
+}
+
+Object.defineProperty(OnigString.prototype, 'length', {
+  get() { return this.content.length }
+})
+
 exports.OnigScanner = OnigScanner
 exports.OnigRegExp = OnigRegExp
 exports.OnigString = OnigString
