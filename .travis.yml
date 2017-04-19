@@ -12,10 +12,7 @@ addons:
     - g++-4.8
 
 node_js:
-  - "iojs"
   - "node"
-  - "0.10"
-  - "0.12"
 
 install:
   - export CXX=g++-4.8
