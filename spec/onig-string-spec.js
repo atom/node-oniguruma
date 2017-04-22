@@ -1,4 +1,4 @@
-const {OnigString} = require('..')
+const OnigString = require('..').OnigString
 
 describe('OnigString', () => {
   it('has a length property', () => {

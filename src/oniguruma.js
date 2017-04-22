@@ -1,4 +1,5 @@
-const {OnigScanner, OnigString} = require('../build/Release/onig_scanner.node')
+const OnigScanner = require('../build/Release/onig_scanner.node').OnigScanner
+const OnigString = require('../build/Release/onig_scanner.node').OnigString
 
 class OnigRegExp {
   constructor (source) {
