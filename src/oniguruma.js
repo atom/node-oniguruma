@@ -1,3 +1,5 @@
+'use strict'
+
 const OnigScanner = require('../build/Release/onig_scanner.node').OnigScanner
 const OnigString = require('../build/Release/onig_scanner.node').OnigString
 

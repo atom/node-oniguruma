@@ -1,3 +1,5 @@
+'use strict'
+
 const OnigScanner = require('..').OnigScanner
 
 describe('OnigScanner', () => {
