@@ -1,4 +1,6 @@
-const {OnigString} = require('..')
+'use strict'
+
+const OnigString = require('..').OnigString
 
 describe('OnigString', () => {
   it('has a length property', () => {

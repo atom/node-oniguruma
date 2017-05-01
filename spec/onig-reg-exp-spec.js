@@ -1,4 +1,6 @@
-const {OnigRegExp} = require('..')
+'use strict'
+
+const OnigRegExp = require('..').OnigRegExp
 
 describe('OnigRegExp', () => {
   describe('::search(string, index, callback)', () => {

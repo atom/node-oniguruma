@@ -1,4 +1,6 @@
-const {OnigScanner} = require('..')
+'use strict'
+
+const OnigScanner = require('..').OnigScanner
 
 describe('OnigScanner', () => {
   describe('::findNextMatchSync', () => {
