@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const {OnigScanner} = require('..')
+const OnigScanner = require('..').OnigScanner
 
 function runBenchmarkSync (lines, scanner) {
   let startTime = Date.now()
