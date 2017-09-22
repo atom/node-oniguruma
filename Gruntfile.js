@@ -33,7 +33,7 @@ module.exports = function(grunt) {
       },
 
       test: {
-        command: 'node node_modules/jasmine-focused/bin/jasmine-focused --captureExceptions spec/',
+        command: 'jasmine-focused --captureExceptions spec/',
         options: {
           stdout: true,
           stderr: true,
