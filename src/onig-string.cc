@@ -1,5 +1,7 @@
 #include "onig-string.h"
 
+#include <string>
+
 using ::v8::FunctionTemplate;
 
 void OnigString::Init(Local<Object> target) {

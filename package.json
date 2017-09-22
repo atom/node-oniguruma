@@ -3,12 +3,7 @@
   "name": "oniguruma",
   "description": "oniguruma regular expression library",
   "version": "7.0.0",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/atom/node-oniguruma/raw/master/LICENSE.md"
-    }
-  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/atom/node-oniguruma.git"
@@ -25,14 +20,17 @@
     "async"
   ],
   "devDependencies": {
-    "async": "~0.9.0",
-    "jasmine-focused": "~1.0.7"
+    "grunt": "^1.0.1",
+    "grunt-shell": "^2.1.0",
+    "jasmine-focused": "^1.0.7",
+    "node-cpplint": "^0.4.0"
   },
   "dependencies": {
-    "nan": "^2.0.9"
+    "nan": "^2.7.0"
   },
   "scripts": {
-    "test": "jasmine-focused --captureExceptions spec/*",
-    "benchmark": "benchmark/benchmark.coffee"
+    "benchmark": "node benchmark/benchmark.js",
+    "prepublishOnly": "grunt publish",
+    "test": "grunt test"
   }
 }

@@ -1,4 +1,7 @@
 #include "onig-scanner.h"
+
+#include <string>
+
 #include "onig-scanner-worker.h"
 
 using ::v8::FunctionTemplate;

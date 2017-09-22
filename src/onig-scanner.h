@@ -1,6 +1,8 @@
 #ifndef SRC_ONIG_SCANNER_H_
 #define SRC_ONIG_SCANNER_H_
 
+#include <vector>
+
 #include "nan.h"
 #include "onig-string.h"
 #include "onig-result.h"
