@@ -58,7 +58,7 @@ OnigScanner::OnigScanner(Local<Array> sources) {
   regExps.resize(length);
 
   for (int i = 0; i < length; i++) {
-    String::Utf8Value utf8Value(sources->Get(i));
+    Nan::Utf8String utf8Value(sources->Get(i));
     regExps[i] = shared_ptr<OnigRegExp>(new OnigRegExp(string(*utf8Value)));
   }
 

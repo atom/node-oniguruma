@@ -29,7 +29,7 @@ class OnigString : public node::ObjectWrap {
   static NAN_METHOD(New);
 
   int uniqueId_;
-  String::Utf8Value utf8Value;
+  Nan::Utf8String utf8Value;
   size_t utf8_length_;
   bool hasMultiByteChars;
 
