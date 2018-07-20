@@ -24,11 +24,10 @@ OnigRegExp.prototype.captureIndicesForMatch = function(string, match) {
 };
 
 OnigRegExp.prototype.searchSync = function(string, startPosition) {
-  var match;
   if (startPosition == null) {
     startPosition = 0;
   }
-  match = this.scanner.findNextMatchSync(string, startPosition);
+  const match = this.scanner.findNextMatchSync(string, startPosition);
   return this.captureIndicesForMatch(string, match);
 };
 
