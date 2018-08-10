@@ -27,7 +27,7 @@ OnigString::OnigString(Local<String> value)
   static int idGenerator = 0;
   uniqueId_ = ++idGenerator;
 
-  hasMultiByteChars = (value->Length() != utf8_length_);
+  hasMultiByteChars = ((size_t)value->Length() != utf8_length_);
 
   if (hasMultiByteChars) {
     String::Value utf16Value(value);

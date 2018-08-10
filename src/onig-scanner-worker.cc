@@ -34,12 +34,12 @@ void OnigScannerWorker::HandleOKCallback() {
       Nan::Null(),
       result
     };
-    callback->Call(2, argv);
+    callback->Call(2, argv, async_resource);
   } else {
     Local<Value> argv[] = {
       Nan::Null(),
       Nan::Null()
     };
-    callback->Call(2, argv);
+    callback->Call(2, argv, async_resource);
   }
 }
