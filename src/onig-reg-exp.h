@@ -26,6 +26,7 @@ class OnigRegExp {
   string source_;
   regex_t* regex_;
 
+  bool hasGAnchor;
   int lastSearchStrUniqueId;
   int lastSearchPosition;
   shared_ptr<OnigResult> lastSearchResult;

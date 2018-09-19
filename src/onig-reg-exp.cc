@@ -10,6 +10,17 @@ OnigRegExp::OnigRegExp(const string& source)
   lastSearchPosition = -1;
   lastSearchResult = NULL;
 
+  hasGAnchor = false;
+  for (size_t pos = 0, len = source.size(); pos < len; pos++) {
+    if (source[pos] == '\\' && pos + 1 < len) {
+      if (source[pos + 1] == 'G') {
+        hasGAnchor = true;
+        break;
+      }
+      pos++;
+    }
+  }
+
   OnigErrorInfo error;
   const UChar* sourceData = (const UChar*)source.data();
   int status = onig_new(&regex_, sourceData, sourceData + source.length(),
@@ -28,6 +39,12 @@ OnigRegExp::~OnigRegExp() {
 }
 
 shared_ptr<OnigResult> OnigRegExp::Search(OnigString* str, int position) {
+  if (hasGAnchor) {
+    // Should not use caching, because the regular expression
+    // targets the current search position (\G)
+    return Search(str->utf8_value(), position, str->utf8_length());
+  }
+
   if (lastSearchStrUniqueId == str->uniqueId() && lastSearchPosition <= position) {
     if (lastSearchResult == NULL || lastSearchResult->LocationAt(0) >= position) {
       return lastSearchResult;
