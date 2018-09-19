@@ -1,6 +1,7 @@
 'use strict'
 
 const OnigScanner = require('..').OnigScanner
+const OnigString = require('..').OnigString;
 
 describe('OnigScanner', () => {
   describe('::findNextMatchSync', () => {
@@ -110,6 +111,18 @@ describe('OnigScanner', () => {
 
       match = scanner.findNextMatchSync('X💻X', 1000)
       expect(match).toEqual(null)
+    })
+  )
+
+  describe('when a regular expression contains \\G', () =>
+    it('it does not get cached', () => {
+      let str = new OnigString('first-and-second');
+      let scanner = new OnigScanner(['\\G-and'])
+      let match = scanner.findNextMatchSync(str, 0)
+      expect(match).toEqual(null)
+
+      match = scanner.findNextMatchSync(str, 5)
+      expect(match.captureIndices).toEqual([{index: 0, start: 5, end: 9, length: 4}])
     })
   )
 
