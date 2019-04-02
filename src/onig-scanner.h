@@ -30,8 +30,8 @@ class OnigScanner : public node::ObjectWrap {
   ~OnigScanner();
 
   void FindNextMatch(Local<String> v8String, Local<Number> v8StartLocation, Local<Function> v8Callback);
-  Local<Value> FindNextMatchSync(OnigString* onigString, Local<Number> v8StartLocation);
-  Local<Value> FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation);
+  Local<Value> FindNextMatchSync(OnigString* onigString, Local<Number> v8StartLocation, Local<Number> v8EndLocation);
+  Local<Value> FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation, Local<Number> v8EndLocation);
   static Local<Value> CaptureIndicesForMatch(OnigResult* result, OnigString* source);
 
   vector<shared_ptr<OnigRegExp>> regExps;

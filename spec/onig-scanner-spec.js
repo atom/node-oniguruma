@@ -14,6 +14,16 @@ describe('OnigScanner', () => {
       expect(scanner.findNextMatchSync('xxaxxbxxc', 9)).toBe(null)
     })
 
+    it('supports explicit end indexes', () => {
+      let scanner = new OnigScanner(['a$', 'b$'])
+      expect(scanner.findNextMatchSync('xabc', 0, 1)).toBe(null)
+      expect(scanner.findNextMatchSync('xabc', 0, 2).index).toBe(0)
+      expect(scanner.findNextMatchSync('xabc', 0, 3).index).toBe(1)
+      expect(scanner.findNextMatchSync('xabc', 0, 4)).toBe(null)
+
+      expect(scanner.findNextMatchSync('xabc', 3, 2)).toBe(null)
+    })
+
     it('includes the scanner with the results', () => {
       let scanner = new OnigScanner(['a'])
       expect(scanner.findNextMatchSync('a', 0).scanner).toBe(scanner)

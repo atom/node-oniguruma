@@ -33,14 +33,15 @@ NAN_METHOD(OnigScanner::FindNextMatchSync) {
 
   Local<Object> param1 = Local<Object>::Cast(info[0]);
   Local<Number> param2 = Local<Number>::Cast(info[1]);
+  Local<Number> param3 = Local<Number>::Cast(info[2]);
   Local<Value> result;
 
   if (param1->IsString()) {
     Local<String> v8String = Local<String>::Cast(info[0]);
-    result = scanner->FindNextMatchSync(v8String, param2);
+    result = scanner->FindNextMatchSync(v8String, param2, param3);
   } else {
     OnigString* onigString = node::ObjectWrap::Unwrap<OnigString>(info[0]->ToObject());
-    result = scanner->FindNextMatchSync(onigString, param2);
+    result = scanner->FindNextMatchSync(onigString, param2, param3);
   }
 
   info.GetReturnValue().Set(result);
@@ -75,17 +76,18 @@ void OnigScanner::FindNextMatch(Local<String> v8String, Local<Number> v8StartLoc
   Nan::AsyncQueueWorker(worker);
 }
 
-Local<Value> OnigScanner::FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation) {
+Local<Value> OnigScanner::FindNextMatchSync(Local<String> v8String, Local<Number> v8StartLocation, Local<Number> v8EndLocation) {
   OnigString* source = new OnigString(v8String);
-  Local<Value> r = FindNextMatchSync(source, v8StartLocation);
+  Local<Value> r = FindNextMatchSync(source, v8StartLocation, v8EndLocation);
   delete source;
   return r;
 }
 
-Local<Value> OnigScanner::FindNextMatchSync(OnigString* source, Local<Number> v8StartLocation) {
+Local<Value> OnigScanner::FindNextMatchSync(OnigString* source, Local<Number> v8StartLocation, Local<Number> v8EndLocation) {
   int charOffset = v8StartLocation->Value();
+  int charEndOffset = v8EndLocation->Value();
 
-  shared_ptr<OnigResult> bestResult = searcher->Search(source, charOffset);
+  shared_ptr<OnigResult> bestResult = searcher->Search(source, charOffset, charEndOffset);
   if (bestResult != NULL) {
     Local<Object> result = Nan::New<Object>();
     result->Set(Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));

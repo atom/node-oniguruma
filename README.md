@@ -60,13 +60,15 @@ scanner.findNextMatch 'abc', (error, match) ->
   }
 ```
 
-### OnigScanner::findNextMatchSync(string, startPosition)
+### OnigScanner::findNextMatchSync(string, startPosition, endPosition)
 
 Synchronously find the next match from a given position.
 
 `string` - The string to search.
 
 `startPosition` - The optional position to start at, defaults to `0`.
+
+`endPosition` - The optional position to end at, defaults to the end of the string.
 
 Returns an object containing details about the match or `null` if no match.
 

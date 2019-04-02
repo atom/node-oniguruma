@@ -5,7 +5,7 @@ using ::v8::Number;
 using ::v8::Value;
 
 void OnigScannerWorker::Execute() {
-  bestResult = searcher->Search(source, charOffset);
+  bestResult = searcher->Search(source, charOffset, endCharOffset);
 }
 
 void OnigScannerWorker::HandleOKCallback() {

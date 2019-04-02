@@ -73,12 +73,18 @@ OnigScanner.prototype.findNextMatch = function (string, startPosition, callback)
   })
 }
 
-OnigScanner.prototype.findNextMatchSync = function (string, startPosition) {
+OnigScanner.prototype.findNextMatchSync = function (string, startPosition, endPosition) {
   if (startPosition == null) { startPosition = 0 }
   string = this.convertToString(string)
   startPosition = this.convertToNumber(startPosition)
 
-  let match = this._findNextMatchSync(string, startPosition)
+  if (endPosition) {
+    endPosition = this.convertToNumber(endPosition);
+  } else {
+    endPosition = -1;
+  }
+
+  let match = this._findNextMatchSync(string, startPosition, endPosition)
   if (match) match.scanner = this
   return match
 }

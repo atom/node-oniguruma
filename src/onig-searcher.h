@@ -16,7 +16,7 @@ class OnigSearcher {
 
   ~OnigSearcher() {}
 
-  shared_ptr<OnigResult> Search(OnigString* source, int charOffset);
+  shared_ptr<OnigResult> Search(OnigString* source, int charOffset, int endCharOffset);
 
  private:
   vector<shared_ptr<OnigRegExp>> regExps;

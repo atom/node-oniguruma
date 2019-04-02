@@ -38,11 +38,11 @@ OnigRegExp::~OnigRegExp() {
   if (regex_) onig_free(regex_);
 }
 
-shared_ptr<OnigResult> OnigRegExp::Search(OnigString* str, int position) {
+shared_ptr<OnigResult> OnigRegExp::Search(OnigString* str, int position, int endPosition) {
   if (hasGAnchor) {
     // Should not use caching, because the regular expression
     // targets the current search position (\G)
-    return Search(str->utf8_value(), position, str->utf8_length());
+    return Search(str->utf8_value(), position, endPosition);
   }
 
   if (lastSearchStrUniqueId == str->uniqueId() && lastSearchPosition <= position) {
@@ -53,7 +53,7 @@ shared_ptr<OnigResult> OnigRegExp::Search(OnigString* str, int position) {
 
   lastSearchStrUniqueId = str->uniqueId();
   lastSearchPosition = position;
-  lastSearchResult = Search(str->utf8_value(), position, str->utf8_length());
+  lastSearchResult = Search(str->utf8_value(), position, endPosition);
   return lastSearchResult;
 }
 

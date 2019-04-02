@@ -18,7 +18,8 @@ class OnigScannerWorker : public Nan::AsyncWorker {
                     Local<String> v8String,
                     int charOffset)
     : Nan::AsyncWorker(callback),
-      charOffset(charOffset) {
+      charOffset(charOffset),
+      endCharOffset(-1) {
         source = new OnigString(v8String);
     searcher = shared_ptr<OnigSearcher>(new OnigSearcher(regExps));
   }
@@ -33,6 +34,7 @@ class OnigScannerWorker : public Nan::AsyncWorker {
  private:
   OnigString* source;
   int charOffset;
+  int endCharOffset;
   shared_ptr<OnigSearcher> searcher;
   shared_ptr<OnigResult> bestResult;
 };
