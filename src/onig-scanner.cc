@@ -39,7 +39,7 @@ NAN_METHOD(OnigScanner::FindNextMatchSync) {
     Local<String> v8String = Local<String>::Cast(info[0]);
     result = scanner->FindNextMatchSync(v8String, param2);
   } else {
-    OnigString* onigString = node::ObjectWrap::Unwrap<OnigString>(info[0]->ToObject());
+    OnigString* onigString = node::ObjectWrap::Unwrap<OnigString>(info[0].As<Object>());
     result = scanner->FindNextMatchSync(onigString, param2);
   }
 
