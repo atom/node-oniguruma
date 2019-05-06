@@ -2,6 +2,7 @@
 #include "onig-scanner-worker.h"
 
 using ::v8::FunctionTemplate;
+using ::v8::Context;
 
 void OnigScanner::Init(Local<Object> target) {
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(OnigScanner::New);
@@ -10,7 +11,8 @@ void OnigScanner::Init(Local<Object> target) {
   tpl->PrototypeTemplate()->Set(Nan::New<String>("_findNextMatch").ToLocalChecked(), Nan::New<FunctionTemplate>(OnigScanner::FindNextMatch));
   tpl->PrototypeTemplate()->Set(Nan::New<String>("_findNextMatchSync").ToLocalChecked(), Nan::New<FunctionTemplate>(OnigScanner::FindNextMatchSync));
 
-  target->Set(Nan::New<String>("OnigScanner").ToLocalChecked(), tpl->GetFunction());
+  Local<Context> context = Nan::GetCurrentContext();
+  target->Set(Nan::New<String>("OnigScanner").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
 }
 
 void InitModule(Local<Object> target) {
