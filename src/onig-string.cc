@@ -31,7 +31,7 @@ OnigString::OnigString(Local<String> value)
   hasMultiByteChars = ((size_t)value->Length() != utf8_length_);
 
   if (hasMultiByteChars) {
-#if NODE_MODULE_VERSION >= 48
+#if NODE_MODULE_VERSION > 48
     Local<Context> context = Nan::GetCurrentContext();
     v8::Isolate *isolate = context->GetIsolate();
     String::Value utf16Value(isolate, value);
