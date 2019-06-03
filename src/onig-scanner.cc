@@ -92,7 +92,7 @@ Local<Value> OnigScanner::FindNextMatchSync(OnigString* source, Local<Number> v8
   shared_ptr<OnigResult> bestResult = searcher->Search(source, charOffset);
   if (bestResult != NULL) {
     Local<Object> result = Nan::New<Object>();
-	Local<Context> context = Nan::GetCurrentContext();
+    Local<Context> context = Nan::GetCurrentContext();
     result->Set(context, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));
     result->Set(context, Nan::New<String>("captureIndices").ToLocalChecked(), CaptureIndicesForMatch(bestResult.get(), source));
     return result;
