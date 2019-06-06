@@ -1,13 +1,14 @@
 #include "onig-string.h"
 
 using ::v8::FunctionTemplate;
+using ::v8::Context;
 
 void OnigString::Init(Local<Object> target) {
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(OnigString::New);
   tpl->SetClassName(Nan::New<String>("OnigString").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-
-  target->Set(Nan::New<String>("OnigString").ToLocalChecked(), tpl->GetFunction());
+  Local<Context> context = Nan::GetCurrentContext();
+  target->Set(context, Nan::New<String>("OnigString").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
 }
 
 NAN_METHOD(OnigString::New) {
@@ -19,7 +20,8 @@ NAN_METHOD(OnigString::New) {
 
   OnigString* string = new OnigString(content);
   string->Wrap(info.This());
-  info.This()->Set(Nan::New("content").ToLocalChecked(), content);
+  Local<Context> context = Nan::GetCurrentContext();
+  info.This()->Set(context, Nan::New("content").ToLocalChecked(), content);
 }
 
 OnigString::OnigString(Local<String> value)
@@ -30,7 +32,12 @@ OnigString::OnigString(Local<String> value)
   hasMultiByteChars = ((size_t)value->Length() != utf8_length_);
 
   if (hasMultiByteChars) {
+#if NODE_MODULE_VERSION > 48
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    String::Value utf16Value(isolate, value);
+#else
     String::Value utf16Value(value);
+#endif
     utf16_length_ = utf16Value.length();
 
     utf16OffsetToUtf8 = new int[utf16_length_ + 1];
