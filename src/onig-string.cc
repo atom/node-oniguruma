@@ -8,7 +8,7 @@ void OnigString::Init(Local<Object> target) {
   tpl->SetClassName(Nan::New<String>("OnigString").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   Local<Context> context = Nan::GetCurrentContext();
-  target->Set(context, Nan::New<String>("OnigString").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
+  Nan::Set(target, Nan::New<String>("OnigString").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
 }
 
 NAN_METHOD(OnigString::New) {
@@ -20,8 +20,7 @@ NAN_METHOD(OnigString::New) {
 
   OnigString* string = new OnigString(content);
   string->Wrap(info.This());
-  Local<Context> context = Nan::GetCurrentContext();
-  info.This()->Set(context, Nan::New("content").ToLocalChecked(), content);
+  Nan::Set(info.This(), Nan::New("content").ToLocalChecked(), content);
 }
 
 OnigString::OnigString(Local<String> value)

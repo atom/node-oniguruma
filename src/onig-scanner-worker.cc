@@ -13,8 +13,7 @@ void OnigScannerWorker::HandleOKCallback() {
 
   if (bestResult != NULL) {
     Local<Object> result = Nan::New<Object>();
-    Local<v8::Context> context = Nan::GetCurrentContext();
-    result->Set(context, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));
+    Nan::Set(result, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));
 
     int resultCount = bestResult->Count();
     Local<Array> captures = Nan::New<Array>(resultCount);
@@ -23,13 +22,13 @@ void OnigScannerWorker::HandleOKCallback() {
       int captureEnd = source->ConvertUtf8OffsetToUtf16(bestResult->LocationAt(index) + bestResult->LengthAt(index));
 
       Local<Object> capture = Nan::New<Object>();
-      capture->Set(context, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
-      capture->Set(context, Nan::New<String>("start").ToLocalChecked(), Nan::New<Number>(captureStart));
-      capture->Set(context, Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureEnd));
-      capture->Set(context, Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureEnd - captureStart));
-      captures->Set(context, index, capture);
+      Nan::Set(capture, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
+      Nan::Set(capture, Nan::New<String>("start").ToLocalChecked(), Nan::New<Number>(captureStart));
+      Nan::Set(capture, Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureEnd));
+      Nan::Set(capture, Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureEnd - captureStart));
+      Nan::Set(captures, index, capture);
     }
-    result->Set(context, Nan::New<String>("captureIndices").ToLocalChecked(), captures);
+    Nan::Set(result, Nan::New<String>("captureIndices").ToLocalChecked(), captures);
 
     Local<Value> argv[] = {
       Nan::Null(),

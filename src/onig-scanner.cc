@@ -12,8 +12,7 @@ void OnigScanner::Init(Local<Object> target) {
   v8::Isolate* isolate = context->GetIsolate();
   tpl->PrototypeTemplate()->Set(isolate, "_findNextMatch", Nan::New<FunctionTemplate>(OnigScanner::FindNextMatch));
   tpl->PrototypeTemplate()->Set(isolate, "_findNextMatchSync", Nan::New<FunctionTemplate>(OnigScanner::FindNextMatchSync));
-
-  target->Set(context, Nan::New<String>("OnigScanner").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
+  Nan::Set(target, Nan::New<String>("OnigScanner").ToLocalChecked(), tpl->GetFunction(context).ToLocalChecked());
 }
 
 void InitModule(Local<Object> target) {
@@ -92,9 +91,8 @@ Local<Value> OnigScanner::FindNextMatchSync(OnigString* source, Local<Number> v8
   shared_ptr<OnigResult> bestResult = searcher->Search(source, charOffset);
   if (bestResult != NULL) {
     Local<Object> result = Nan::New<Object>();
-    Local<Context> context = Nan::GetCurrentContext();
-    result->Set(context, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));
-    result->Set(context, Nan::New<String>("captureIndices").ToLocalChecked(), CaptureIndicesForMatch(bestResult.get(), source));
+    Nan::Set(result, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(bestResult->Index()));
+    Nan::Set(result, Nan::New<String>("captureIndices").ToLocalChecked(), CaptureIndicesForMatch(bestResult.get(), source));
     return result;
   } else {
     return Nan::Null();
@@ -110,12 +108,11 @@ Local<Value> OnigScanner::CaptureIndicesForMatch(OnigResult* result, OnigString*
     int captureEnd = source->ConvertUtf8OffsetToUtf16(result->LocationAt(index) + result->LengthAt(index));
 
     Local<Object> capture = Nan::New<Object>();
-    Local<Context> context = Nan::GetCurrentContext();
-    capture->Set(context, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
-    capture->Set(context, Nan::New<String>("start").ToLocalChecked(), Nan::New<Number>(captureStart));
-    capture->Set(context, Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureEnd));
-    capture->Set(context, Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureEnd - captureStart));
-    captures->Set(context, index, capture);
+    Nan::Set(capture, Nan::New<String>("index").ToLocalChecked(), Nan::New<Number>(index));
+    Nan::Set(capture, Nan::New<String>("start").ToLocalChecked(), Nan::New<Number>(captureStart));
+    Nan::Set(capture, Nan::New<String>("end").ToLocalChecked(), Nan::New<Number>(captureEnd));
+    Nan::Set(capture, Nan::New<String>("length").ToLocalChecked(), Nan::New<Number>(captureEnd - captureStart));
+    Nan::Set(captures, index, capture);
   }
 
   return captures;
