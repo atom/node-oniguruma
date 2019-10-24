@@ -21,7 +21,9 @@ void InitModule(Local<Object> target) {
   OnigString::Init(target);
 }
 
-NODE_MODULE(onig_scanner, InitModule)
+NODE_MODULE_INIT() {
+    InitModule(exports);
+}
 
 NAN_METHOD(OnigScanner::New) {
   Nan::HandleScope scope;
