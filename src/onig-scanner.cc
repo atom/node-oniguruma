@@ -33,11 +33,10 @@ NAN_METHOD(OnigScanner::FindNextMatchSync) {
   Nan::HandleScope scope;
   OnigScanner* scanner = node::ObjectWrap::Unwrap<OnigScanner>(info.This());
 
-  Local<Object> param1 = Local<Object>::Cast(info[0]);
   Local<Number> param2 = Local<Number>::Cast(info[1]);
   Local<Value> result;
 
-  if (param1->IsString()) {
+  if (info[0]->IsString()) {
     Local<String> v8String = Local<String>::Cast(info[0]);
     result = scanner->FindNextMatchSync(v8String, param2);
   } else {

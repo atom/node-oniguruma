@@ -12,12 +12,12 @@ void OnigString::Init(Local<Object> target) {
 }
 
 NAN_METHOD(OnigString::New) {
-  Local<String> content = Local<String>::Cast(info[0]);
-  if (!content->IsString()) {
+  if (!info[0]->IsString()) {
     Nan::ThrowTypeError("Argument must be a string");
     return;
   }
 
+  Local<String> content = Local<String>::Cast(info[0]);
   OnigString* string = new OnigString(content);
   string->Wrap(info.This());
   Nan::Set(info.This(), Nan::New("content").ToLocalChecked(), content);
