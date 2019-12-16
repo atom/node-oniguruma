@@ -15,6 +15,9 @@ env:
   global:
     - npm_config_jobs=max
 
+git:
+  depth: 10
+
 branches:
   only:
     - master
