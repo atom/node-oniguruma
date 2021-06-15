@@ -1,7 +1,5 @@
 # Oniguruma Node module
-[![macOS Build Status](https://travis-ci.org/atom/node-oniguruma.svg?branch=master)](https://travis-ci.org/atom/node-oniguruma)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/s9twhi451ef2butr/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/node-oniguruma/branch/master)
-[![Dependency Status](https://david-dm.org/atom/node-oniguruma.svg)](https://david-dm.org/atom/node-oniguruma)
+[![CI](https://github.com/atom/node-oniguruma/actions/workflows/ci.yml/badge.svg)](https://github.com/atom/node-oniguruma/actions/workflows/ci.yml)
 
 Native Node bindings to the Oniguruma regular expressions library.
 
