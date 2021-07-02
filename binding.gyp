@@ -99,13 +99,13 @@
       'conditions': [
         ['OS=="mac"', {
           'xcode_settings': {
-            'OTHER_CPLUSPLUSFLAGS': ['-std=c++11', '-stdlib=libc++'],
+            'OTHER_CPLUSPLUSFLAGS': ['-std=c++17', '-stdlib=libc++'],
             'MACOSX_DEPLOYMENT_TARGET': '10.7.0',
           }
         }],
         ['OS in "linux solaris"', {
           'cflags': [
-            '-std=c++0x',
+            '-std=c++17',
             '-Wno-unused-result',
             '-Wno-missing-field-initializers',
           ],
@@ -131,7 +131,7 @@
         }],
         ['OS=="freebsd"', {
           'cflags': [
-            '-std=c++0x',
+            '-std=c++17',
           ]
         }]
       ]
