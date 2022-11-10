@@ -106,7 +106,8 @@ OnigString.prototype.toString = function (start, end) {
 }
 
 Object.defineProperty(OnigString.prototype, 'length', {
-  get() { return this.content.length }
+  get() { return this.content.length },
+  configurable: true
 })
 
 exports.OnigScanner = OnigScanner
